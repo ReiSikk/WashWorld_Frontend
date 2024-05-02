@@ -1,5 +1,6 @@
 import React from "react";
 import { NativeBaseProvider, Box, extendTheme, useTheme, Text } from "native-base";
+import ProductCardDark from "./components/ProductCardDark";
 import * as Font from 'expo-font';
 
 Font.loadAsync({
@@ -49,6 +50,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <Text fontSize={theme.fontSizes.light}>Hello world</Text>
+      <ProductCardDark />
     </NativeBaseProvider>
   );
 }

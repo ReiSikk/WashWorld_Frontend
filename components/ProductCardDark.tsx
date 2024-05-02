@@ -1,41 +1,46 @@
 import React from 'react';
-import  { StyleSheet, Text, View } from 'react-native';
-import { useTheme } from 'native-base';
+import  { StyleSheet, Text } from 'react-native';
+import { useTheme, Button, ITheme, theme, View} from 'native-base';
 
 const SubscriptionCard = () => {
     const theme = useTheme();
-    const styles = getStyles(theme);
+
     
   return (
     <View style={styles.container}>
-    <Text style={styles.title}>Title</Text>
+     <View style={styles.arrowContainer}>
+     <Text style={styles.title}>Title</Text>
+     <Text style={styles.arrow}>Arrow</Text>
+     </View>
     <Text style={styles.description}>Description</Text>
     <Text style={styles.price}>Price</Text>
-    <View style={styles.noSignUpFee}>
-      <Text style={styles.noSignUpFeeText}>No Sign Up Fee</Text>
+    <View>
+        <Button colorScheme="primary" backgroundColor={'black'} color={'white'} size={'lg'}>Subscribe</Button>
     </View>
-    <Text style={styles.arrow}>Arrow</Text>
   </View>
   );
 };
 
-const getStyles = (theme: any) =>StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-      backgroundColor: '#333',
       padding: 20,
-      borderRadius: 10,
       alignItems: 'flex-start',
       justifyContent: 'space-between',
+      backgroundColor: theme.colors.black,
       flexDirection: 'column',
       margin: 10,
     },
     textContainer: {
       flex: 1,
     },
+    arrowContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
     title: {
       color: '#fff',
-      fontSize: theme.fontSizes.large,
-      fontWeight: 'bold',
     },
     description: {
       color: '#ccc',
@@ -45,12 +50,6 @@ const getStyles = (theme: any) =>StyleSheet.create({
       color: '#0f0',
       fontSize: 32,
       fontWeight: 'bold',
-    },
-    noSignUpFee: {
-      backgroundColor: '#0f0',
-      padding: 5,
-      paddingHorizontal: 10,
-      borderRadius: 5,
     },
     noSignUpFeeText: {
       color: '#000',
@@ -63,6 +62,10 @@ const getStyles = (theme: any) =>StyleSheet.create({
       fontWeight: 'bold',
       marginLeft: 10,
     },
+    cta: {
+        backgroundColor: theme.colors.white[500],
+    }
+
   });
 
 export default SubscriptionCard;

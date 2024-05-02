@@ -1,6 +1,7 @@
 import React from "react";
 import { NativeBaseProvider, Box, extendTheme, useTheme, Text } from "native-base";
 import * as Font from 'expo-font';
+import WelcomeScreen from "./screens/WelcomeScreen";
 
 Font.loadAsync({
   'font-extraBold': require('./assets/fonts/Poppins-ExtraBold.ttf'),
@@ -14,15 +15,16 @@ Font.loadAsync({
 const theme = extendTheme({
   colors: {
     primary: {
-      "green-white": "#06C167",
-      "green-black": "#0CE578",
-      "white": "#FFFFFF",
-      "orange": "#FF6B06",
-      "black": "#1A1A1A",
-      "gray80": "#333333",
-      "gray60": "#666666",
-      "gray10": "#E5E5E5",
-      "gray5": "#F7F7F7",
+      50: "#0CE578",
+      100: "#0CE578",
+      200: "#0CE578",
+      300: "#0CE578",
+      400: "#0CE578",
+      500: "#FFFFFF",
+      600: "#0CE578",
+      700: "#0CE578",
+      800: "#0CE578",
+      900: "#0CE578",
     },
   },
   fonts: {
@@ -49,6 +51,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <Text fontSize={theme.fontSizes.light}>Hello world</Text>
+      <WelcomeScreen></WelcomeScreen>
     </NativeBaseProvider>
   );
 }

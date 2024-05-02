@@ -2,6 +2,7 @@ import React from "react";
 import { NativeBaseProvider, Box, extendTheme, useTheme, Text } from "native-base";
 import ProductCardDark from "./components/ProductCardDark";
 import * as Font from 'expo-font';
+import WelcomeScreen from "./screens/WelcomeScreen";
 import { Button } from "react-native";
 
 Font.loadAsync({
@@ -77,6 +78,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={customTheme}>
       <ProductCardDark />
+      <WelcomeScreen />
     </NativeBaseProvider>
   );
 }

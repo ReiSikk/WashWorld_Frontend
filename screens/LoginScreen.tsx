@@ -1,8 +1,9 @@
 import React from 'react'
+import { Text } from 'native-base'
 
 function LoginScreen() {
   return (
-    <div>LoginScreen</div>
+    <Text>LoginScreen</Text>
   )
 }
 

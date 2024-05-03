@@ -6,6 +6,8 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import { Button } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen"
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MainNavigation from "./screens/MainNavigation";
 
 Font.loadAsync({
   'font-extraBold': require('./assets/fonts/Poppins-ExtraBold.ttf'),
@@ -31,8 +33,7 @@ const customTheme = extendTheme({
       900: '#06C167',  // Darkest shade
     },
     greenWhite:"#06C167",
-    greenBlack:"#0CE578",
-    
+    greenBlack:'#0CE578',
     white: "#FFFFFF",
     orange: "#FF6B06",
     black: "#1A1A1A",
@@ -45,7 +46,7 @@ const customTheme = extendTheme({
   components: {
     Button: {
           color: 'colors.white',
-          backgroundColor: 'colors.black',
+          backgroundColor: 'colors.greenWhite',
       },
   },
   fonts: {
@@ -63,12 +64,11 @@ const customTheme = extendTheme({
     labelSmall: 10,
   },
   borders: {
-    "separator": "0.25px solid #E5E5E5",
-    "borderRadius": "4px",
+    separator: "0.25px solid #E5E5E5",
+    borderRadius: 4,
   }
 });
 
-// 2. Get the type of the CustomTheme
 type CustomThemeType = typeof customTheme;
 
 // 3. Extend the internal NativeBase Theme
@@ -76,10 +76,14 @@ declare module 'native-base' {
   interface ICustomTheme extends CustomThemeType {}
 }
 
+
 export default function App() {
   return (
     <NativeBaseProvider theme={customTheme}>
-      <WelcomeScreen />
+      <MainNavigation>
+      </MainNavigation> 
+      {/* <ProductCardDark />
+      <WelcomeScreen /> */}
     </NativeBaseProvider>
   );
 }

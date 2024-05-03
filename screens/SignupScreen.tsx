@@ -7,6 +7,7 @@ function SignupScreen() {
   const theme: ICustomTheme = useTheme();
   const styles = getStyles(theme);
   return (
+
     <View>
       <Box safeArea p="10" py="8">
         <Box w="100%" maxWidth="300px">
@@ -34,7 +35,7 @@ Log in instead
             </Link>
       </Box>
     </View>
-  );
+  )
 }
 
 const getStyles = (theme: any) =>

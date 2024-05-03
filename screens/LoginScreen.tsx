@@ -2,6 +2,7 @@ import React from "react";
 import { Container, useTheme, Button, ICustomTheme, Center, Box, FormControl, Input, Stack, Link, Heading } from "native-base";
 import { View, Text, StyleSheet } from "react-native";
 
+
 function LoginScreen() {
   const theme: ICustomTheme = useTheme();
   const styles = getStyles(theme);
@@ -47,7 +48,7 @@ function LoginScreen() {
             </Link>
       </Box>
     </View>
-  );
+  )
 }
 
 const getStyles = (theme: any) =>

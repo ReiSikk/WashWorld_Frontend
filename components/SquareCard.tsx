@@ -15,14 +15,11 @@ const SquareCard = () => {
     
     const styles = StyleSheet.create({
         container: {
-          padding: 20,
+          padding: 10,
+          maxHeight: 300,
+          maxWidth: 225,
+          width: "100%",
           alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          backgroundColor: theme.colors.black,
-          flexDirection: 'column',
-          margin: 10,
-          borderRadius: theme.borders.borderRadius,
-          overflow: 'hidden',
           
         },
         textContainer: {
@@ -75,43 +72,11 @@ const SquareCard = () => {
         white: {
             color: theme.colors.white,
         },
-  /*       bottomCont: {
-            flexDirection: 'row',
-            alignItems: 'baseline', // Align text by text baseline
-            zIndex: 20, // Ensure the price is above the banner
-        },
-        greenBanner: {
-            backgroundColor: theme.colors.greenBlack,
-            height: 50,
-            width: "66%",
-            paddingLeft: 60, 
-            justifyContent: 'center', 
-            overflow: 'hidden', 
-            position: 'relative', 
-        },
-        bannerAngle: {
-            backgroundColor: theme.colors.black,
-            width: 100,
-            zIndex: 15, // Ensure the angle is above the banner
-            height: 200,
-            position: 'absolute',
-            left: 100,
-            bottom: 0,
-            transform: [{ rotate: '30deg' }],
-        },
-        greenBannerText: {
-            color: theme.colors.white,
-            fontSize: theme.fontSizes.medium,
-            fontFamily: theme.fonts.extraBold,
-            position: 'absolute',
-            right: 25, 
-            bottom: 15, 
-        }, */
       });
 
 
     return(
-     <Box alignItems="center">
+     <Box alignItems="center" style={styles.container}>
              <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
              borderColor: "coolGray.600",
              backgroundColor: "gray.700"

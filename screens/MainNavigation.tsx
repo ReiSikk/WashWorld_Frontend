@@ -16,6 +16,7 @@ import EnterLicensePlate from './subscriptionFlow/EnterLicensePlate';
 import OrderSummary from './subscriptionFlow/OrderSummary';
 import SelectPaymentMethod from './subscriptionFlow/SelectPaymentMethod';
 import WelcomeScreen from './WelcomeScreen';
+import { Text, TouchableOpacity } from 'react-native';
 
 //define route params types
 export type RootStackParamList = {
@@ -28,7 +29,7 @@ export type RootStackParamList = {
     RewardsScreen: { memberID: number };
     WelcomeScreen: undefined;
     HomeSubscriptionsScreen: undefined;
-    PlanOverview: undefined;
+    PlanOverview: { SubscriptionPlanID: number};
     EnterLicensePlate: undefined;
     OrderSummary: undefined;
     SelectPaymentMethod: undefined;
@@ -41,12 +42,20 @@ const Tab = createBottomTabNavigator();
 const HomeStackNavigator = () => {
     return (
       <Stack.Navigator
-        screenOptions={{
-          headerShown: false
-        }}
       >
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen name="HomeSubscriptionsScreen" component={HomeSubscriptionsScreen} />
+          <Stack.Screen 
+          name="HomeSubscriptionsScreen"
+          options={({ navigation }) => ({
+    headerLeft: () => (
+      <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
+        <Ionicons name="return-up-back" size={24} color="black" />
+      </TouchableOpacity>
+    ),
+  })}
+
+          component={HomeSubscriptionsScreen}
+           />
           <Stack.Screen name="PlanOverview" component={PlanOverview} />
           <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate} />
           <Stack.Screen name="OrderSummary" component={OrderSummary} />
@@ -73,13 +82,7 @@ const MainNavigation = () => {
                     tabBarActiveTintColor: '#1A1A1A',
                     tabBarInactiveTintColor: '#666666',
                     headerShown: true,
-                      headerRight: () => (
-                       /*  <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
-                          onPress={() => dispatch(logout())} variant={"outline"} _icon={{
-                            as: AntDesign,
-                            name: "logout"
-                          }} /> */
-                          
+                      headerRight: () => (     
                           <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
                            variant={"outline"} _icon={{
                             as: AntDesign,

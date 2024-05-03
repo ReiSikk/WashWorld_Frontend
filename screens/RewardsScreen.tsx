@@ -1,8 +1,9 @@
 import React from 'react'
+import { Text } from 'native-base'
 
 function RewardsScreen() {
   return (
-    <div>RewardsScreen</div>
+    <Text>RewardsScreen</Text>
   )
 }
 

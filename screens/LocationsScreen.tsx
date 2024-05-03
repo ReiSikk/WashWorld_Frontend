@@ -1,8 +1,9 @@
 import React from 'react'
+import { Text } from 'native-base'
 
 function LocationsScreen() {
   return (
-    <div>LocationsScreen</div>
+    <Text>LocationsScreen</Text>
   )
 }
 

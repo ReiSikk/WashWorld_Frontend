@@ -4,6 +4,8 @@ import ProductCardDark from "./components/ProductCardDark";
 import * as Font from 'expo-font';
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { Button } from "react-native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MainNavigation from "./screens/MainNavigation";
 
 Font.loadAsync({
   'font-extraBold': require('./assets/fonts/Poppins-ExtraBold.ttf'),
@@ -65,7 +67,6 @@ const customTheme = extendTheme({
   }
 });
 
-// 2. Get the type of the CustomTheme
 type CustomThemeType = typeof customTheme;
 
 // 3. Extend the internal NativeBase Theme
@@ -73,10 +74,16 @@ declare module 'native-base' {
   interface ICustomTheme extends CustomThemeType {}
 }
 
+
 export default function App() {
   return (
     <NativeBaseProvider theme={customTheme}>
-      <ProductCardDark />
+      <MainNavigation>
+        
+      </MainNavigation>
+      
+      {/* <ProductCardDark />
+      <WelcomeScreen /> */}
     </NativeBaseProvider>
   );
 }

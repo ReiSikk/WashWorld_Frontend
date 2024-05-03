@@ -4,10 +4,7 @@ import SquareCard from '../components/SquareCard'
 
 function HomeScreen() {
   return (
-    <>
     <Text>HomeScreen</Text>
-    <SquareCard />
-    </>
   )
 }
 

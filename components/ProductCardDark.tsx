@@ -1,6 +1,6 @@
 import React from 'react';
-import  { StyleSheet, Text } from 'react-native';
-import { useTheme, Button, ITheme, theme, View, ICustomTheme, Box} from 'native-base';
+import  { StyleSheet } from 'react-native';
+import { useTheme, Text,Button, ITheme, theme, View, ICustomTheme, Box} from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 
 const SubscriptionCard = () => {

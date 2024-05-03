@@ -31,8 +31,7 @@ const customTheme = extendTheme({
       900: '#0CE578',  // Darkest shade
     },
     greenWhite:"#06C167",
-    greenBlack:"#0CE578",
-    
+    greenBlack:'#0CE578',
     white: "#FFFFFF",
     orange: "#FF6B06",
     black: "#1A1A1A",
@@ -45,7 +44,7 @@ const customTheme = extendTheme({
   components: {
     Button: {
           color: 'colors.white',
-          backgroundColor: 'colors.black',
+          backgroundColor: 'colors.greenWhite',
       },
   },
   fonts: {
@@ -63,8 +62,8 @@ const customTheme = extendTheme({
     labelSmall: 10,
   },
   borders: {
-    "separator": "0.25px solid #E5E5E5",
-    "borderRadius": "4px",
+    separator: "0.25px solid #E5E5E5",
+    borderRadius: 4,
   }
 });
 

@@ -4,6 +4,8 @@ import ProductCardDark from "./components/ProductCardDark";
 import * as Font from 'expo-font';
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { Button } from "react-native";
+import LoginScreen from "./screens/LoginScreen";
+import SignupScreen from "./screens/SignupScreen"
 
 Font.loadAsync({
   'font-extraBold': require('./assets/fonts/Poppins-ExtraBold.ttf'),
@@ -17,16 +19,16 @@ Font.loadAsync({
 const customTheme = extendTheme({
   colors: {
     primary: {
-      50: '#0CE578',  // Lightest shade (used for hover, pressed states, etc.)
-      100: '#0CE578',
-      200: '#0CE578',
-      300: '#0CE578',
-      400: '#0CE578',
-      500: '#0CE578',  // Default primary color
-      600: '#0CE578',
-      700: '#0CE578',
-      800: '#0CE578',
-      900: '#0CE578',  // Darkest shade
+      50: '#06C167',  // Lightest shade (used for hover, pressed states, etc.)
+      100: '#06C167',
+      200: '#06C167',
+      300: '#06C167',
+      400: '#06C167',
+      500: '#06C167',  // Default primary color
+      600: '#06C167',
+      700: '#06C167',
+      800: '#06C167',
+      900: '#06C167',  // Darkest shade
     },
     greenWhite:"#06C167",
     greenBlack:"#0CE578",
@@ -34,10 +36,10 @@ const customTheme = extendTheme({
     white: "#FFFFFF",
     orange: "#FF6B06",
     black: "#1A1A1A",
-    gray80: "#333333",
-    gray60: "#666666",
-    gray10: "#E5E5E5",
-    gray5: "#F7F7F7",
+    grey80: "#333333",
+    grey60: "#666666",
+    grey10: "#E5E5E5",
+    grey5: "#F7F7F7",
 
   },
   components: {
@@ -77,7 +79,6 @@ declare module 'native-base' {
 export default function App() {
   return (
     <NativeBaseProvider theme={customTheme}>
-      <ProductCardDark />
       <WelcomeScreen />
     </NativeBaseProvider>
   );

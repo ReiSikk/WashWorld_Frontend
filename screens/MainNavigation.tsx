@@ -15,6 +15,7 @@ import PlanOverview from './subscriptionFlow/PlanOverview';
 import EnterLicensePlate from './subscriptionFlow/EnterLicensePlate';
 import OrderSummary from './subscriptionFlow/OrderSummary';
 import SelectPaymentMethod from './subscriptionFlow/SelectPaymentMethod';
+import WelcomeScreen from './WelcomeScreen';
 
 //define route params types
 export type RootStackParamList = {
@@ -39,7 +40,11 @@ const Tab = createBottomTabNavigator();
 
 const HomeStackNavigator = () => {
     return (
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="HomeSubscriptionsScreen" component={HomeSubscriptionsScreen} />
           <Stack.Screen name="PlanOverview" component={PlanOverview} />
@@ -67,6 +72,7 @@ const MainNavigation = () => {
                    screenOptions={({ navigation }) => ({
                     tabBarActiveTintColor: '#1A1A1A',
                     tabBarInactiveTintColor: '#666666',
+                    headerShown: true,
                       headerRight: () => (
                        /*  <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
                           onPress={() => dispatch(logout())} variant={"outline"} _icon={{
@@ -120,6 +126,7 @@ const MainNavigation = () => {
             ) : (
               <>
                 <Stack.Navigator>
+                    <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
                     <Stack.Screen name="SignupScreen" component={SignupScreen} />
                     <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 </Stack.Navigator>

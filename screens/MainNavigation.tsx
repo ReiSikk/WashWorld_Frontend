@@ -2,7 +2,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { IconButton } from "native-base";
+import { Box, IconButton } from "native-base";
 import { AntDesign, MaterialIcons, Ionicons } from "@expo/vector-icons";
 import LocationsScreen from './LocationsScreen';
 import RewardsScreen from './RewardsScreen';
@@ -17,6 +17,8 @@ import OrderSummary from './subscriptionFlow/OrderSummary';
 import SelectPaymentMethod from './subscriptionFlow/SelectPaymentMethod';
 import WelcomeScreen from './WelcomeScreen';
 import { Text, TouchableOpacity } from 'react-native';
+import { baseFontSize } from 'native-base/lib/typescript/theme/tools';
+import sizes from 'native-base/lib/typescript/theme/base/sizes';
 
 //define route params types
 export type RootStackParamList = {
@@ -43,23 +45,13 @@ const HomeStackNavigator = () => {
     return (
       <Stack.Navigator
       >
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen 
-          name="HomeSubscriptionsScreen"
-          options={({ navigation }) => ({
-    headerLeft: () => (
-      <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
-        <Ionicons name="return-up-back" size={24} color="black" />
-      </TouchableOpacity>
-    ),
-  })}
-
-          component={HomeSubscriptionsScreen}
+          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}  />
+          <Stack.Screen name="HomeSubscriptionsScreen" options={{ headerShown: false }} component={HomeSubscriptionsScreen}
            />
-          <Stack.Screen name="PlanOverview" component={PlanOverview} />
-          <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate} />
-          <Stack.Screen name="OrderSummary" component={OrderSummary} />
-          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod} />
+          <Stack.Screen name="PlanOverview" component={PlanOverview} options={{ headerShown: false }}/>
+          <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate} options={{ headerShown: false }} />
+          <Stack.Screen name="OrderSummary" component={OrderSummary} options={{ headerShown: false }}  />
+          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod} options={{ headerShown: false }}  />
         </Stack.Navigator>
     )
   }
@@ -88,7 +80,15 @@ const MainNavigation = () => {
                             as: AntDesign,
                             name: "logout"
                           }} />
-                      )})}>
+                      ),
+                      headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10, flexDirection:"row", alignItems: 'center', gap:10 }}>
+                          <Ionicons name="return-up-back" size={24} color="black" />
+                          <Text style={{ fontSize:16, fontWeight:'500' }}>Back</Text>
+                        </TouchableOpacity>
+                      ),
+                    })}
+                      >
                       <Tab.Screen
                        name="Home"
                        component={HomeStackNavigator}  

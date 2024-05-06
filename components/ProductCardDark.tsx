@@ -1,9 +1,10 @@
 import React from 'react';
-import  { StyleSheet, Text } from 'react-native';
-import { useTheme, Button, ITheme, theme, View, ICustomTheme, Box} from 'native-base';
+import  { StyleSheet } from 'react-native';
+import { useTheme, Text,Button, ITheme, theme, View, ICustomTheme, Box} from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
 
-const SubscriptionCard = () => {
+const SubscriptionCard = ({ onPress }: { onPress: () => void }) => {
     const theme: ICustomTheme = useTheme();
 
 
@@ -33,6 +34,7 @@ const SubscriptionCard = () => {
           color: theme.colors.greenBlack,
           fontSize: theme.fontSizes.extraLarge,
           fontFamily: theme.fonts.extraBold,
+          paddingTop: 20,
           zIndex: 25,
         },
         startingFrom: {
@@ -43,6 +45,7 @@ const SubscriptionCard = () => {
           color: theme.colors.white,
           fontSize: theme.fontSizes.extraLarge,
           fontFamily: theme.fonts.extraBold,
+          paddingTop: 25,
         },
         noSignUpFeeText: {
           color: '#000',
@@ -62,15 +65,16 @@ const SubscriptionCard = () => {
         flexEnd: {
             marginTop: 30,
             width: '100%',
-            flexDirection: 'row', // Align children horizontally
-            alignItems: 'center', // Align children vertically in the center
-            justifyContent: 'space-between', // Space between the price text and the banner
+            flexDirection: 'row', 
+            alignItems: 'center', 
+            justifyContent: 'space-between', 
             backgroundColor: theme.colors.black,
         },
         bottomCont: {
             flexDirection: 'row',
-            alignItems: 'baseline', // Align text by text baseline
-            zIndex: 20, // Ensure the price is above the banner
+            alignItems: 'baseline', 
+            padding: 5,
+            zIndex: 20, 
         },
         greenBanner: {
             backgroundColor: theme.colors.greenBlack,
@@ -84,7 +88,7 @@ const SubscriptionCard = () => {
         bannerAngle: {
             backgroundColor: theme.colors.black,
             width: 100,
-            zIndex: 15, // Ensure the angle is above the banner
+            zIndex: 15, 
             height: 200,
             position: 'absolute',
             left: 100,
@@ -103,6 +107,7 @@ const SubscriptionCard = () => {
 
     
   return (
+    <TouchableOpacity onPress={onPress}>
     <View style={styles.container}>
      <View style={styles.arrowContainer}>
      <Text style={styles.title}>CardTitle</Text>
@@ -119,12 +124,9 @@ const SubscriptionCard = () => {
     </View>
     </View>
   </View>
+    </TouchableOpacity>
   );
 };
-
-
-
-
 
 
 export default SubscriptionCard;

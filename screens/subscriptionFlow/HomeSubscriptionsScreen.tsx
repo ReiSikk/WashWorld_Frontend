@@ -10,10 +10,10 @@ import { Subscription } from '../../entities/subscription';
 
 type Props = NativeStackScreenProps<RootStackParamList, "HomeSubscriptionsScreen">
 
-type ItemProps = {subscriptionPlanID: number, onPress: () => void};
+type ItemProps = { plan: Subscription, onPress: () => void };
 
-const Item = ({subscriptionPlanID, onPress}: ItemProps) => (
-  <SubscriptionCard onPress={onPress} />
+const Item = ({plan, onPress}: ItemProps) => (
+  <SubscriptionCard plan={plan} onPress={onPress} />
 );
 
 function HomeSubscriptionsScreen({ navigation }: Props) {
@@ -32,8 +32,8 @@ function HomeSubscriptionsScreen({ navigation }: Props) {
       {subscriptions.map((plan: Subscription) => (
         <Item 
           key={plan.id} 
-          subscriptionPlanID={plan.id} 
-          onPress={() => navigation.navigate('PlanOverview', {subscriptionPlanID: plan.id})}
+          plan={plan}
+          onPress={() => navigation.navigate('PlanOverview', { subscriptionPlanID: plan.id-1 })}
         />
       ))}
     </>

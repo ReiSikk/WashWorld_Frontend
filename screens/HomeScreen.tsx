@@ -1,10 +1,14 @@
 import React from 'react'
-import { Text } from 'native-base'
-import TitleCard from '../components/TitleCard'
+import { Text, View } from 'native-base'
+import Settings from './accountFlow/Settings'
+import WashHistory from './accountFlow/WashHistory'
+import PaymentMethods from './accountFlow/PaymentMethods'
 
 function HomeScreen() {
   return (
-    <TitleCard></TitleCard>
+<View>
+  <Text>Home</Text>
+</View>
   )
 }
 

@@ -1,21 +1,21 @@
-import React from 'react'
-import { Container, Spacer, Flex, Text, View, useTheme, Button, Input, Box, Heading, Link} from 'native-base';
+import React from 'react';
+import { Spacer, Flex, Text, View, Box } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 
-function TitleCard() {
-  return (
-    <View>
-        <Flex flexDirection="row" bg="grey5" p="6" w="90%" >
-<Box>
-<Text>Title</Text>
-</Box>
-<Spacer />
-<Box>
-<AntDesign name="right" size={24}/>
-</Box>
-        </Flex>
-    </View>
-  )
+interface TitleCardProps {
+  title: string;
 }
 
-export default TitleCard
+const TitleCard: React.FC<TitleCardProps> = ({ title }) => {
+  return (
+    <View>
+      <Flex flexDirection="row" bg="grey5" py="8" px="4" w="100%" alignItems="center">
+          <Text>{title}</Text>
+        <Spacer />
+          <AntDesign name="right" size={24} />
+      </Flex>
+    </View>
+  );
+}
+
+export default TitleCard;

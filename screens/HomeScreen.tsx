@@ -1,4 +1,5 @@
 import React from 'react'
+import SubscriptionCard from '../components/SubscriptionCard'
 import { ITheme, Text, useTheme } from 'native-base'
 import SquareCard from '../components/SquareCard'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -11,7 +12,9 @@ type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 
 function HomeScreen({ navigation }: Props) {
   return (
-    <>
+     <>
+    <Text>HomeScreen</Text>
+    <SubscriptionCard></SubscriptionCard>
     <Text>HomeScreen</Text>
     <SquareCard />
         <ProductCardDark onPress={() => navigation.navigate('HomeSubscriptionsScreen')} />

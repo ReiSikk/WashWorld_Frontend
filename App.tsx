@@ -9,6 +9,8 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen"
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainNavigation from "./screens/MainNavigation";
+import { store } from './store/store'
+import { Provider } from 'react-redux'
 
 const useFonts = async () => {
   await Font.loadAsync({
@@ -103,11 +105,13 @@ export default function App() {
   }, []);
 
   return (
+    <Provider store={store}>
     <NativeBaseProvider theme={customTheme}>
       <MainNavigation>
       </MainNavigation> 
       {/* <ProductCardDark />
       <WelcomeScreen /> */}
     </NativeBaseProvider>
+    </Provider>
   );
 }

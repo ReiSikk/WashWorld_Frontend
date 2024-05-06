@@ -1,11 +1,13 @@
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { Container, Spacer, Text, useTheme, Button, ICustomTheme, Center, Box, FormControl, Input, Stack, Link, Heading, Checkbox, HStack, View, Flex } from "native-base";
+import { TouchableOpacity } from 'react-native';
 import  { StyleSheet} from 'react-native';
 
 
-function SubscriptionCard() {
+function SubscriptionCard({ onPress }: { onPress: () => void }) {
   return (
+    <TouchableOpacity onPress={onPress}>
     <View>
         <Flex flexDirection="row" bg="grey5" width="90%" p="4">
         <Box>
@@ -18,8 +20,8 @@ function SubscriptionCard() {
        <AntDesign name="right" size={24} />
        </Box>
        </Flex>
-  
     </View>
+    </TouchableOpacity>
   )
 }
 

@@ -13,9 +13,6 @@ type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 function HomeScreen({ navigation }: Props) {
   return (
      <>
-    <Text>HomeScreen</Text>
-    <SubscriptionCard></SubscriptionCard>
-    <Text>HomeScreen</Text>
     <SquareCard />
         <ProductCardDark onPress={() => navigation.navigate('HomeSubscriptionsScreen')} />
     </>

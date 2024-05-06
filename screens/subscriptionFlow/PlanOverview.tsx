@@ -1,9 +1,21 @@
 import React from 'react'
 import { Text } from 'native-base'
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../MainNavigation';
 
-function PlanOverview() {
+type Props = NativeStackScreenProps<RootStackParamList, "PlanOverview">
+
+
+function PlanOverview({route, navigation}: Props) {
+
+    // Get the subscriptionPlanID from the navigation parameters
+    const { subscriptionPlanID } = route.params;
+
+
   return (
-    <Text>PlanOverview</Text>
+    <>
+  <Text>{subscriptionPlanID}</Text>
+    </>
   )
 }
 

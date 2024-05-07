@@ -4,8 +4,6 @@ import ProductCardDark from "./components/ProductCardDark";
 import * as Font from 'expo-font';
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { Button } from "react-native";
-import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen"
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainNavigation from "./screens/MainNavigation";
 

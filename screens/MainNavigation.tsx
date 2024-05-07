@@ -16,6 +16,12 @@ import EnterLicensePlate from './subscriptionFlow/EnterLicensePlate';
 import OrderSummary from './subscriptionFlow/OrderSummary';
 import SelectPaymentMethod from './subscriptionFlow/SelectPaymentMethod';
 import WelcomeScreen from './WelcomeScreen';
+import Contact from './accountFlow/Contact';
+import FAQ from './accountFlow/FAQ';
+import PaymentMethods from './accountFlow/PaymentMethods';
+import Settings from './accountFlow/Settings';
+import WashHistory from './accountFlow/WashHistory';
+
 
 //define route params types
 export type RootStackParamList = {
@@ -32,7 +38,11 @@ export type RootStackParamList = {
     EnterLicensePlate: undefined;
     OrderSummary: undefined;
     SelectPaymentMethod: undefined;
-    
+    Contact: undefined;
+    FAQ: undefined;
+    PaymentMethods: undefined;
+    Settings: undefined;
+    WashHistory: undefined;
   };
   
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -55,6 +65,23 @@ const HomeStackNavigator = () => {
     )
   }
 
+
+  const AccountStackNavigator = () => {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+          <Stack.Screen name="AccountScreen" component={AccountScreen} />
+          <Stack.Screen name="Contact" component={Contact} />
+          <Stack.Screen name="FAQ" component={FAQ} />
+          <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
+          <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="WashHistory" component={WashHistory} />
+        </Stack.Navigator>
+    )
+  }
 
 const MainNavigation = () => {
     //TODO: implement redux

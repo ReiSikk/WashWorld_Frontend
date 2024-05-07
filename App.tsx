@@ -5,8 +5,6 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { Button } from "react-native";
-import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen"
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainNavigation from "./screens/MainNavigation";
 import { store } from './store/store'

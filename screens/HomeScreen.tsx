@@ -1,4 +1,8 @@
 import React from 'react'
+import { Text, View } from 'native-base'
+import Settings from './accountFlow/Settings'
+import WashHistory from './accountFlow/WashHistory'
+import PaymentMethods from './accountFlow/PaymentMethods'
 import SubscriptionCard from '../components/SubscriptionCard'
 import { ITheme, Text, useTheme } from 'native-base'
 import SquareCard from '../components/SquareCard'

@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NativeBaseProvider, Box, extendTheme, useTheme, Text } from "native-base";
 import ProductCardDark from "./components/ProductCardDark";
 import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { Button } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainNavigation from "./screens/MainNavigation";
+import { store } from './store/store'
+import { Provider } from 'react-redux'
 
-Font.loadAsync({
-  'font-extraBold': require('./assets/fonts/Poppins-ExtraBold.ttf'),
-  'font-medium': require('./assets/fonts/Poppins-Medium.ttf'),
-  'font-regular': require('./assets/fonts/Poppins-Regular.ttf'),
-  'font-light': require('./assets/fonts/Poppins-Light.ttf'),
-  // Include other variants here
-});
+const useFonts = async () => {
+  await Font.loadAsync({
+    'font-extraBold': require('./assets/fonts/Poppins-ExtraBold.ttf'),
+    'font-medium': require('./assets/fonts/Poppins-Medium.ttf'),
+    'font-regular': require('./assets/fonts/Poppins-Regular.ttf'),
+    'font-light': require('./assets/fonts/Poppins-Light.ttf'),
+    // Include other fonts here
+  });
+};
+
+
 
 //custom theme
 const customTheme = extendTheme({
@@ -89,6 +96,7 @@ const customTheme = extendTheme({
   }
 });
 
+
 type CustomThemeType = typeof customTheme;
 
 // 3. Extend the internal NativeBase Theme
@@ -97,13 +105,34 @@ declare module 'native-base' {
 }
 
 
+
 export default function App() {
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Keep the splash screen visible while we fetch resources
+        await SplashScreen.preventAutoHideAsync();
+        // Load fonts
+        await useFonts();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Hide the splash screen
+        await SplashScreen.hideAsync();
+      }
+    }
+
+    prepare();
+  }, []);
+
   return (
+    <Provider store={store}>
     <NativeBaseProvider theme={customTheme}>
       <MainNavigation>
       </MainNavigation> 
       {/* <ProductCardDark />
       <WelcomeScreen /> */}
     </NativeBaseProvider>
+    </Provider>
   );
 }

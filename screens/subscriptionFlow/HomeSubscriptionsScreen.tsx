@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text } from 'native-base'
+import { ScrollView, Text } from 'native-base'
 import SubscriptionCard from '../../components/SubscriptionCard'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../MainNavigation';
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchSubscriptions } from '../../store/SubscriptionSlice';
 import { AppDispatch, RootState } from '../../store/store';
 import { Subscription } from '../../entities/subscription';
+import { VStack, FlatList, View } from 'native-base';
 
 type Props = NativeStackScreenProps<RootStackParamList, "HomeSubscriptionsScreen">
 
@@ -27,16 +28,18 @@ function HomeSubscriptionsScreen({ navigation }: Props) {
 
 
   return (
-    <>
-      <Text>Map all subscription plans as cards down here</Text>
-      {subscriptions.map((plan: Subscription) => (
+    <FlatList
+      data={subscriptions}
+      keyExtractor={(plan) => plan.id.toString()}
+      renderItem={({ item: plan }) => (
         <Item 
-          key={plan.id} 
           plan={plan}
           onPress={() => navigation.navigate('PlanOverview', { subscriptionPlanID: plan.id-1 })}
         />
-      ))}
-    </>
+      )}
+      contentContainerStyle={{ margin: 12}}
+      ItemSeparatorComponent={() => <View style={{ height: 12 }} />} 
+    />
   )
 }
 

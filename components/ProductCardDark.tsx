@@ -32,8 +32,6 @@ const SubscriptionCard = ({ onPress }: { onPress: () => void }) => {
         },
         title: {
           color: theme.colors.greenBlack,
-          fontSize: theme.fontSizes.extraLarge,
-          fontFamily: theme.fonts.extraBold,
           paddingTop: 20,
           zIndex: 25,
         },
@@ -43,8 +41,6 @@ const SubscriptionCard = ({ onPress }: { onPress: () => void }) => {
         },
         price: {
           color: theme.colors.white,
-          fontSize: theme.fontSizes.extraLarge,
-          fontFamily: theme.fonts.extraBold,
           paddingTop: 25,
         },
         noSignUpFeeText: {
@@ -97,8 +93,7 @@ const SubscriptionCard = ({ onPress }: { onPress: () => void }) => {
         },
         greenBannerText: {
             color: theme.colors.white,
-            fontSize: theme.fontSizes.medium,
-            fontFamily: theme.fonts.extraBold,
+            fontSize: theme.fontSizes.md,
             position: 'absolute',
             right: 25, 
             bottom: 15, 

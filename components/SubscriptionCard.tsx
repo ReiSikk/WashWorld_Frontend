@@ -16,7 +16,7 @@ function SubscriptionCard({ plan, onPress }: SubscriptionCardProps) {
   return (
     <TouchableOpacity onPress={onPress}>
     <View>
-        <Flex flexDirection="row" bg="grey5" width="90%" p="4">
+        <Flex flexDirection="row" bg="grey5" width="100%" p="4">
         <Box>
         <Text fontSize="2xl" color="greenWhite" fontWeight={800}>{plan.name}</Text>
         <Text fontSize="4xl" color="black" fontWeight={800}>{plan.price_per_month_kr} kr./md.</Text>

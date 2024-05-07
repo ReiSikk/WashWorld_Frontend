@@ -52,29 +52,52 @@ const customTheme = extendTheme({
   },
   components: {
     Button: {
-          color: 'colors.white',
-          backgroundColor: 'colors.greenWhite',
+      baseStyle: {
+        rounded: 'sm',
       },
+      defaultProps: {
+        colorScheme: 'primary',
+      },
+    },
+      Text: {
+        baseStyle: {
+          color: 'black'
+        },
+        defaultProps: {
+          size: 'md'
+        },
+        sizes: {
+          xl: {
+            fontSize: '30px'
+          },
+          lg: {
+            fontSize: '22px'
+          },
+          md: {
+            fontSize: '16px'
+          },
+          sm: {
+            fontSize: '12px'
+          },
+          xs: {
+            fontSize: '10px'
+          }
+        }
+      }
   },
   fonts: {
     // Define your custom fonts
-    extraBold: "font-extraBold",
+    extrabold: "font-extraBold",
     medium: "font-medium",
-    regular: "font-regular",
+    normal: "font-regular",
     light: "font-light",
-  },
-  fontSizes: {
-    extraLarge: 30,
-    large: 22,
-    medium: 16,
-    light: 12,
-    labelSmall: 10,
   },
   borders: {
     separator: "0.25px solid #E5E5E5",
     borderRadius: 4,
   }
 });
+
 
 type CustomThemeType = typeof customTheme;
 

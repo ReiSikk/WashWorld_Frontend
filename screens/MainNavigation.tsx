@@ -71,7 +71,7 @@ const HomeStackNavigator = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false
-        }}
+        }} 
       >
           <Stack.Screen name="AccountScreen" component={AccountScreen} />
           <Stack.Screen name="Contact" component={Contact} />
@@ -143,7 +143,7 @@ const MainNavigation = () => {
                        />
                       <Tab.Screen 
                       name="Account" 
-                      component={AccountScreen}
+                      component={AccountStackNavigator}
                       options={{
                         tabBarIcon: ({ color, size }) => (
                           <Ionicons name="body-outline" size={24} color="#666666" />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, VStack, HStack, Text, Input, Select, Button, IconButton, Icon, View } from 'native-base';
+import { Box, VStack, HStack, Text, Input, Select, Button, IconButton, Icon, View, FormControl  } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AppDispatch, RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,29 +25,6 @@ const EnterLicensePlate = ({route, navigation}: Props) => {
   const [country, setCountry] = useState('');
   const [countryError, setCountryError] = useState('');
 
-  const validatePlateNumber = (value:string) => {
-
-        // Remove any existing spaces from the value
-        const newValue = value.replace(/\s/g, '');
-
-    if (newValue === undefined || newValue.length < 6) {
-      setPlateNumberError('Invalid license plate number');
-      return false;
-    }
-        // Format the value for display
-        let formattedValue = '';
-        for (let i = 0; i < newValue.length; i++) {
-          // Add a space after every 3rd character
-          if (i > 0 && i % 3 === 0) {
-            formattedValue += ' ';
-          }
-          formattedValue += newValue[i];
-        }
-
-    setFormattedPlateNumber(formattedValue)
-    setPlateNumberError('');
-    return true;
-  };
 
   const validateCountry = (value:string) => {
     if (value === undefined || value.length < 3) {
@@ -58,25 +35,26 @@ const EnterLicensePlate = ({route, navigation}: Props) => {
     return true;
   };
 
-  const handleAddLicensePlate = () => {
-    const isPlateNumberValid = validatePlateNumber(plateNumber);
-    const isCountryValid = validateCountry(country);
-
-    if (isPlateNumberValid && isCountryValid) {
-      navigation.navigate('OrderSummary');
-    } else {
-      alert('Please fill in all fields correctly');
+  const validateNumberPlate = (value:string) => {
+    if (value === undefined || value.length < 3) {
+      setPlateNumberError('Invalid plate number');
+      return false;
     }
+    setPlateNumberError('');
+    return true;
   };
 
+  
 
 
-/*   useFocusEffect(
-    React.useCallback(() => {
-      // Set the current step to the appropriate number when the screen comes into focus
-      dispatch(setCurrentStep(1));
-    }, [dispatch])
-  ); */
+
+  const validateForm = () => {
+    validateCountry(country);
+    validateNumberPlate(plateNumber);
+    if (validateCountry(country) && validateNumberPlate(plateNumber)) {
+      navigation.navigate('OrderSummary');
+    }
+  };
   
   
 
@@ -92,25 +70,28 @@ const EnterLicensePlate = ({route, navigation}: Props) => {
       <Text>
       To use the subscription service, you need to register your license plate first for it to be recognized at he station.
       </Text>
-      <VStack space={1} justifyContent={'space-between'}>
-        <InputWLabel
-         label="Plate number" 
-         placeholder="ABC 123"
-         helperText={plateNumberError}
-         value={plateNumber} 
-        setValue={setPlateNumber} 
+      <VStack space={4} m='6'>
+  <FormControl isRequired isInvalid={!!plateNumberError}>
+    <FormControl.Label _text={{bold: true}}>Plate number</FormControl.Label>
+    <Input 
+      placeholder="ABC 123"
+      value={plateNumber}
+      onChangeText={setPlateNumber}
+    />
+    <FormControl.ErrorMessage>{plateNumberError}</FormControl.ErrorMessage>
+  </FormControl>
+  <FormControl isRequired isInvalid={!!countryError}>
+    <FormControl.Label _text={{bold: true}}>Country</FormControl.Label>
+    <Input 
+      placeholder="Denmark"
+      value={country}
+      onChangeText={setCountry}
+    />
+    <FormControl.ErrorMessage>{countryError}</FormControl.ErrorMessage>
+  </FormControl>
+</VStack>
 
-           />
-        <InputWLabel 
-        label="Country"
-        placeholder="Denmark"
-        helperText={plateNumberError}
-        value={country} 
-        setValue={setCountry} 
-        />
-      </VStack>
-
-      <Button mt="5" colorScheme="green" onPress={handleAddLicensePlate}>
+      <Button mt="5" colorScheme="green" onPress={validateForm}>
         Add license plate
       </Button>
       </VStack>

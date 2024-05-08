@@ -52,15 +52,32 @@ const Tab = createBottomTabNavigator();
 
 const HomeStackNavigator = () => {
     return (
-      <Stack.Navigator
+      <Stack.Navigator      screenOptions={({ navigation }) => ({
+        tabBarActiveTintColor: '#1A1A1A',
+        tabBarInactiveTintColor: '#666666',
+        headerShown: true,
+          headerRight: () => (     
+              <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
+               variant={"outline"} _icon={{
+                as: AntDesign,
+                name: "logout"
+              }} />
+          ),
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10, flexDirection:"row", alignItems: 'center', gap:10 }}>
+              <Ionicons name="return-up-back" size={24} color="black" />
+              <Text style={{ fontSize:16, fontWeight:'500' }}>Back</Text>
+            </TouchableOpacity>
+          ),
+        })}
       >
-          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}  />
-          <Stack.Screen name="HomeSubscriptionsScreen" options={{ headerShown: false }} component={HomeSubscriptionsScreen}
+          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerLeft: () => null }}  />
+          <Stack.Screen name="HomeSubscriptionsScreen" options={{ headerShown: true }} component={HomeSubscriptionsScreen}
            />
-          <Stack.Screen name="PlanOverview" component={PlanOverview} options={{ headerShown: false }}/>
+          <Stack.Screen name="PlanOverview" component={PlanOverview} options={{ headerShown: true }}/>
           <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate} options={{ headerShown: false }} />
-          <Stack.Screen name="OrderSummary" component={OrderSummary} options={{ headerShown: false }}  />
-          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod} options={{ headerShown: false }}  />
+          <Stack.Screen name="OrderSummary" component={OrderSummary} options={{ headerShown: true }}  />
+          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod} options={{ headerShown: true }}  />
         </Stack.Navigator>
     )
   }
@@ -69,11 +86,26 @@ const HomeStackNavigator = () => {
   const AccountStackNavigator = () => {
     return (
       <Stack.Navigator
-        screenOptions={{
-          headerShown: false
-        }}
+            screenOptions={({ navigation }) => ({
+                    tabBarActiveTintColor: '#1A1A1A',
+                    tabBarInactiveTintColor: '#666666',
+                    headerShown: true,
+                      headerRight: () => (     
+                          <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
+                           variant={"outline"} _icon={{
+                            as: AntDesign,
+                            name: "logout"
+                          }} />
+                      ),
+                      headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10, flexDirection:"row", alignItems: 'center', gap:10 }}>
+                          <Ionicons name="return-up-back" size={24} color="black" />
+                          <Text style={{ fontSize:16, fontWeight:'500' }}>Back</Text>
+                        </TouchableOpacity>
+                      ),
+                    })}
       >
-          <Stack.Screen name="AccountScreen" component={AccountScreen} />
+          <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ headerLeft: () => null }} />
           <Stack.Screen name="Contact" component={Contact} />
           <Stack.Screen name="FAQ" component={FAQ} />
           <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
@@ -99,26 +131,14 @@ const MainNavigation = () => {
                    screenOptions={({ navigation }) => ({
                     tabBarActiveTintColor: '#1A1A1A',
                     tabBarInactiveTintColor: '#666666',
-                    headerShown: true,
-                      headerRight: () => (     
-                          <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
-                           variant={"outline"} _icon={{
-                            as: AntDesign,
-                            name: "logout"
-                          }} />
-                      ),
-                      headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10, flexDirection:"row", alignItems: 'center', gap:10 }}>
-                          <Ionicons name="return-up-back" size={24} color="black" />
-                          <Text style={{ fontSize:16, fontWeight:'500' }}>Back</Text>
-                        </TouchableOpacity>
-                      ),
+                    headerShown: false,
                     })}
                       >
                       <Tab.Screen
                        name="Home"
                        component={HomeStackNavigator}  
                        options={{
+                    
                         tabBarIcon: ({ color, size }) => (
                           <Ionicons name="home-outline" size={24} color="#666666" />
                         ),
@@ -143,8 +163,9 @@ const MainNavigation = () => {
                        />
                       <Tab.Screen 
                       name="Account" 
-                      component={AccountScreen}
+                      component={AccountStackNavigator}
                       options={{
+      
                         tabBarIcon: ({ color, size }) => (
                           <Ionicons name="body-outline" size={24} color="#666666" />
                         ),

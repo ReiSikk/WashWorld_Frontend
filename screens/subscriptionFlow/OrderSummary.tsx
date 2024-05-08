@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Button } from 'native-base'
+import { Text, Button, Box, VStack } from 'native-base'
 import { useFocusEffect } from '@react-navigation/native'
 import { setCurrentStep } from '../../store/StepSlice'
 import { useDispatch } from 'react-redux'
@@ -21,9 +21,9 @@ function OrderSummary({navigation, route}: Props) {
   ); */
 
   return (
-    <>
-      <ProgressSteps currentStep={1} totalSteps={4} />
-    <Text>OrderSummary</Text>
+    <Box pt={'5%'}>
+       <VStack space={4} m="6">
+       <ProgressSteps currentStep={1} totalSteps={4} />
     <Button mt="5" bg={'black'} onPress={() => {
 navigation.navigate('HomeSubscriptionsScreen')
       }}>
@@ -34,7 +34,8 @@ navigation.navigate('SelectPaymentMethod')
       }}>
         Add a payment method to continue
       </Button>
-    </>
+       </VStack>
+    </Box>
   )
 }
 

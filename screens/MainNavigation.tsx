@@ -74,10 +74,10 @@ const HomeStackNavigator = () => {
           <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerLeft: () => null }}  />
           <Stack.Screen name="HomeSubscriptionsScreen" options={{ headerShown: true }} component={HomeSubscriptionsScreen}
            />
-          <Stack.Screen name="PlanOverview" component={PlanOverview} options={{ headerShown: true }}/>
-          <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate} options={{ headerShown: false }} />
-          <Stack.Screen name="OrderSummary" component={OrderSummary} options={{ headerShown: true }}  />
-          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod} options={{ headerShown: true }}  />
+          <Stack.Screen name="PlanOverview" component={PlanOverview}/>
+          <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate}/>
+          <Stack.Screen name="OrderSummary" component={OrderSummary}/>
+          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}/>
         </Stack.Navigator>
     )
   }

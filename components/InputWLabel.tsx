@@ -5,31 +5,23 @@ type InputWLabelProps = {
     label: string;
     placeholder: string;
     helperText: string;
-    formData: any;
-    setData: any;
-    errors: any;
-    validate: any;
+    setValue: (value: string) => void;
+    value: any;
 };
 
 
 
-function InputWLabel({label, placeholder, helperText, formData, setData, errors, validate}: InputWLabelProps) {
+function InputWLabel({label, placeholder, helperText, setValue, value}: InputWLabelProps) {
     return (
-        <VStack width="90%" mx="3" maxW="300px">
-        <FormControl isRequired isInvalid={'name' in errors}>
-          <FormControl.Label _text={{
-          bold: true
-        }}>{label}</FormControl.Label>
-          <Input placeholder={placeholder}
-           onChangeText={value => {
-            setData({ ...formData, name: value})
-            validate(value);
-           }
-        } />
-          {'name' in errors ? <FormControl.ErrorMessage>{helperText}</FormControl.ErrorMessage> : <FormControl.HelperText>
-              Name should contain atleast 3 character.
-            </FormControl.HelperText>}
-        </FormControl>
+      <VStack width="90%" mx="3" maxW="300px">
+      <FormControl isRequired>
+        <FormControl.Label _text={{bold: true}}>{label}</FormControl.Label>
+        <Input 
+          placeholder={placeholder}
+          value={value}
+          onChangeText={setValue}
+        />
+      </FormControl>
       </VStack>
     );
   }

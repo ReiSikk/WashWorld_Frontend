@@ -24,6 +24,7 @@ import WashHistory from './accountFlow/WashHistory';
 import { Text, TouchableOpacity } from 'react-native';
 import { baseFontSize } from 'native-base/lib/typescript/theme/tools';
 import sizes from 'native-base/lib/typescript/theme/base/sizes';
+import Location from './locationFlow/Location';
 
 //define route params types
 export type RootStackParamList = {
@@ -45,6 +46,7 @@ export type RootStackParamList = {
     PaymentMethods: undefined;
     Settings: undefined;
     WashHistory: undefined;
+    Location: undefined;
   };
   
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -115,6 +117,34 @@ const HomeStackNavigator = () => {
     )
   }
 
+  const LocationsStackNavigator = () => {
+    return (
+      <Stack.Navigator
+            screenOptions={({ navigation }) => ({
+                    tabBarActiveTintColor: '#1A1A1A',
+                    tabBarInactiveTintColor: '#666666',
+                    headerShown: true,
+                      headerRight: () => (     
+                          <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
+                           variant={"outline"} _icon={{
+                            as: AntDesign,
+                            name: "logout"
+                          }} />
+                      ),
+                      headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10, flexDirection:"row", alignItems: 'center', gap:10 }}>
+                          <Ionicons name="return-up-back" size={24} color="black" />
+                          <Text style={{ fontSize:16, fontWeight:'500' }}>Back</Text>
+                        </TouchableOpacity>
+                      ),
+                    })}
+      >
+          <Stack.Screen name="LocationsScreen" component={LocationsScreen} options={{ headerLeft: () => null }} />
+          <Stack.Screen name="Location" component={Location} />
+        </Stack.Navigator>
+    )
+  }
+
 const MainNavigation = () => {
     //TODO: implement redux
     //const dispatch = useDispatch<AppDispatch>();
@@ -145,7 +175,7 @@ const MainNavigation = () => {
                         }}  />
                       <Tab.Screen
                        name="Locations" 
-                       component={LocationsScreen}
+                       component={LocationsStackNavigator}
                        options={{
                         tabBarIcon: ({ color, size }) => (
                           <Ionicons name="location-outline" size={24} color="#666666" />

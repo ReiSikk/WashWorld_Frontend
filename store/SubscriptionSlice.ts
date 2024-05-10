@@ -5,10 +5,13 @@ import { Subscription } from '../entities/subscription'
 
 export interface SubscriptionState {
   subscriptions: Subscription[]
+  selectedSubscription?: Subscription | null
+  
 }
 
 const initialState: SubscriptionState = {
   subscriptions: [],
+  selectedSubscription: null,
 }
 
 
@@ -24,7 +27,12 @@ export const fetchSubscriptions = createAsyncThunk(
 export const subscriptionSlice = createSlice({
   name: 'subscription',
   initialState,
-  reducers: {},
+  reducers: {
+    selectSubscription: (state, action) => {
+      state.selectedSubscription = action.payload;
+      console.log(state.selectedSubscription, "selected subscription in redux state");
+    },
+  },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchSubscriptions.fulfilled, (state, action) => {
@@ -36,6 +44,6 @@ export const subscriptionSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 // ACTIONS
-export const {  } = subscriptionSlice.actions
+export const { selectSubscription } = subscriptionSlice.actions
 
 export default subscriptionSlice.reducer

@@ -74,12 +74,12 @@ const HomeStackNavigator = () => {
         })}
       >
           <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerLeft: () => null }}  />
-          <Stack.Screen name="HomeSubscriptionsScreen" options={{ headerShown: false }} component={HomeSubscriptionsScreen}
+          <Stack.Screen name="HomeSubscriptionsScreen" options={{ headerShown: true }} component={HomeSubscriptionsScreen}
            />
-          <Stack.Screen name="PlanOverview" component={PlanOverview} options={{ headerShown: false }}/>
-          <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate} options={{ headerShown: false }} />
-          <Stack.Screen name="OrderSummary" component={OrderSummary} options={{ headerShown: false }}  />
-          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod} options={{ headerShown: false }}  />
+          <Stack.Screen name="PlanOverview" component={PlanOverview}/>
+          <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate}/>
+          <Stack.Screen name="OrderSummary" component={OrderSummary}/>
+          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}/>
         </Stack.Navigator>
     )
   }
@@ -123,20 +123,7 @@ const HomeStackNavigator = () => {
             screenOptions={({ navigation }) => ({
                     tabBarActiveTintColor: '#1A1A1A',
                     tabBarInactiveTintColor: '#666666',
-                    headerShown: true,
-                      headerRight: () => (     
-                          <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
-                           variant={"outline"} _icon={{
-                            as: AntDesign,
-                            name: "logout"
-                          }} />
-                      ),
-                      headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10, flexDirection:"row", alignItems: 'center', gap:10 }}>
-                          <Ionicons name="return-up-back" size={24} color="black" />
-                          <Text style={{ fontSize:16, fontWeight:'500' }}>Back</Text>
-                        </TouchableOpacity>
-                      ),
+                    headerShown: false,
                     })}
       >
           <Stack.Screen name="LocationsScreen" component={LocationsScreen} options={{ headerLeft: () => null }} />

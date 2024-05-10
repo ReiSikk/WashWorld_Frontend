@@ -5,6 +5,8 @@ import { RootStackParamList } from '../MainNavigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
 import { AntDesign } from '@expo/vector-icons';
+import { selectSubscription } from '../../store/SubscriptionSlice';
+import { Subscription } from '../../entities/subscription';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "PlanOverview">
@@ -13,7 +15,11 @@ type Props = NativeStackScreenProps<RootStackParamList, "PlanOverview">
 function PlanOverview({route, navigation}: Props) {
   const { subscriptionPlanID } = route.params;
   const dispatch: AppDispatch = useDispatch();
-  const subscriptions = useSelector((state: RootState) => state.subscription.subscriptions[subscriptionPlanID]);
+  const subscription = useSelector((state: RootState) => state.subscription.subscriptions[subscriptionPlanID]);
+
+  const handleConfirm = (subscription: Subscription) => {
+    dispatch(selectSubscription(subscription));
+  };
 
 
 
@@ -26,11 +32,11 @@ function PlanOverview({route, navigation}: Props) {
                 </Text>
                 <Box p="4" rounded="md">
                     <Text color="greenWhite" fontSize="2xl" fontWeight={'extrabold'}>
-                    {subscriptions ? subscriptions.name : 'Subscription plan not found'}
+                    {subscription ? subscription.name : 'Subscription plan not found'}
                     </Text>
                     <HStack space={2} alignItems="baseline">
                     <Text color="black" fontSize="5xl" fontWeight={'extrabold'}>
-                        {subscriptions ? subscriptions.price_per_month_kr : 'Subscription price not found'} 
+                        {subscription ? subscription.price_per_month_kr : 'Subscription price not found'} 
                     </Text>
                     <Text color="black" fontSize={'lg'} fontWeight={'extrabold'}>kr./md.</Text>
                     </HStack>
@@ -68,7 +74,11 @@ function PlanOverview({route, navigation}: Props) {
                 <Text color={'grey60'} underline fontWeight={'extrabold'}>
                   Læs mere
                 </Text>
-            <Button  mt={10}colorScheme="green" position={'sticky'} onPress={() => navigation.navigate('EnterLicensePlate')}>
+            <Button  mt={10}colorScheme="green" position={'sticky'} 
+            onPress={() => {
+              dispatch(selectSubscription(subscription.id));
+              navigation.navigate('EnterLicensePlate');
+            }}>
                     Confirm
             </Button>
            </VStack>

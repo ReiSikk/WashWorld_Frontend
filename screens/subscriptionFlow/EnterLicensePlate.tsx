@@ -24,8 +24,12 @@ const customData = require('../../countries.json');
 
 
 const EnterLicensePlate = ({route, navigation}: Props) => {
+  const { subscriptionPlanID } = route.params;
   const dispatch: AppDispatch = useDispatch();
   const stateCars = useSelector((state: RootState) => state.subscription.cars);
+  console.log(subscriptionPlanID, "subscriptionID in enterPlate state");
+ 
+  
 
   const [cars, setCars] = useState<Car[]>([
     {

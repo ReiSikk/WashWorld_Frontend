@@ -77,7 +77,7 @@ function PlanOverview({route, navigation}: Props) {
             <Button  mt={10}colorScheme="green" position={'sticky'} 
             onPress={() => {
               dispatch(selectSubscription(subscription.id));
-              navigation.navigate('EnterLicensePlate');
+              navigation.navigate('EnterLicensePlate', { subscriptionPlanID: subscription.id });
             }}>
                     Confirm
             </Button>

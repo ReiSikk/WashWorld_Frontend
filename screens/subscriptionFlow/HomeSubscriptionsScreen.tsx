@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, Text } from 'native-base'
+import { HStack, ScrollView, Text, Button } from 'native-base'
 import SubscriptionCard from '../../components/SubscriptionCard'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../MainNavigation';
@@ -20,26 +20,50 @@ const Item = ({plan, onPress}: ItemProps) => (
 function HomeSubscriptionsScreen({ navigation }: Props) {
   const dispatch: AppDispatch = useDispatch();
   const subscriptions = useSelector((state: RootState) => state.subscription.subscriptions);
+  const [subscriptionType, setSubscriptionType] = useState('Subscription');
+
+  const [selectedPlan, setSelectedPlan] = useState<number | undefined>(undefined);
 
   // Fetch the subscription plans when the component mounts
   useEffect(() => {
     dispatch(fetchSubscriptions());
   }, [dispatch]);
 
+  const handleTabChange = (type: string) => {
+    setSubscriptionType(type);
+    if (type === 'Subscription' && selectedPlan) {
+    } 
+    const payByPlatePlan = subscriptions.find(plan => plan.name === "Pay by Plate");
+    if (type === 'PayByPlate' && payByPlatePlan){
+      setSelectedPlan(payByPlatePlan.id);
+      navigation.navigate('EnterLicensePlate', {subscriptionPlanID: payByPlatePlan.id});
+    }
+  }
+
+  const handleItemPress = (plan:any) => {
+    setSelectedPlan(plan.id);
+    navigation.navigate('PlanOverview', { subscriptionPlanID: plan.id-1 });
+  }
+  const filteredSubscriptions = subscriptions.filter(plan => plan.name !== 'Pay by Plate');
 
   return (
+    <>
+    <HStack justifyContent="center" mt={4} p={3}>
+    <Button onPress={() => handleTabChange('Subscription')}>Subscription</Button>
+      <Button onPress={() => handleTabChange('PayByPlate')}>Pay by plate</Button>
+    </HStack>
     <FlatList
-      data={subscriptions}
+      data={filteredSubscriptions}
       keyExtractor={(plan) => plan.id.toString()}
       renderItem={({ item: plan }) => (
         <Item 
           plan={plan}
-          onPress={() => navigation.navigate('PlanOverview', { subscriptionPlanID: plan.id-1 })}
-        />
+          onPress={() => handleItemPress(plan)}/>
       )}
       contentContainerStyle={{ margin: 12}}
       ItemSeparatorComponent={() => <View style={{ height: 12 }} />} 
     />
+    </>
   )
 }
 

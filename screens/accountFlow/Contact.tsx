@@ -1,8 +1,12 @@
 import React from 'react'
 import { Text, View, Box, Flex } from 'native-base'
 import { AntDesign } from '@expo/vector-icons';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../MainNavigation';
 
-function Contact() {
+type Props = NativeStackScreenProps<RootStackParamList, "Contact">
+
+function Contact({ navigation }: Props) {
   return (
     <View m="6">
       <Box mb="8">

@@ -1,8 +1,20 @@
 import React from 'react'
-import { Text, View, Box, Button, Flex, VStack, ScrollView, HStack } from 'native-base'
+import { Text, View, Box, Button, Flex, VStack, ScrollView, HStack, Badge } from 'native-base'
+import { TouchableOpacity } from 'react-native';
 import { AntDesign, MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { Divider } from 'native-base';
+import LocationsScreen from '../LocationsScreen';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../MainNavigation';
 
-function Location() {
+
+
+type Props = NativeStackScreenProps<RootStackParamList, "Location">
+
+
+function Location({ navigation }: Props) {
+
+
   return (
 <View mx="6">
     <Text mt="6" mb="4" size="xl" fontWeight="extrabold">Søborg - Dynamovej</Text>
@@ -28,7 +40,47 @@ function Location() {
 </VStack>
 
     <Button my="4">Get directions</Button>
-    <Text>See more car washes in Copenhagen here.</Text>
+    <Flex flexDirection="row">
+    <Text>See more car washes in Copenhagen </Text>
+    <TouchableOpacity onPress={() => navigation.navigate('LocationsScreen')}>
+    <Text color="greenWhite">here.</Text>
+    </TouchableOpacity>
+    </Flex>
+    <Divider my="2" _light={{
+        bg: "grey10"
+      }} _dark={{
+        bg: "grey10"
+      }} />
+
+
+      <Text size="lg" fontWeight="extrabold" mb="2">Wash bays</Text>
+      <VStack space={4} mb="8">
+      <HStack space={4}>
+      <Text>Wash-bay 1</Text>
+      <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg="greenWhite">Available</Badge>
+      </HStack>
+     
+      <HStack space={4}>
+  
+      <Text>Wash-bay 2</Text>
+      <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg="orange">Not available</Badge>
+      </HStack>
+      </VStack>
+      <Text size="lg" fontWeight="extrabold" mb="2">Self-wash</Text>
+      <VStack space={4}>
+      <HStack space={4}>
+      <Text>Self-wash 1</Text>
+      <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg="greenWhite">Available</Badge>
+      </HStack>
+     
+      <HStack space={4}>
+  
+      <Text>Self-wash 2</Text>
+      <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg="orange">Not available</Badge>
+      </HStack>
+      </VStack>
+      
+
 </View>
   )
 }

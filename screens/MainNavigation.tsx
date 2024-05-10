@@ -189,6 +189,7 @@ const MainNavigation = () => {
                         tabBarIcon: ({ color, size }) => (
                           <Ionicons name="trophy-outline" size={24} color="#666666" />
                         ),
+                        headerShown: true,
                         }} 
                        />
                       <Tab.Screen 

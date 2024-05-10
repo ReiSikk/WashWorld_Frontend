@@ -5,11 +5,12 @@ import { Spacer, Flex, Text, View, Box, HStack, Image, Badge } from 'native-base
 function PartnerDiscountCard() {
   return (
     <View>
-        <Flex flexDirection="column" bg="grey5" py="4" px="4" w="100%" h="200">
-            <Badge variant="solid" borderRadius="sm" alignSelf="flex-end" px="4" bg="orange">20%</Badge>
-            <Box alignSelf="flex-start">
-            <Text size="lg" fontWeight="extrabold">Super Tires</Text>
-            <Text>Expires in 3 days</Text>
+        <Flex flexDirection="column" w="100%">
+        <Image source={require('../assets/images/tire_picture.png')} alt="image"/>
+            <Badge variant="solid" borderRadius="sm" px="4" py="2" bg="orange" position="absolute" top="3" right="3">20%</Badge>
+            <Box position="absolute" bottom="2" left="2">
+            <Text color="white" size="lg" fontWeight="extrabold">Super Tires</Text>
+            <Text color="white">Expires in 3 days</Text>
             </Box>
         </Flex>
     </View>

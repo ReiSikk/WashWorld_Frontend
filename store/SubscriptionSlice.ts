@@ -6,12 +6,20 @@ import { Subscription } from '../entities/subscription'
 export interface SubscriptionState {
   subscriptions: Subscription[]
   selectedSubscription?: Subscription | null
-  
+  cars: CarState[]
+}
+
+export interface CarState {
+  plateNumber: string;
+  country: string;
+  plateNumberError: string;
+  countryError: string;
 }
 
 const initialState: SubscriptionState = {
   subscriptions: [],
   selectedSubscription: null,
+  cars: [],
 }
 
 
@@ -32,6 +40,10 @@ export const subscriptionSlice = createSlice({
       state.selectedSubscription = action.payload;
       console.log(state.selectedSubscription, "selected subscription in redux state");
     },
+    setCarsState: (state, action) => {
+      state.cars = action.payload;
+      console.log(state.cars, "cars in redux state");
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -44,6 +56,6 @@ export const subscriptionSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 // ACTIONS
-export const { selectSubscription } = subscriptionSlice.actions
+export const { selectSubscription, setCarsState } = subscriptionSlice.actions
 
 export default subscriptionSlice.reducer

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, VStack, HStack, Text, Input, Select, Button, IconButton, Icon, View, FormControl, ScrollView, Checkbox  } from 'native-base';
+import { Box, VStack, HStack, Text, Input, Select, Button, IconButton, Icon, View, FormControl, ScrollView, Checkbox, Pressable  } from 'native-base';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { AppDispatch, RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,27 +8,40 @@ import { setCurrentStep } from "../../store/StepSlice";
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../MainNavigation';
-import InputWLabel from '../../components/InputWLabel';
-
-
+import  { setCarsState }  from "../../store/SubscriptionSlice";
 
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "EnterLicensePlate">
+type Car = {
+  plateNumber: string;
+  country: string;
+  plateNumberError: string;
+  countryError: string;
+};
 
 const customData = require('../../countries.json');
-console.log(customData);
 
 
 const EnterLicensePlate = ({route, navigation}: Props) => {
   const dispatch: AppDispatch = useDispatch();
+  const stateCars = useSelector((state: RootState) => state.subscription.cars);
 
-  const [plateNumber, setPlateNumber] = useState('');
-  const [formattedPlateNumber, setFormattedPlateNumber] = useState('');
-  const [plateNumberError, setPlateNumberError] = useState('');
+  const [cars, setCars] = useState<Car[]>([
+    {
+      plateNumber: '',
+      country: '',
+      plateNumberError: '',
+      countryError: '',
+    },
+    {
+      plateNumber: '',
+      country: '',
+      plateNumberError: '',
+      countryError: '',
+    },
+  ]);
 
-  const [country, setCountry] = useState('');
-  const [countryError, setCountryError] = useState('');
   const [addSecondPlate, setAddSecondPlate] = useState(false);
 
   //compare to values from countries.json
@@ -41,37 +54,68 @@ const EnterLicensePlate = ({route, navigation}: Props) => {
 }
 
 //validate country
-const handleCountryChange = (value: string) => {
-const validation = validateCountry(value);
-if (!validation.isValid) {
-    setCountryError(validation.errorMessage);
-    return false
-} else {
-    setCountryError('');
-    return true
-}
-}
-
-  const validateNumberPlate = (value:string) => {
-    if (value === undefined || value.length < 3) {
-      setPlateNumberError('Invalid plate number');
-      return false;
+const handleCountryChange = (index:any, value:string) => {
+  const validation = validateCountry(value);
+  const newCars = cars.map((car, i) => {
+    if (i === index) {
+      return { ...car, country: value, countryError: validation.errorMessage };
     }
-    setPlateNumberError('');
-    return true;
-  };
+    return car;
+  });
 
-  
+  setCars(newCars);
+  return newCars[index]; // return the updated car
+};
 
+const validateNumberPlate = (index: number, value: string) => {
+  let plateNumberError = '';
+  if (value === undefined || value.length < 3) {
+    plateNumberError = 'Invalid plate number';
+  }
 
-
-  const validateForm = () => {
-    handleCountryChange(country);
-    validateNumberPlate(plateNumber);
-    if (handleCountryChange(country) && validateNumberPlate(plateNumber)) {
-      navigation.navigate('OrderSummary');
+  const newCars = cars.map((car, i) => {
+    if (i === index) {
+        const trimmedPlateNumber = value.replace(/\s/g, '').toUpperCase();
+      return { ...car, plateNumber: trimmedPlateNumber, plateNumberError };
     }
-  };
+    return car;
+  });
+
+  setCars(newCars);
+  return newCars[index];
+};
+
+const validateForm = () => {
+  let isFormValid = true;
+  const newCars = cars.map((car, index) => {
+    // Initialize placeholders for validation results
+    let validatedCountry = { ...car };
+    let validatedPlate = { ...car };
+
+    // Always validate first car and second car if it exists
+    if (index === 0 || (index === 1 && addSecondPlate)) {
+      validatedCountry = handleCountryChange(index, car.country);
+      validatedPlate = validateNumberPlate(index, car.plateNumber);
+
+      if (validatedCountry.countryError || validatedPlate.plateNumberError || !car.country || !car.plateNumber) {
+        isFormValid = false;
+      }
+    }
+
+    return {...car, ...validatedCountry, ...validatedPlate}; 
+  });
+
+  setCars(newCars);
+
+  if (isFormValid) {
+    const trimmedCarsPayload = newCars.filter((_, i) => i === 0 || (i === 1 && addSecondPlate))
+                                      .map(({ country, plateNumber }) => ({ country, plateNumber }));
+    dispatch(setCarsState(trimmedCarsPayload));
+    navigation.navigate('OrderSummary');
+  } else {
+    alert('Please correct the errors in the form.');
+  }
+};
 
 
   return (
@@ -84,44 +128,56 @@ if (!validation.isValid) {
       <Text>
       To use the subscription service, you need to register your license plate first for it to be recognized at he station.
       </Text>
-      <VStack space={4}>
-  <FormControl isRequired isInvalid={!!plateNumberError}>
-    <FormControl.Label _text={{bold: true}}>Plate number</FormControl.Label>
-    <Input 
-      placeholder="ABC 123"
-      value={plateNumber}
-      onChangeText={setPlateNumber}
-    />
-    <FormControl.ErrorMessage>{plateNumberError}</FormControl.ErrorMessage>
-  </FormControl>
-  <Button onPress={() => setAddSecondPlate(!addSecondPlate)} color={'black'}>
-    <HStack justifyContent={'flex-start'}>
-  <AntDesign name="plus" size={24} color="black" />
-    <Text>{addSecondPlate  ? 'Remove second car' : 'Add second car' }</Text>
-    </HStack>
-    </Button>
-  {addSecondPlate && (
-     <FormControl isRequired isInvalid={!!plateNumberError}>
-     <FormControl.Label _text={{bold: true}}>Plate number</FormControl.Label>
-     <Input 
-       placeholder="ABC 123"
-       value={plateNumber}
-       onChangeText={setPlateNumber}
-     />
-     <FormControl.ErrorMessage>{plateNumberError}</FormControl.ErrorMessage>
-   </FormControl>
-  ) 
-  }
-  <FormControl isRequired isInvalid={!!countryError}>
-    <FormControl.Label _text={{bold: true}}>Country</FormControl.Label>
-    <Input 
-      placeholder="Denmark"
-      value={country}
-      onChangeText={setCountry}
-    />
-    <FormControl.ErrorMessage>{countryError}</FormControl.ErrorMessage>
-  </FormControl>
-</VStack>
+
+    <VStack space={4}>
+      <FormControl isRequired isInvalid={!!cars[0].plateNumberError}>
+        <FormControl.Label _text={{bold: true}}>Plate number</FormControl.Label>
+        <Input 
+          placeholder="ABC 123"
+          value={cars[0].plateNumber}
+          onChangeText={(value) => validateNumberPlate(0,value)}
+        />
+        <FormControl.ErrorMessage>{cars[0].plateNumberError}</FormControl.ErrorMessage>
+      </FormControl>
+      <FormControl isRequired isInvalid={!!cars[0].countryError}>
+        <FormControl.Label _text={{bold: true}}>Country</FormControl.Label>
+        <Input 
+          placeholder="Denmark"
+          value={cars[0].country}
+          onChangeText={(value) => handleCountryChange(0,value)}
+        />
+        <FormControl.ErrorMessage>{cars[0].countryError}</FormControl.ErrorMessage>
+      </FormControl>
+    </VStack>
+      <Pressable onPress={() => setAddSecondPlate(!addSecondPlate)} color={'black'} >
+        <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
+        <Text> Add a second license plate</Text>
+        <Icon as={AntDesign} name={addSecondPlate ? 'up' : 'down'} size={4} color={'black'} />
+        </HStack>
+      </Pressable>
+      {addSecondPlate && (
+        <VStack space={4}>
+        <FormControl isRequired isInvalid={!!cars[1].plateNumberError}>
+          <FormControl.Label _text={{bold: true}}>Plate number</FormControl.Label>
+          <Input 
+            placeholder="ABC 123"
+            value={cars[1].plateNumber}
+            onChangeText={(value) => validateNumberPlate(1,value)}
+          />
+          <FormControl.ErrorMessage>{cars[1].plateNumberError}</FormControl.ErrorMessage>
+        </FormControl>
+        <FormControl isRequired isInvalid={!!cars[1].countryError}>
+          <FormControl.Label _text={{bold: true}}>Country</FormControl.Label>
+          <Input 
+            placeholder="Denmark"
+            value={cars[1].country}
+            onChangeText={(value) => handleCountryChange(1,value)}
+          />
+          <FormControl.ErrorMessage>{cars[1].countryError}</FormControl.ErrorMessage>
+        </FormControl>
+      </VStack>
+      )}
+
 
       <Button mt="5" colorScheme="green" onPress={validateForm}>
         Add license plate

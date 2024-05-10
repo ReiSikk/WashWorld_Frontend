@@ -39,7 +39,7 @@ export type RootStackParamList = {
     HomeSubscriptionsScreen: undefined;
     PlanOverview: { subscriptionPlanID: number};
     EnterLicensePlate: { subscriptionPlanID: number};
-    OrderSummary: undefined;
+    OrderSummary: { subscriptionPlanID: number };
     SelectPaymentMethod: undefined;
     Contact: undefined;
     FAQ: undefined;

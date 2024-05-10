@@ -115,7 +115,7 @@ const validateForm = () => {
     const trimmedCarsPayload = newCars.filter((_, i) => i === 0 || (i === 1 && addSecondPlate))
                                       .map(({ country, plateNumber }) => ({ country, plateNumber }));
     dispatch(setCarsState(trimmedCarsPayload));
-    navigation.navigate('OrderSummary');
+    navigation.navigate('OrderSummary', { subscriptionPlanID: subscriptionPlanID});
   } else {
     alert('Please correct the errors in the form.');
   }
@@ -123,6 +123,7 @@ const validateForm = () => {
 
 
   return (
+    <>
     <Box pt={'5%'}>
       <VStack space={4} m="6">
         <ProgressSteps currentStep={0} totalSteps={4}  />
@@ -181,13 +182,14 @@ const validateForm = () => {
         </FormControl>
       </VStack>
       )}
-
-
-      <Button mt="5" colorScheme="green" onPress={validateForm}>
-        Add license plate
-      </Button>
       </VStack>
       </Box>
+        <Box bottom={0} mt={'auto'} ml={6} mr={6} mb={6}>
+        <Button mt="5" colorScheme="green" onPress={validateForm}>
+          Add license plate
+        </Button>
+      </Box>
+    </>
   );
 };
 

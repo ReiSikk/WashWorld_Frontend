@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, VStack, HStack, Text, Input, Select, Button, IconButton, Icon, View, FormControl, ScrollView, Checkbox, Pressable  } from 'native-base';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { AppDispatch, RootState } from '../../store/store';
@@ -27,26 +27,34 @@ const EnterLicensePlate = ({route, navigation}: Props) => {
   const { subscriptionPlanID } = route.params;
   const dispatch: AppDispatch = useDispatch();
   const stateCars = useSelector((state: RootState) => state.subscription.cars);
+  console.log(stateCars, "stateCars in enterPlate state");
   console.log(subscriptionPlanID, "subscriptionID in enterPlate state");
  
   
 
   const [cars, setCars] = useState<Car[]>([
     {
-      plateNumber: '',
-      country: '',
+      plateNumber: stateCars[0]?.plateNumber ||'',
+      country: stateCars[0]?.country ||'',
       plateNumberError: '',
       countryError: '',
     },
     {
-      plateNumber: '',
-      country: '',
+      plateNumber: stateCars[1]?.plateNumber ||'',
+      country: stateCars[1]?.country ||'',
       plateNumberError: '',
       countryError: '',
     },
   ]);
 
   const [addSecondPlate, setAddSecondPlate] = useState(false);
+  useEffect(() => {
+    if (stateCars[1]?.plateNumber && stateCars[1]?.country) {
+      setAddSecondPlate(true);
+    } else {
+      setAddSecondPlate(false);
+    }
+  }, [stateCars]);
 
   //compare to values from countries.json
   const validateCountry = (value: string): { isValid: boolean, errorMessage: string } => {
@@ -156,8 +164,8 @@ const validateForm = () => {
     </VStack>
       <Pressable onPress={() => setAddSecondPlate(!addSecondPlate)} color={'black'} >
         <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
-        <Text> Add a second license plate</Text>
-        <Icon as={AntDesign} name={addSecondPlate ? 'up' : 'down'} size={4} color={'black'} />
+        <Text>{addSecondPlate ? 'Remove second car' : 'Add another car'}</Text>
+        <Icon as={AntDesign} name={addSecondPlate ? 'minus' : 'plus'} size={4} color={'black'} />
         </HStack>
       </Pressable>
       {addSecondPlate && (

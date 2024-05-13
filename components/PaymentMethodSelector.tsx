@@ -7,28 +7,35 @@ import { AppDispatch } from '../store/store';
 import { useDispatch } from 'react-redux';
 import { CreateCardDTO } from '../entities/CreateCardDTO';
 import { createCard } from '../store/CardSlice';
+import moment from 'moment';
+import dayjs from 'dayjs';
 
 
 
 
 const PaymentMethodSelector = () => {
   const dispatch: AppDispatch = useDispatch();
-
-  const [formData, setData] = React.useState({
+  
+  const [showForm, setShowForm] = useState(false);
+  const [cardAdded, setCardAdded] = useState(false);
+  const [formData, setFormData] = React.useState({
     nameOnCard: "",
     cardNumber: "",
     expirationDate: new Date(),
     cvv: "",
   });
-  const [errors, setErrors] = React.useState({});
-
   const newCard = new CreateCardDTO(formData.nameOnCard, formData.cardNumber, formData.expirationDate, formData.cvv);
-  const [cardAdded, setCardAdded] = useState(false);
-const [showForm, setShowForm] = useState(false);
+  const [expirationDateInput, setExpirationDateInput] = React.useState('');
+  console.log(formData, 'formData');
+
+  const [errors, setErrors] = useState({ nameOnCard: '', cardNumber: '', expirationDate: '', cvv: ''});
+  const [date, setDate] = useState<any>(dayjs());
+  const formatDate = (date: dayjs.Dayjs) => {
+    return dayjs(date).format('MM/YYYY');
+  };
 
 const [paymentMethods, setPaymentMethods] = useState(['']);
 const [selectedMethod, setSelectedMethod] = useState('');
-console.log(selectedMethod, 'selectedMethod');
 
 //TODO: Get saved payment methods from backend API
 useEffect(() => {
@@ -49,37 +56,43 @@ const handleAddPaymentCard = () => {
 
 
 
-const validate = () => {
-  let newErrors = {
-    nameOnCard: '',
-    cardNumber: '',
-    expirationDate: '',
-    cvv: '',
-  };
 
-  if (formData.nameOnCard === undefined || formData.nameOnCard.length < 3) {
-    newErrors.nameOnCard = formData.nameOnCard === undefined ? 'Name is required' : 'Name is too short';
-  }
 
-  if (formData.cardNumber === undefined || formData.cardNumber.length < 16) {
-    newErrors.cardNumber = formData.cardNumber === undefined ? 'Card number is required' : 'Card number is too short';
-  }
+const handleSubmit = () => {
+  dispatch(createCard(newCard))
+  .then(() => {
+    // Entry added successfully
+    setCardAdded(true);
+  })
+  .catch(error => {
+    // Handle error if entry addition fails
+    console.error('Error adding card:', error);
+  });
+};
 
-  if (formData.expirationDate === undefined || !/^\d{2}\/\d{2}$/.test(formData.expirationDate.toISOString())) {
-    newErrors.expirationDate = formData.expirationDate === undefined ? 'Expiry date is required' : 'Expiry date is not valid';
-  }
+const handleValidation = (fieldName: string) => {
+  const { nameOnCard, cardNumber, expirationDate, cvv } = formData;
+  const newErrors = { nameOnCard: '', cardNumber: '', expirationDate: '', cvv: ''};
 
-  if (formData.cvv === undefined || formData.cvv.length < 3) {
-    newErrors.cvv = formData.cvv === undefined ? 'CVV is required' : 'CVV is too short';
+  if (fieldName === 'nameOnCard') {
+    if (nameOnCard.length < 2) {
+      newErrors.nameOnCard = 'Name needs to be longer than 1 character';
+    }
+  } else if (fieldName === 'cardNumber') {
+    if (cardNumber.trim() === '') {
+      newErrors.cardNumber = 'Card number cannot be empty';
+    }
+  } else if (fieldName === 'expirationDate') {
+    if (expirationDate === null || expirationDate === undefined) {
+      newErrors.expirationDate = 'Expiration date cannot be empty';
+    }
+  } else if (fieldName === 'cvv') {
+    if (newErrors.cvv.trim() === '') {
+      newErrors.cvv = 'CVV cannot be empty';
+    }
   }
 
   setErrors(newErrors);
-
-  return Object.keys(newErrors).length === 0;
-};
-
-const onSubmit = () => {
-  validate() ? console.log('Submitted') : console.log('Validation Failed');
 };
 
 
@@ -121,7 +134,7 @@ const onSubmit = () => {
           onPress={() => setSelectedMethod('Mobile Pay')}
         >
           <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
-            <Icon as={AntDesign} name='plus' size={4} color={'black'}  />
+            <Icon as={AntDesign} name={'plus'} size={4} color={'black'}  />
             <Text>Pay with Mobile Pay</Text>
             <AntDesign name="right" size={14} marginLeft={'auto'} />
           </HStack>
@@ -130,63 +143,75 @@ const onSubmit = () => {
           color={'black'}
           padding={4}
           borderRadius={4}
-          onPress={() => {
-            setShowForm(!showForm)
-          }
-        }
         >
+            <Pressable onPress={() => setShowForm(!showForm)}>
           <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
-            <Icon as={AntDesign} name='plus' size={4} color={'black'}  />
+            <Icon as={AntDesign} name={showForm ? 'minus' : 'plus'} size={4} color={'black'}  />
             <Text>Add a payment card</Text>
             <AntDesign name={showForm ? 'down' : 'right' } size={14} marginLeft={'auto'} />
           </HStack>
+            </Pressable>
           {showForm && 
-          <VStack width="90%" mx="3" maxW="300px">
+          <VStack width="100%" space={4} py={6}>
       <FormControl isRequired isInvalid={'nameOncard' in errors}>
         <FormControl.Label _text={{
         bold: true
       }}>Name on card</FormControl.Label>
-        <Input placeholder="John" onChangeText={value => setData({ ...formData,
+        <Input placeholder="John" maxLength={255} type='text'
+         onChangeText={value => setFormData({ ...formData,
         nameOnCard: value
-      })} />
-        {'nameOnCard' in errors ? <FormControl.ErrorMessage>Invalid format</FormControl.ErrorMessage> : <FormControl.HelperText>
-            Name should contain atleast 3 character.
-          </FormControl.HelperText>}
+      })}
+      onBlur={() => handleValidation('nameOnCard')}
+      value={formData.nameOnCard}
+       />
+       {errors.nameOnCard ? <Text color={'error.500'} fontSize={'sm'}>Invalid name</Text> : null}
       </FormControl>
       <FormControl isRequired isInvalid={'cardNumber' in errors}>
         <FormControl.Label _text={{
         bold: true
       }}>Card number</FormControl.Label>
-        <Input placeholder="1234 5678 9012 3456 " onChangeText={value => setData({ ...formData,
+        <Input placeholder="1234 5678 9012 3456" maxLength={23}
+         onChangeText={value => setFormData({ ...formData,
         cardNumber: value
-      })} />
-        {'cardNumber' in errors ? <FormControl.ErrorMessage>Invalid card number format</FormControl.ErrorMessage> : <FormControl.HelperText>
-            Card number should contain atleast 16 characters.
-          </FormControl.HelperText>}
+      })}
+      onBlur={() => handleValidation('cardNumber')}
+      value={formData.cardNumber}
+       />
+        {errors.cardNumber ? <Text color={'error.500'} fontSize={'sm'}>Invalid card number</Text> : null}
       </FormControl>
-      <FormControl isRequired isInvalid={'expirationDate' in errors}>
+      <HStack space={4} flex={1/1}>
+      <FormControl isRequired isInvalid={'expirationDate' in errors} flex={2}>
         <FormControl.Label _text={{
         bold: true
       }}>Expiration date</FormControl.Label>
-        <Input placeholder="MM / YY " onChangeText={value => setData({ ...formData,
-        expirationDate: new Date(value)
-      })} />
-        {'expirationDate' in errors ? <FormControl.ErrorMessage>Invalid expiration date</FormControl.ErrorMessage> : <FormControl.HelperText>
-            Invalid expiration date format.
-          </FormControl.HelperText>}
+      <Input placeholder="MM / YY"
+   onChangeText={value => {
+     setExpirationDateInput(value);
+     const date = moment(value, 'MM / YY');
+     setFormData({ ...formData, expirationDate: date.toDate() });
+   }}
+    onBlur={() => handleValidation('expirationDate')}
+   value={expirationDateInput}
+    />
+        {errors.expirationDate ? <Text color={'error.500'} fontSize={'sm'}>Invalid expiration date</Text> : null}
+       
       </FormControl>
-      <FormControl isRequired isInvalid={'cvv' in errors}>
+      <FormControl isRequired isInvalid={'cvv' in errors} flex={1}>
         <FormControl.Label _text={{
         bold: true
       }}>CVV</FormControl.Label>
-        <Input placeholder="CVV " onChangeText={value => setData({ ...formData,
-        nameOnCard: value
-      })} />
-        {'cvv' in errors ? <FormControl.ErrorMessage>Invalid CVV</FormControl.ErrorMessage> : <FormControl.HelperText>
-            Invalid CVV
-          </FormControl.HelperText>}
+        <Input placeholder="CVV" maxLength={4} 
+        onChangeText={value => setFormData({ ...formData,
+        cvv: value
+      })}
+      onBlur={() => handleValidation('cvv')}
+      value={formData.cvv}
+       />
+        {errors.cvv ? <Text color={'error.500'} fontSize={'sm'}>Invalid CVV number</Text> : null}
+       
       </FormControl>
-      <Button onPress={onSubmit} mt="5" bg={'greenWhite'}>
+      </HStack>
+      <Button onPress={handleSubmit} mt="5" bg={'greenWhite'}>
         Add card
       </Button>
           </VStack>

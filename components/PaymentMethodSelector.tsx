@@ -11,7 +11,7 @@ import moment from 'moment';
 import dayjs from 'dayjs';
 
 
-
+type FieldName = 'nameOnCard' | 'cardNumber' | 'expirationDate' | 'cvv';
 
 const PaymentMethodSelector = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -70,29 +70,33 @@ const handleSubmit = () => {
   });
 };
 
-const handleValidation = (fieldName: string) => {
-  const { nameOnCard, cardNumber, expirationDate, cvv } = formData;
-  const newErrors = { nameOnCard: '', cardNumber: '', expirationDate: '', cvv: ''};
-
-  if (fieldName === 'nameOnCard') {
-    if (nameOnCard.length < 2) {
-      newErrors.nameOnCard = 'Name needs to be longer than 1 character';
-    }
-  } else if (fieldName === 'cardNumber') {
-    if (cardNumber.trim() === '') {
-      newErrors.cardNumber = 'Card number cannot be empty';
-    }
-  } else if (fieldName === 'expirationDate') {
-    if (expirationDate === null || expirationDate === undefined) {
-      newErrors.expirationDate = 'Expiration date cannot be empty';
-    }
-  } else if (fieldName === 'cvv') {
-    if (newErrors.cvv.trim() === '') {
-      newErrors.cvv = 'CVV cannot be empty';
-    }
+const handleValidation = (fieldName: FieldName) => {
+  let newErrors = {
+    [fieldName]: '',
+  };
+  if (fieldName === 'nameOnCard' && formData.nameOnCard.length < 2) {
+    newErrors.nameOnCard = 'Name needs to be longer than 1 character';
+  }
+  if (fieldName === 'cardNumber' && formData.cardNumber.trim() === '') {
+    newErrors.cardNumber = 'Card number cannot be empty';
+  }
+  if (fieldName === 'expirationDate' && !formData.expirationDate) {
+    newErrors.expirationDate = 'Expiration date cannot be empty';
+  }
+  if (fieldName === 'cvv' && formData.cvv.trim() === '') {
+    newErrors.cvv = 'CVV cannot be empty';
   }
 
-  setErrors(newErrors);
+  setErrors(prev => ({ ...prev, ...newErrors }));
+  return newErrors;
+};
+
+const handleInputChange = (name, value) => {
+  setFormData(prev => ({ ...prev, [name]: value }));
+  // Clear errors when user starts typing again
+  if (errors[name]) {
+    setErrors(prev => ({ ...prev, [name]: '' }));
+  }
 };
 
 
@@ -152,68 +156,55 @@ const handleValidation = (fieldName: string) => {
           </HStack>
             </Pressable>
           {showForm && 
-          <VStack width="100%" space={4} py={6}>
-      <FormControl isRequired isInvalid={'nameOncard' in errors}>
-        <FormControl.Label _text={{
-        bold: true
-      }}>Name on card</FormControl.Label>
-        <Input placeholder="John" maxLength={255} type='text'
-         onChangeText={value => setFormData({ ...formData,
-        nameOnCard: value
-      })}
-      onBlur={() => handleValidation('nameOnCard')}
-      value={formData.nameOnCard}
-       />
-       {errors.nameOnCard ? <Text color={'error.500'} fontSize={'sm'}>Invalid name</Text> : null}
-      </FormControl>
-      <FormControl isRequired isInvalid={'cardNumber' in errors}>
-        <FormControl.Label _text={{
-        bold: true
-      }}>Card number</FormControl.Label>
-        <Input placeholder="1234 5678 9012 3456" maxLength={23}
-         onChangeText={value => setFormData({ ...formData,
-        cardNumber: value
-      })}
-      onBlur={() => handleValidation('cardNumber')}
-      value={formData.cardNumber}
-       />
-        {errors.cardNumber ? <Text color={'error.500'} fontSize={'sm'}>Invalid card number</Text> : null}
-      </FormControl>
-      <HStack space={4} flex={1/1}>
-      <FormControl isRequired isInvalid={'expirationDate' in errors} flex={2}>
-        <FormControl.Label _text={{
-        bold: true
-      }}>Expiration date</FormControl.Label>
-      <Input placeholder="MM / YY"
-   onChangeText={value => {
-     setExpirationDateInput(value);
-     const date = moment(value, 'MM / YY');
-     setFormData({ ...formData, expirationDate: date.toDate() });
-   }}
-    onBlur={() => handleValidation('expirationDate')}
-   value={expirationDateInput}
-    />
-        {errors.expirationDate ? <Text color={'error.500'} fontSize={'sm'}>Invalid expiration date</Text> : null}
-       
-      </FormControl>
-      <FormControl isRequired isInvalid={'cvv' in errors} flex={1}>
-        <FormControl.Label _text={{
-        bold: true
-      }}>CVV</FormControl.Label>
-        <Input placeholder="CVV" maxLength={4} 
-        onChangeText={value => setFormData({ ...formData,
-        cvv: value
-      })}
-      onBlur={() => handleValidation('cvv')}
-      value={formData.cvv}
-       />
-        {errors.cvv ? <Text color={'error.500'} fontSize={'sm'}>Invalid CVV number</Text> : null}
-       
-      </FormControl>
-      </HStack>
-      <Button onPress={handleSubmit} mt="5" bg={'greenWhite'}>
-        Add card
-      </Button>
+            <VStack width="100%" space={4} py={6}>
+            <FormControl isRequired isInvalid={errors.nameOnCard}>
+              <FormControl.Label _text={{ bold: true }}>Name on card</FormControl.Label>
+              <Input
+                placeholder="John Doe"
+                maxLength={255}
+                onChangeText={value => handleInputChange('nameOnCard', value)}
+                onBlur={() => handleValidation('nameOnCard')}
+                value={formData.nameOnCard}
+              />
+              {errors.nameOnCard && <Text color={'error.500'} fontSize={'sm'}>{errors.nameOnCard}</Text>}
+            </FormControl>
+            <FormControl isRequired isInvalid={errors.cardNumber}>
+              <FormControl.Label _text={{ bold: true }}>Card number</FormControl.Label>
+              <Input
+                placeholder="1234 5678 9012 3456"
+                maxLength={19}
+                onChangeText={value => handleInputChange('cardNumber', value)}
+                onBlur={() => handleValidation('cardNumber')}
+                value={formData.cardNumber}
+              />
+              {errors.cardNumber && <Text color={'error.500'} fontSize={'sm'}>{errors.cardNumber}</Text>}
+            </FormControl>
+            <HStack space={4} flex={1}>
+              <FormControl isRequired isInvalid={errors.expirationDate} flex={2}>
+                <FormControl.Label _text={{ bold: true }}>Expiration date</FormControl.Label>
+                <Input
+                  placeholder="MM/YY"
+                  onChangeText={value => handleInputChange('expirationDate', moment(value, 'MM/YY').format('MM/YY'))}
+                  onBlur={() => handleValidation('expirationDate')}
+                  value={formData.expirationDate}
+                />
+                {errors.expirationDate && <Text color={'error.500'} fontSize={'sm'}>{errors.expirationDate}</Text>}
+              </FormControl>
+              <FormControl isRequired isInvalid={errors.cvv} flex={1}>
+                <FormControl.Label _text={{ bold: true }}>CVV</FormControl.Label>
+                <Input
+                  placeholder="CVV"
+                  maxLength={4}
+                  onChangeText={value => handleInputChange('cvv', value)}
+                  onBlur={() => handleValidation('cvv')}
+                  value={formData.cvv}
+                />
+                {errors.cvv && <Text color={'error.500'} fontSize={'sm'}>{errors.cvv}</Text>}
+              </FormControl>
+            </HStack>
+            <Button onPress={handleAddPaymentCard} mt="5" bg={'greenWhite'}>
+              Add card
+            </Button>
           </VStack>
 }
         </Pressable>

@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
 import { CreateCardDTO } from '../entities/CreateCardDTO';
 import { createCard } from '../store/CardSlice';
-import { format, parse, isValid, set } from 'date-fns';
 import dayjs from 'dayjs';
+import { parse, isValid } from 'date-fns';
 
 const PaymentMethodSelector: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -23,12 +23,6 @@ const PaymentMethodSelector: React.FC = () => {
   });
   const [expirationDateStr, setExpirationDateStr] = useState('');
 
-/*   const [date, setDate] = useState<any>(dayjs());
-  const formatDate = (date: dayjs.Dayjs) => {
-    return dayjs(date).format('MM/YYYY');
-  }; */
-
-
   const [errors, setErrors] = useState({ nameOnCard: '', cardNumber: '', expirationDate: '', cvv: '' });
 
   useEffect(() => {
@@ -36,7 +30,6 @@ const PaymentMethodSelector: React.FC = () => {
   }, []);
 
   const handleSubmit = () => {
-    console.log("handleSubmit");
     const nameErrors = handleValidation('nameOnCard');
     const cardNumberErrors = handleValidation('cardNumber');
     const expirationDateErrors = handleValidation('expirationDate');
@@ -51,10 +44,9 @@ const PaymentMethodSelector: React.FC = () => {
     const newCard: CreateCardDTO = {
       nameOnCard: formData.nameOnCard,
       cardNumber: formData.cardNumber,
-      expirationDate: dayjs(formData.expirationDate).toDate(),
+      expirationDate: formData.expirationDate,
       cvv: formData.cvv,
     };
-    console.log('New card:', newCard)
 
     dispatch(createCard(newCard))
       .then(() => {
@@ -77,10 +69,18 @@ const PaymentMethodSelector: React.FC = () => {
       if (cardNumber.trim() === '') {
         newErrors.cardNumber = 'Card number cannot be empty';
       }
-    }  else if (fieldName === 'expirationDate') {
-      if (expirationDate === null || !isValid(expirationDate)) {
-        newErrors.expirationDate = 'Expiration date must be in MMYY format';
-      } 
+    } else if (fieldName === 'expirationDate') {
+      if (!/^\d{2}\/\d{2}$/.test(expirationDateStr)) {
+        newErrors.expirationDate = 'Expiration date must be in MM/YY format';
+      } else {
+        const [month, year] = expirationDateStr.split('/').map(Number);
+        const expDate = new Date(`${year + 2000}-${month}-01`);
+        if (!isValid(expDate)) {
+          newErrors.expirationDate = 'Invalid expiration date';
+        } else if (expDate < new Date()) {
+          newErrors.expirationDate = 'Expiration date cannot be in the past';
+        }
+      }
     } else if (fieldName === 'cvv') {
       if (cvv.trim() === '') {
         newErrors.cvv = 'CVV cannot be empty';
@@ -91,25 +91,26 @@ const PaymentMethodSelector: React.FC = () => {
     return newErrors;
   };
 
-
   const handleExpirationDateChange = (value: string) => {
-     // Remove all non-numeric characters
-  const numericValue = value.replace(/\D/g, '');
+    const numericValue = value.replace(/\D/g, '');
 
-  // Split the numeric value into month and year
-  const month = numericValue.slice(0, 2);
-  const year = numericValue.slice(2, 4);
+    if (numericValue.length <= 4) {
+      const month = numericValue.slice(0, 2);
+      const year = numericValue.slice(2, 4);
 
-  if (!month || !year) {
-    console.error('Invalid date format. Expected MMYY');
-    return;
-  }
+      const formattedValue = `${month}${year ? ' / ' + year : ''}`;
+      setExpirationDateStr(formattedValue);
 
-    const dateObject = dayjs(`20${year}-${month}`, 'YYYY/MM').endOf('month').toDate();
-      setFormData({ ...formData, expirationDate: dateObject });
-      setExpirationDateStr(`${month} / ${year}`);
+      if (month.length === 2 && year.length === 2) {
+        const dateObject = parse(`20${year}-${month}-01`, 'yyyy-MM-dd', new Date());
+        if (isValid(dateObject)) {
+          setFormData({ ...formData, expirationDate: dateObject });
+        }
+      }
+    }
   };
-  console.log('date', formData.expirationDate)
+
+  console.log('formData:', formData.expirationDate);
 
   return (
     <ScrollView>
@@ -193,14 +194,12 @@ const PaymentMethodSelector: React.FC = () => {
                   <FormControl isRequired flex={2}>
                     <FormControl.Label _text={{ bold: true }}>Expiration date</FormControl.Label>
                     <Input
-                        type="text"
-                        placeholder="MM/YY"
-                        value={dayjs(formData.expirationDate).toDate()}
-                        onChangeText={(value) => {
-                            handleExpirationDateChange(value);
-                        }}
-                        onBlur={() => handleValidation('expirationDate')}
-                      />
+                      type="text"
+                      placeholder="MM/YY"
+                      value={expirationDateStr} // Ensure this is a string
+                      onChangeText={handleExpirationDateChange}
+                      onBlur={() => handleValidation('expirationDate')}
+                    />
                     {errors.expirationDate && <Text color={'error.500'} fontSize={'sm'}>{errors.expirationDate}</Text>}
                   </FormControl>
                   <FormControl isRequired flex={1}>

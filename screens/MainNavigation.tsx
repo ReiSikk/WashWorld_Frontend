@@ -138,7 +138,7 @@ const MainNavigation = () => {
     const dispatch = () => {};
     //TODO: get user state from redux
     //const isSignedIn = useSelector((state: RootState) => state.user.token);
-    const isSignedIn = true;
+    const isSignedIn = false;
   
       return (
           <NavigationContainer>

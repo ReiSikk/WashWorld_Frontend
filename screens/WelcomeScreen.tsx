@@ -1,40 +1,34 @@
 import React from 'react';
-import { Container, Text, View, useTheme, Button, Input, Box, Heading, Link} from 'native-base';
-import  { StyleSheet} from 'react-native';
+import { Container, Text, View, useTheme, Button, Input, Box, Heading, Link, Flex} from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from './MainNavigation';
 
-function WelcomeScreen() {
-  const theme = useTheme();
-  const styles = getStyles(theme);
+type Props = NativeStackScreenProps<RootStackParamList, "WelcomeScreen">
+
+function WelcomeScreen({ navigation }: Props) {
+
+
   return (
-<View style={styles.container}>
-      <Box safeArea>
+<View>
+  <Flex safeArea justifyContent="center" h="100%" bg="black">
       <Box alignItems="center">
-        <Heading size="xl" fontWeight="600" color="white" py="10">
+        <Heading size="xl" fontWeight="extrabold" color="white">
           WashWorld
         </Heading>
-     
-        <Button w="80%" maxWidth="300px" bg="greenBlack">Sign up</Button>
+        <Button onPress={() => navigation.navigate('SignupScreen')} w="80%" maxWidth="300px" bg="greenBlack" mt="8" mb="4" _text={{
+            fontWeight: "extrabold",
+          }}>Sign up</Button>
       </Box>
       <Link _text={{
             fontSize: "sm",
-            fontWeight: "500",
             color: "white"
-          }} alignSelf="center" mt="1" py="2">
+          }} alignSelf="center" onPress={() => navigation.navigate('LoginScreen')}>
 Have an account? Log in instead
             </Link>
-      </Box>
+      </Flex>
     </View>
   );
 }
-
-
-const getStyles = (theme: any) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: "center",
-      backgroundColor: "black",
-    },
-  });
 
 export default WelcomeScreen;

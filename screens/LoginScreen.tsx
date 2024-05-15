@@ -1,11 +1,13 @@
 import React from "react";
 import { Container, useTheme, Button, ICustomTheme, Center, Box, FormControl, Input, Stack, Link, Heading } from "native-base";
 import { View, Text, StyleSheet } from "react-native";
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from './MainNavigation';
 
+type Props = NativeStackScreenProps<RootStackParamList, "LoginScreen">
 
-function LoginScreen() {
-  const theme: ICustomTheme = useTheme();
-  const styles = getStyles(theme);
+function LoginScreen({ navigation }: Props) {
+
   return (
     <View>
       <Box safeArea p="10" py="8">
@@ -43,7 +45,7 @@ function LoginScreen() {
             fontSize: "sm",
             fontWeight: "500",
             color: "black"
-          }} alignSelf="center" mt="1" py="6">
+          }} alignSelf="center" mt="1" py="6" onPress={() => navigation.navigate('SignupScreen')}>
               I don't have an account - Sign Up
             </Link>
       </Box>
@@ -51,13 +53,5 @@ function LoginScreen() {
   )
 }
 
-const getStyles = (theme: any) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: "center",
-      backgroundColor: "black",
-    },
-  });
 
 export default LoginScreen;

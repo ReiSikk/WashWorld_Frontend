@@ -4,7 +4,7 @@ import { SuperQueries } from './SuperQueries';
 
 
 export class PaymentCardQueries extends SuperQueries {
-    static baseUrl = SuperQueries.baseUrl + 'paymentcards'
+    static baseUrl = SuperQueries.baseUrl + 'paymentcard'
 
     
     static async fetchAll() {
@@ -24,6 +24,7 @@ export class PaymentCardQueries extends SuperQueries {
     
     static async createCard(card: CreateCardDTO) {
      /*    const token = await SecureStore.getItemAsync('token') */
+     console.log(card, "card in createCard PaymentCardQueries")
         const response = await fetch(this.baseUrl, {
             method: 'POST',
             headers: {

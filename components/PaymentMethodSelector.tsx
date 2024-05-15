@@ -5,8 +5,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
 import { CreateCardDTO } from '../entities/CreateCardDTO';
 import { createCard } from '../store/CardSlice';
-import dayjs from 'dayjs';
-import { parse, isValid } from 'date-fns';
+import { parse, isValid, endOfMonth } from 'date-fns';
 
 const PaymentMethodSelector: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -24,19 +23,38 @@ const PaymentMethodSelector: React.FC = () => {
   const [expirationDateStr, setExpirationDateStr] = useState('');
 
   const [errors, setErrors] = useState({ nameOnCard: '', cardNumber: '', expirationDate: '', cvv: '' });
+console.log(errors, "errors in PaymentMethodSelector")
 
   useEffect(() => {
     setPaymentMethods(['Card', 'Card 2']);
   }, []);
 
   const handleSubmit = () => {
-    const nameErrors = handleValidation('nameOnCard');
-    const cardNumberErrors = handleValidation('cardNumber');
-    const expirationDateErrors = handleValidation('expirationDate');
-    const cvvErrors = handleValidation('cvv');
+    const nameErrors = handleValidation();
+    const cardNumberErrors = handleValidation();
+    const expirationDateErrors = handleValidation();
+    const cvvErrors = handleValidation();
 
     // Check if there are any errors
-    if (nameErrors.nameOnCard || cardNumberErrors.cardNumber || expirationDateErrors.expirationDate || cvvErrors.cvv) {
+    let hasErrors = false;
+
+    if (nameErrors.nameOnCard) {
+      hasErrors = true;
+    }
+    
+    if (cardNumberErrors.cardNumber) {
+      hasErrors = true;
+    }
+    
+    if (expirationDateErrors.expirationDate) {
+      hasErrors = true;
+    }
+    
+    if (cvvErrors.cvv) {
+      hasErrors = true;
+    }
+    
+    if (hasErrors) {
       alert('Please fix the errors before submitting the form');
       return;
     }
@@ -57,36 +75,30 @@ const PaymentMethodSelector: React.FC = () => {
       });
   };
 
-  const handleValidation = (fieldName: string) => {
+  const handleValidation = () => {
     const { nameOnCard, cardNumber, expirationDate, cvv } = formData;
     const newErrors = { nameOnCard: '', cardNumber: '', expirationDate: '', cvv: '' };
-
-    if (fieldName === 'nameOnCard') {
-      if (nameOnCard.trim().length < 2) {
-        newErrors.nameOnCard = 'Name needs to be longer than 1 character';
-      }
-    } else if (fieldName === 'cardNumber') {
-      if (cardNumber.trim() === '') {
-        newErrors.cardNumber = 'Card number cannot be empty';
-      }
-    } else if (fieldName === 'expirationDate') {
-      if (!/^\d{2}\/\d{2}$/.test(expirationDateStr)) {
-        newErrors.expirationDate = 'Expiration date must be in MM/YY format';
-      } else {
-        const [month, year] = expirationDateStr.split('/').map(Number);
-        const expDate = new Date(`${year + 2000}-${month}-01`);
-        if (!isValid(expDate)) {
-          newErrors.expirationDate = 'Invalid expiration date';
-        } else if (expDate < new Date()) {
-          newErrors.expirationDate = 'Expiration date cannot be in the past';
-        }
-      }
-    } else if (fieldName === 'cvv') {
-      if (cvv.trim() === '') {
-        newErrors.cvv = 'CVV cannot be empty';
-      }
+  
+    if (nameOnCard.trim().length < 2) {
+      newErrors.nameOnCard = 'Name needs to be longer than 1 character';
     }
-
+  
+    if (cardNumber.trim() === '') {
+      newErrors.cardNumber = 'Card number cannot be empty';
+    }
+  
+    const [month, year] = expirationDateStr.split('/').map(Number);
+    const expDate = new Date(`${year + 2000}-${month}-01`);
+    if (!isValid(expDate)) {
+      newErrors.expirationDate = 'Invalid expiration date';
+    } else if (expDate < new Date()) {
+      newErrors.expirationDate = 'Expiration date cannot be in the past';
+    }
+  
+    if (cvv.trim() === '') {
+      newErrors.cvv = 'CVV cannot be empty';
+    }
+  
     setErrors(newErrors);
     return newErrors;
   };
@@ -102,15 +114,17 @@ const PaymentMethodSelector: React.FC = () => {
       setExpirationDateStr(formattedValue);
 
       if (month.length === 2 && year.length === 2) {
-        const dateObject = parse(`20${year}-${month}-01`, 'yyyy-MM-dd', new Date());
+        let dateObject = parse(`20${year}-${month}-01`, 'yyyy-MM-dd', new Date());
         if (isValid(dateObject)) {
+            // Get the end of the month
+            dateObject = endOfMonth(dateObject);
           setFormData({ ...formData, expirationDate: dateObject });
         }
       }
     }
   };
 
-  console.log('formData:', formData.expirationDate);
+  console.log('formData:', formData);
 
   return (
     <ScrollView>
@@ -174,7 +188,7 @@ const PaymentMethodSelector: React.FC = () => {
                     placeholder="John Doe"
                     maxLength={255}
                     onChangeText={value => setFormData({ ...formData, nameOnCard: value })}
-                    onBlur={() => handleValidation('nameOnCard')}
+                    onBlur={() => handleValidation()}
                     value={formData.nameOnCard}
                   />
                   {errors.nameOnCard && <Text color={'error.500'} fontSize={'sm'}>{errors.nameOnCard}</Text>}
@@ -185,7 +199,7 @@ const PaymentMethodSelector: React.FC = () => {
                     placeholder="1234 5678 9012 3456"
                     maxLength={19}
                     onChangeText={value => setFormData({ ...formData, cardNumber: value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim() })}
-                    onBlur={() => handleValidation('cardNumber')}
+                    onBlur={() => handleValidation()}
                     value={formData.cardNumber}
                   />
                   {errors.cardNumber && <Text color={'error.500'} fontSize={'sm'}>{errors.cardNumber}</Text>}
@@ -198,7 +212,7 @@ const PaymentMethodSelector: React.FC = () => {
                       placeholder="MM/YY"
                       value={expirationDateStr} // Ensure this is a string
                       onChangeText={handleExpirationDateChange}
-                      onBlur={() => handleValidation('expirationDate')}
+                      onBlur={() => handleValidation()}
                     />
                     {errors.expirationDate && <Text color={'error.500'} fontSize={'sm'}>{errors.expirationDate}</Text>}
                   </FormControl>
@@ -208,7 +222,7 @@ const PaymentMethodSelector: React.FC = () => {
                       placeholder="CVV"
                       maxLength={4}
                       onChangeText={value => setFormData({ ...formData, cvv: value })}
-                      onBlur={() => handleValidation('cvv')}
+                      onBlur={() => handleValidation()}
                       value={formData.cvv}
                     />
                     {errors.cvv && <Text color={'error.500'} fontSize={'sm'}>{errors.cvv}</Text>}

@@ -11,6 +11,7 @@ export interface CardState {
 const initialState: CardState = {
   cards: [],
 }
+console.log("initialState in CardSlice.ts", initialState);
 
 
 // First, create the thunk

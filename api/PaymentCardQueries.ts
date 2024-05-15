@@ -18,7 +18,6 @@ export class PaymentCardQueries extends SuperQueries {
         
         });
         const data = await response.json();
-        console.log(data, "data in fetchAll PaymentCardQueries");
         return data;
     }
     

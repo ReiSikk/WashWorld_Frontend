@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { subscriptionSlice } from './SubscriptionSlice'
 import { stepSlice } from './StepSlice'
+import { cardSlice } from './CardSlice'
 
 export const store = configureStore({
   reducer: {
     subscription: subscriptionSlice.reducer,
     step: stepSlice.reducer,
+    cards: cardSlice.reducer
   },
 })
 

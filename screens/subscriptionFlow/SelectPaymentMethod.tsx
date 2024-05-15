@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Button, VStack } from 'native-base'
+import { View, Text, Button, VStack, ScrollView, Box } from 'native-base'
 import ProgressSteps from '../../components/ProgressSteps'
 import PaymentMethodSelector from '../../components/PaymentMethodSelector'
 function SelectPaymentMethod() {
@@ -7,15 +7,17 @@ function SelectPaymentMethod() {
     <>
     <VStack space={4} m={6}>
     <ProgressSteps currentStep={2} totalSteps={4} />
+    <ScrollView>
     <PaymentMethodSelector />
-    <Text>Here we dynamically render the subscription success view</Text>
-    <Text>And the How it Works section after the succes view</Text>
+      </ScrollView>
+      </VStack>
+      <Box bottom={0} mt={'auto'} ml={6} mr={6} mb={6}>
     <Button mt="5" colorScheme="green" onPress={() => {
       console.log('Continue to payment presses, render payment success view')
       }}>
         Continue to payment
       </Button>
-      </VStack>
+    </Box>
     </>
   )
 }

@@ -2,17 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Text, VStack, Button, Icon, Pressable, HStack, FormControl, Input, ScrollView } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/store';
+import { AppDispatch, RootState } from '../store/store';
 import { CreateCardDTO } from '../entities/CreateCardDTO';
-import { createCard } from '../store/CardSlice';
+import { createCard, fetchCards } from '../store/CardSlice';
 import { parse, isValid, endOfMonth } from 'date-fns';
+import { useSelector } from 'react-redux';
 
 const PaymentMethodSelector: React.FC = () => {
+  //redux
   const dispatch: AppDispatch = useDispatch();
+  const cardsFromStore = useSelector((state: RootState) => state.cards);
+  
   const [showForm, setShowForm] = useState(false);
   const [cardAdded, setCardAdded] = useState(false);
-  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
-  const [selectedMethod, setSelectedMethod] = useState<string>('');
+  const [selectedMethod, setSelectedMethod] = useState('');
+  console.log(selectedMethod, "selectedMethod in PaymentMethodSelector")
+
 
   const [formData, setFormData] = useState({
     nameOnCard: "",
@@ -23,11 +28,15 @@ const PaymentMethodSelector: React.FC = () => {
   const [expirationDateStr, setExpirationDateStr] = useState('');
 
   const [errors, setErrors] = useState({ nameOnCard: '', cardNumber: '', expirationDate: '', cvv: '' });
-console.log(errors, "errors in PaymentMethodSelector")
 
-  useEffect(() => {
-    setPaymentMethods(['Card', 'Card 2']);
-  }, []);
+
+useEffect(() => {
+  dispatch(fetchCards());
+}, [dispatch]);
+
+
+//useffect to setpaymentmethods
+
 
   const handleSubmit = () => {
     const nameErrors = handleValidation();
@@ -124,7 +133,6 @@ console.log(errors, "errors in PaymentMethodSelector")
     }
   };
 
-  console.log('formData:', formData);
 
   return (
     <ScrollView>
@@ -137,21 +145,22 @@ console.log(errors, "errors in PaymentMethodSelector")
             My payment methods
           </Text>
           <Text fontSize="sm" color="grey60">
-            {!paymentMethods.length ? 'No saved payment methods found, add one to continue' : 'Select your payment method to continue'}
+            {!cardsFromStore.cards.length ? 'No saved payment methods found, add one to continue' : 'Select your payment method to continue'}
           </Text>
         </VStack>
-        <VStack>
-          {paymentMethods.map((method, index) => (
+        <VStack space={4}>
+          {cardsFromStore.cards.map((method, index) => (
             <Pressable
               key={index}
               color={'black'}
               padding={4}
-              bg={selectedMethod === method ? 'greenWhite' : 'grey10'}
+              bg={selectedMethod === method.cardNumber ? 'greenWhite' : 'grey10'}
               borderRadius={4}
-              onPress={() => setSelectedMethod(method)}
+              onPress={() => setSelectedMethod(method.cardNumber)}
             >
               <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
-                <Text>{method}</Text>
+                <Text>{method.nameOnCard}</Text>
+                <Text>{method.cardNumber}</Text>
                 <AntDesign name="right" size={14} marginLeft={'auto'} />
               </HStack>
             </Pressable>

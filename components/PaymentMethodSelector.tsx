@@ -135,7 +135,7 @@ useEffect(() => {
 
 
   return (
-    <ScrollView>
+    <ScrollView mb={20}>
       <VStack space={4}>
         <Text size={'xl'} fontWeight={'extrabold'}>
           Wallet

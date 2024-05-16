@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Button, VStack, ScrollView, Box } from 'native-base'
+import { View, Text, Button, VStack, ScrollView, Box, Flex } from 'native-base'
 import ProgressSteps from '../../components/ProgressSteps'
 import PaymentMethodSelector from '../../components/PaymentMethodSelector'
 function SelectPaymentMethod() {
@@ -11,13 +11,17 @@ function SelectPaymentMethod() {
     <PaymentMethodSelector />
       </ScrollView>
       </VStack>
-      <Box bottom={0} mt={'auto'} ml={6} mr={6} mb={6}>
-    <Button mt="5" colorScheme="green" onPress={() => {
+      <Flex  flexDirection="row" mt={'auto'} px={0} bg={'white'} width={"100%"} h={"10%"}  justifyContent="center" alignItems={'center'}>
+
+
+      <Box>
+    <Button width={"100%"} colorScheme="green" onPress={() => {
       console.log('Continue to payment presses, render payment success view')
-      }}>
+    }}>
         Continue to payment
       </Button>
     </Box>
+    </Flex>
     </>
   )
 }

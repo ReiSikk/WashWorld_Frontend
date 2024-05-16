@@ -6,10 +6,15 @@ import  { StyleSheet, TouchableOpacity } from 'react-native';
 
 
 
+type SquareCardProps = {
+  /* onPress: () => void; */
+  name: string;
+  address: string;
+};
 
 
 
-const SquareCard = () => {
+const SquareCard = (props:SquareCardProps) => {
 
     const theme: ICustomTheme = useTheme();
     
@@ -50,12 +55,12 @@ const SquareCard = () => {
                <VStack p="4" space={3} bg='greenWhite'>
                  <HStack space={2} justifyContent={'space-between'} alignItems={'center'}>
                    <Heading size="lg" ml="-1" color={'white'} >
-                     WashStation
+                     {props.name}
                    </Heading>
                    <AntDesign name="right" size={24} color={'white'} />
                  </HStack>
                  <Text color={'white'}>
-                   WashStation.address
+                   {props.address}
                  </Text>
                  <HStack alignItems="center" space={4} justifyContent="space-between">
                    <HStack alignItems="center">

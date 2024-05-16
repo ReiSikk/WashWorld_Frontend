@@ -1,16 +1,21 @@
 import React from 'react';
 import  { StyleSheet } from 'react-native';
-import { useTheme, Text,Button, ITheme, theme, View, ICustomTheme, Box} from 'native-base';
+import { useTheme, Text,Button, ITheme, theme, View, ICustomTheme, Badge, Flex, HStack} from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 
-const SubscriptionCard = ({ onPress }: { onPress: () => void }) => {
+
+type ProductCardDarkProps = {
+  onPress: () => void;
+  title: string;
+};
+const SubscriptionCard = (props: ProductCardDarkProps) => {
     const theme: ICustomTheme = useTheme();
 
 
     const styles = StyleSheet.create({
         container: {
-          padding: 20,
+          padding:20,
           alignItems: 'flex-start',
           justifyContent: 'space-between',
           backgroundColor: theme.colors.black,
@@ -18,107 +23,28 @@ const SubscriptionCard = ({ onPress }: { onPress: () => void }) => {
           margin: 10,
           borderRadius: theme.borders.borderRadius,
           overflow: 'hidden',
-          
-        },
-        textContainer: {
-          flex: 1,
-        },
-        arrowContainer: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-            zIndex: 25,
-        },
-        title: {
-          color: theme.colors.greenBlack,
-          paddingTop: 20,
-          zIndex: 25,
-        },
-        startingFrom: {
-          color: 'colors.white',
-          fontSize: 18,
-        },
-        price: {
-          color: theme.colors.white,
-          paddingTop: 25,
-        },
-        noSignUpFeeText: {
-          color: '#000',
-          fontSize: 14,
-          fontWeight: 'bold',
-        },
-        arrow: {
-          fontSize: 24,
-          fontWeight: 'bold',
-          marginLeft: 10,
-        },
-        row: {
-            flexDirection: 'row',
-            gap: 10,
-            alignItems: 'baseline',
-        },
-        flexEnd: {
-            marginTop: 30,
-            width: '100%',
-            flexDirection: 'row', 
-            alignItems: 'center', 
-            justifyContent: 'space-between', 
-            backgroundColor: theme.colors.black,
-        },
-        bottomCont: {
-            flexDirection: 'row',
-            alignItems: 'baseline', 
-            padding: 5,
-            zIndex: 20, 
-        },
-        greenBanner: {
-            backgroundColor: theme.colors.greenBlack,
-            height: 50,
-            width: "66%",
-            paddingLeft: 60, 
-            justifyContent: 'center', 
-            overflow: 'hidden', 
-            position: 'relative', 
-        },
-        bannerAngle: {
-            backgroundColor: theme.colors.black,
-            width: 100,
-            zIndex: 15, 
-            height: 200,
-            position: 'absolute',
-            left: 100,
-            bottom: 0,
-            transform: [{ rotate: '30deg' }],
-        },
-        greenBannerText: {
-            color: theme.colors.white,
-            fontSize: theme.fontSizes.md,
-            position: 'absolute',
-            right: 25, 
-            bottom: 15, 
         },
       });
 
     
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={props.onPress}>
     <View style={styles.container}>
-     <View style={styles.arrowContainer}>
-     <Text style={styles.title}>CardTitle</Text>
-     <AntDesign name="right" size={24} color={theme.colors.white} />
-     </View>
-    <Text style={styles.startingFrom}>Starting from</Text>
-    <View style={styles.flexEnd}>
-    <View style={styles.bottomCont}>
-    <Text style={styles.price}>69</Text><Text style={{color: theme.colors.white}}>kr./md.</Text>
+     <HStack alignItems={'center'} justifyContent={'space-between'} w={"100%"} pb={6}>
+     <Text fontWeight='extrabold' color='greenBlack' size="xl">{props.title}</Text>
+     <AntDesign name="right" size={24} color={'white'} />
+     </HStack>
+    <Text color='white' size={'lg'}>Starting from</Text>
+    <Flex 
+    flexDirection='row'alignItems='center'justifyContent='space-between' w="100%">
+    <HStack alignItems='baseline' space={2}>
+    <Text size="xl" color={'white'} fontWeight={'extrabold'}>{props.title ==="Subscriptions" ? '69' : '10'}</Text><Text color={'white'} pb={1}>{props.title ==="Subscriptions" ? 'kr./md.' : 'kr./ per wash'}</Text>
+    </HStack>
+    <Badge variant="solid" color={'white'} size={'xl'} borderRadius="sm" px="4" py="2" bg="greenBlack" position="relative" bottom="0" right="0" _text={{
+        fontSize: 16
+      }}>No signup fee</Badge>
+    </Flex>
     </View>
-        <Box style={styles.bannerAngle}></Box>
-    <View style={styles.greenBanner}>
-        <Text style={styles.greenBannerText}>No sign up fee!</Text>
-    </View>
-    </View>
-  </View>
     </TouchableOpacity>
   );
 };

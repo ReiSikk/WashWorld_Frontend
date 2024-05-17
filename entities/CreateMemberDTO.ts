@@ -6,9 +6,9 @@ export class createMemberDTO {
   firstName: string;
   lastName: string;
   phone: string;
-  active: boolean;
-  joinDate: Date;
-  loyaltyPoints: number;
+  active?: boolean;
+  joinDate?: Date;
+  loyaltyPoints?: number;
 
   constructor(email: string, password: string, firstName: string, lastName: string, phone: string, active: boolean, joinDate: Date, loyaltyPoints: number) {
     this.email = email;

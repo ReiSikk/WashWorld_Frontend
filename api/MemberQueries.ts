@@ -4,23 +4,24 @@ import { createMemberDTO } from "../entities/CreateMemberDTO";
 export class MemberQueries extends SuperQueries {
     static baseUrl = SuperQueries.baseUrl + 'auth/'
 
-    static async login( email: string, password: string, firstName: string, lastName: string, phone: string, active: boolean, joinDate: Date, loyaltyPoints: number) {
-//console.log("calling...", this.baseUrl + "login");
+/*     static async login( email: string, password: string) {
+console.log("calling...", this.baseUrl + "login");
 
-     //   const response = await fetch(this.baseUrl + "login", { 
-      //      method: 'POST',
-      //      headers: {
-        //        'Content-Type': 'application/json'
-        //    },
-      //      body: JSON.stringify({ email, password, firstName, lastName, phone, active, joinDate, loyaltyPoints})
-    //     });
-    //     const data = await response.json();
-    //    console.log(data, "data from login response");
+       const response = await fetch(this.baseUrl + "login", { 
+          method: 'POST',
+           headers: {
+               'Content-Type': 'application/json'
+            },
+           body: JSON.stringify({ email, password, firstName, lastName, phone, active, joinDate, loyaltyPoints})
+       });
+        const data = await response.json();
+       console.log(data, "data from login response");
         
-     //   return data;
-    }
+        return data;
+    } */
  static async signup(member: createMemberDTO) {
-    /*     const response = await fetch(this.baseUrl + "signup", { 
+    console.log('calling signup)')
+         const response = await fetch(this.baseUrl + "signup", { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -29,7 +30,7 @@ export class MemberQueries extends SuperQueries {
          });
          const data = response.json();
 
-         return data; */
+         return data;  
          }
          
     static async logout() {

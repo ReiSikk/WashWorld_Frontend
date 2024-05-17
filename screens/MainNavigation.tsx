@@ -25,6 +25,8 @@ import { Text, TouchableOpacity } from 'react-native';
 import { baseFontSize } from 'native-base/lib/typescript/theme/tools';
 import sizes from 'native-base/lib/typescript/theme/base/sizes';
 import Location from './locationFlow/Location';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store/store';
 
 //define route params types
 export type RootStackParamList = {
@@ -134,10 +136,10 @@ const HomeStackNavigator = () => {
 
 const MainNavigation = () => {
     //TODO: implement redux
-    //const dispatch = useDispatch<AppDispatch>();
-    const dispatch = () => {};
+    const dispatch = useDispatch<AppDispatch>();
+    
     //TODO: get user state from redux
-    //const isSignedIn = useSelector((state: RootState) => state.user.token);
+    //const isSignedIn = useSelector((state: RootState) => state.member.token);
     const isSignedIn = false;
   
       return (

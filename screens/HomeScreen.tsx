@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from '../store/store';
 import { fetchWashStations } from '../store/WashStationSlice';
 
 
+
 type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 
 function HomeScreen({ navigation }: Props) {
@@ -19,8 +20,6 @@ function HomeScreen({ navigation }: Props) {
     dispatch(fetchWashStations());
   }, [dispatch]);
 
-  
-  console.log(washStations, "washStations in HomeScreen")
   return (
      <ScrollView m={6}>
      <Flex flexDirection='column' alignItems='center' justifyContent='center' w="100%" h="fit-content" py="6">

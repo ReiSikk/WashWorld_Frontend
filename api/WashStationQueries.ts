@@ -16,8 +16,21 @@ export class WashStationQueries extends SuperQueries {
         });
         const data = await response.json();
         return data;
+
     }
-    
+
+    static async fetchStationsWithBays(washStationId: number) {
+        const response = await fetch(this.baseUrl+`/${washStationId}/washbays`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        
+        });
+        const data = await response.json();
+        return data;
+    }
+
   
 
 /*     static async deleteEntry(id: number) {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View, Box, Button, Flex, VStack, ScrollView, HStack, Badge } from 'native-base'
 import { TouchableOpacity } from 'react-native';
 import { AntDesign, MaterialIcons, Ionicons } from "@expo/vector-icons";
@@ -8,21 +8,43 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../MainNavigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import { WashStationQueries } from '../../api/WashStationQueries';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Location">
+type WashBay = {
+  available: boolean;
+  bayNr: string;
+  bayType: string;
+  dimensionHeight: string;
+  dimensionWidth: string;
+  // include other properties as needed
+};
 
 
 function Location({ route, navigation}: Props) {
+  const dispatch: AppDispatch = useDispatch();
   const { locationID } = route.params;
   const washStations = useSelector((state: RootState) => state.washStations.washStations);
   const location = washStations.find(station => station.id === locationID);
-  console.log(location, "location in Location")
+  const [washBays, setWashBays] = useState<WashBay[]>([]);
+  
+
+  useEffect(() => {
+    const fetchWashBays = async () => {
+      const data = await WashStationQueries.fetchStationsWithBays(locationID);
+      setWashBays(data);
+    };
+
+    fetchWashBays();
+  }, [locationID]);
+  console.log(washBays, "washBays in Location")
 
 
   return (
-<View mx="6">
+<ScrollView mx="6" showsVerticalScrollIndicator={false}>
     <Text mt="6" mb="4" size="xl" fontWeight="extrabold">{location?.stationName}</Text>
     <VStack mb="8" space={2}>
     <HStack space={2}>
@@ -59,35 +81,49 @@ function Location({ route, navigation}: Props) {
       }} />
 
 
-      <Text size="lg" fontWeight="extrabold" mb="2">Wash bays</Text>
+      <Text size="xl" fontWeight="extrabold" mb="2">Automatic wash bays</Text>
       <VStack space={4} mb="8">
-      <HStack space={4}>
-      <Text>Wash-bay 1</Text>
-      <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg="greenWhite">Available</Badge>
-      </HStack>
-     
-      <HStack space={4}>
-  
-      <Text>Wash-bay 2</Text>
-      <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg="orange">Not available</Badge>
-      </HStack>
+        {washBays.map((bay, index) => (
+          bay.bayType === "Automatic" &&
+          <VStack space={2} bg={'white'} py={4} px={6} justifyContent={'space-between'} borderRadius="sm">
+          <HStack key={index} space={4} justifyContent={'space-between'}>
+          <Text fontFamily={'extrabold'} fontSize={'lg'}>Automatic wash bay {bay.bayNr}</Text>
+          <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg={bay.available ? "greenWhite" : "orange"}>{bay.available ? "Available" : "Not available"}</Badge>
+          </HStack>
+          <VStack space={0.5}>
+          <Text fontFamily={'medium'} mt={4}>Max Dimensions</Text>
+          <Text>Max height: {bay.dimensionHeight}</Text>
+          <Text>Max width: {bay.dimensionWidth}</Text>
+          </VStack>
+          </VStack>
+        ))}
       </VStack>
-      <Text size="lg" fontWeight="extrabold" mb="2">Self-wash</Text>
+      <Divider my="2" _light={{
+        bg: "grey10"
+      }} _dark={{
+        bg: "grey10"
+      }} />
+      <Text size="xl" fontWeight="extrabold" mb="2">Self-wash bays</Text>
+
       <VStack space={4}>
-      <HStack space={4}>
-      <Text>Self-wash 1</Text>
-      <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg="greenWhite">Available</Badge>
-      </HStack>
-     
-      <HStack space={4}>
-  
-      <Text>Self-wash 2</Text>
-      <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg="orange">Not available</Badge>
-      </HStack>
+      {washBays.map((bay, index) => (
+          bay.bayType === "Self wash" &&
+          <VStack space={2} bg={'white'} py={4} px={6} justifyContent={'space-between'} borderRadius="sm">
+          <HStack key={index} space={4} justifyContent={'space-between'}>
+          <Text fontFamily={'medium'} fontSize={'lg'}>Self-wash bay {bay.bayNr}</Text>
+          <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg={bay.available ? "greenWhite" : "orange"}>{bay.available ? "Available" : "Not available"}</Badge>
+          </HStack>
+          <VStack space={0.5}>
+          <Text fontFamily={'medium'} mt={4}>Max Dimensions</Text>
+          <Text>Max height: {bay.dimensionHeight}</Text>
+          <Text>Max width: {bay.dimensionWidth}</Text>
+          </VStack>
+          </VStack>
+        ))}
       </VStack>
       
 
-</View>
+</ScrollView>
   )
 }
 

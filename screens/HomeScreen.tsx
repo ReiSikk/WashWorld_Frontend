@@ -24,7 +24,7 @@ function HomeScreen({ navigation }: Props) {
   return (
      <ScrollView m={6}>
      <Flex flexDirection='column' alignItems='center' justifyContent='center' w="100%" h="fit-content" py="6">
-     <ScrollView horizontal={true} height={'fit-content'}>
+     <ScrollView horizontal={true} paddingRight={5} borderRadius={10}>
      <HStack space={2}>
       {washStations && washStations.map((station,index) => (
         <SquareCard key={index} name={station.stationName} address={station.address} />

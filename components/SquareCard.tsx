@@ -1,4 +1,4 @@
-import { Box, Image, AspectRatio, Center, Stack, Heading, Text, HStack,VStack, Badge } from 'native-base';
+import { Box, Image, AspectRatio, Center, Stack, Heading, Text, HStack,VStack, Badge, Flex } from 'native-base';
 import React from 'react';
 import { useTheme, ICustomTheme } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
@@ -21,9 +21,8 @@ const SquareCard = (props:SquareCardProps) => {
     const styles = StyleSheet.create({
         container: {
           padding: 10,
+          width: 225,
           maxHeight: 300,
-          maxWidth: 225,
-          width: "100%",
           alignItems: 'flex-start',
         },
       });
@@ -31,8 +30,8 @@ const SquareCard = (props:SquareCardProps) => {
 
     return(
       <TouchableOpacity>
-     <Box alignItems="center" style={styles.container}>
-             <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
+     <Box style={styles.container}>
+             <Box maxW="80" width={225} height={"100%"} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
              borderColor: "coolGray.600",
              backgroundColor: "gray.700"
            }} _web={{
@@ -42,7 +41,7 @@ const SquareCard = (props:SquareCardProps) => {
              backgroundColor: "gray.50"
            }}>
                <Box>
-                 <AspectRatio w="100%" ratio={16 / 9}>
+                 <AspectRatio w="100%" ratio={16/9}>
                    <Image source={require('../assets/images/washLocation.png')} alt="image"   resizeMode="cover" 
                    w="100%"
                    height="100%" />
@@ -52,13 +51,12 @@ const SquareCard = (props:SquareCardProps) => {
                   fontSize: "sm"
                  }} position="absolute" bottom="0" right="0">2.2KM</Badge>
                </Box>
-               <VStack p="4" space={3} bg='greenWhite'>
-                 <HStack space={2} justifyContent={'space-between'} alignItems={'center'}>
+               <VStack p="4" space={3} height={"100%"} bg='greenWhite'>
+                 <Flex flexDirection={'row'} width={'100%'} justifyContent={'space-between'} alignItems={'center'}>
                    <Heading size="lg" ml="-1" color={'white'} >
                      {props.name}
                    </Heading>
-                   <AntDesign name="right" size={24} color={'white'} />
-                 </HStack>
+                 </Flex>
                  <Text color={'white'}>
                    {props.address}
                  </Text>

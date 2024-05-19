@@ -6,22 +6,28 @@ import { Divider } from 'native-base';
 import LocationsScreen from '../LocationsScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../MainNavigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Location">
 
 
-function Location({ navigation }: Props) {
+function Location({ route, navigation}: Props) {
+  const { locationID } = route.params;
+  const washStations = useSelector((state: RootState) => state.washStations.washStations);
+  const location = washStations.find(station => station.id === locationID);
+  console.log(location, "location in Location")
 
 
   return (
 <View mx="6">
-    <Text mt="6" mb="4" size="xl" fontWeight="extrabold">Søborg - Dynamovej</Text>
+    <Text mt="6" mb="4" size="xl" fontWeight="extrabold">{location?.stationName}</Text>
     <VStack mb="8" space={2}>
     <HStack space={2}>
     <Ionicons name="location-outline" size={24} color="black" />
-          <Text>adress</Text>
+          <Text>{location?.address}</Text>
           </HStack>
           <HStack>
           <Ionicons name="time-outline" size={24} color="black" />

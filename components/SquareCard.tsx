@@ -7,7 +7,7 @@ import  { StyleSheet, TouchableOpacity } from 'react-native';
 
 
 type SquareCardProps = {
-  /* onPress: () => void; */
+  onPress: () => void;
   name: string;
   address: string;
 };
@@ -29,7 +29,7 @@ const SquareCard = (props:SquareCardProps) => {
 
 
     return(
-      <TouchableOpacity>
+      <TouchableOpacity onPress={props.onPress}>
      <Box style={styles.container}>
              <Box maxW="80" width={225} height={"100%"} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
              borderColor: "coolGray.600",

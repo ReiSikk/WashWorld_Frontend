@@ -12,13 +12,13 @@ import { fetchWashStations } from '../store/WashStationSlice';
 type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 
 function HomeScreen({ navigation }: Props) {
-
-  const dispatch: AppDispatch = useDispatch();
-  const washStations = useSelector((state: RootState) => state.washStations.washStations);
+ const dispatch: AppDispatch = useDispatch();
+ const washStations = useSelector((state: RootState) => state.washStations.washStations);
   
   useEffect(() => {
     dispatch(fetchWashStations());
   }, [dispatch]);
+
   
   console.log(washStations, "washStations in HomeScreen")
   return (
@@ -27,7 +27,12 @@ function HomeScreen({ navigation }: Props) {
      <ScrollView horizontal={true} paddingRight={5} borderRadius={10}>
      <HStack space={2}>
       {washStations && washStations.map((station,index) => (
-        <SquareCard key={index} name={station.stationName} address={station.address} />
+        <SquareCard
+         key={index}
+         name={station.stationName} 
+         address={station.address}
+         onPress={() => navigation.navigate('Location', {locationID: station.id})}
+           />
       ))}
     </HStack>
     </ScrollView>

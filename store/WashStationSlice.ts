@@ -5,12 +5,13 @@ import { WashStation } from '../entities/washStation'
 
 export interface WashStationState {
   washStations: WashStation[]
+    isStationOpen: boolean
 }
 
 const initialState: WashStationState = {
   washStations: [],
+isStationOpen: false
 }
-console.log("initialState in WashStationSlice.ts", initialState);
 
 
 // First, create the thunk
@@ -33,7 +34,8 @@ export const washStationSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(fetchWashStations.fulfilled, (state, action) => {
+    builder
+    .addCase(fetchWashStations.fulfilled, (state, action) => {
       // Add user to the state array
       
       state.washStations = action.payload;

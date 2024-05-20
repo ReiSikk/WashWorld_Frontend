@@ -20,7 +20,6 @@ function HomeScreen({ navigation }: Props) {
   useEffect(() => {
     dispatch(fetchWashStations());
   }, [dispatch]);
-  console.log(washStations, "washStations in HomeScreen")
 
   return (
      <ScrollView m={6}>

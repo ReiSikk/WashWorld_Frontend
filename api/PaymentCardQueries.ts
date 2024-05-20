@@ -34,6 +34,7 @@ export class PaymentCardQueries extends SuperQueries {
             },
             body: JSON.stringify(card)
         });
+        console.log(response, "response in createCard PaymentCardQueries")
         const data = await response.json();
         return data;
     }

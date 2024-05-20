@@ -31,6 +31,12 @@ export class WashStationQueries extends SuperQueries {
         return data;
     }
 
+    static async isStationOpen(locationID: number) {
+        const response = await fetch(this.baseUrl+`/${locationID}/isOpen`);
+        const data = await response.json();
+        return data.isOpen;
+      };
+
   
 
 /*     static async deleteEntry(id: number) {

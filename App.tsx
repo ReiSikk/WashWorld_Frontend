@@ -9,6 +9,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainNavigation from "./screens/MainNavigation";
 import { store } from './store/store'
 import { Provider } from 'react-redux'
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
 const useFonts = async () => {
   await Font.loadAsync({
@@ -105,6 +112,8 @@ declare module 'native-base' {
 }
 
 
+const queryClient = new QueryClient()
+
 
 export default function App() {
   useEffect(() => {
@@ -126,6 +135,7 @@ export default function App() {
   }, []);
 
   return (
+    <QueryClientProvider client={queryClient}>
     <Provider store={store}>
     <NativeBaseProvider theme={customTheme}>
       <MainNavigation>
@@ -134,5 +144,6 @@ export default function App() {
       <WelcomeScreen /> */}
     </NativeBaseProvider>
     </Provider>
+    </QueryClientProvider>
   );
 }

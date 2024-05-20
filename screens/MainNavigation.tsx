@@ -80,6 +80,7 @@ const HomeStackNavigator = () => {
           <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate}/>
           <Stack.Screen name="OrderSummary" component={OrderSummary}/>
           <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}/>
+          <Stack.Screen name="Location" component={Location} />
         </Stack.Navigator>
     )
   }

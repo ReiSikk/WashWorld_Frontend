@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text, VStack, Checkbox, Box, HStack, Button, ScrollView } from 'native-base'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../MainNavigation';
@@ -7,6 +7,7 @@ import { RootState, AppDispatch } from '../../store/store';
 import { AntDesign } from '@expo/vector-icons';
 import { selectSubscription } from '../../store/SubscriptionSlice';
 import { Subscription } from '../../entities/subscription';
+import { fetchSubscriptions } from '../../store/SubscriptionSlice';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "PlanOverview">
@@ -15,7 +16,13 @@ type Props = NativeStackScreenProps<RootStackParamList, "PlanOverview">
 function PlanOverview({route, navigation}: Props) {
   const { subscriptionPlanID } = route.params;
   const dispatch: AppDispatch = useDispatch();
+useEffect(() => {
+  dispatch(fetchSubscriptions());
+}
+, [dispatch]);
+
   const subscription = useSelector((state: RootState) => state.subscription.subscriptions[subscriptionPlanID]);
+  console.log(subscription, "subscription in PlanOverview")
 
   const handleConfirm = (subscription: Subscription) => {
     dispatch(selectSubscription(subscription));

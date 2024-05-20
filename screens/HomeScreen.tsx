@@ -7,6 +7,7 @@ import ProductCardDark from '../components/ProductCardDark';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { fetchWashStations } from '../store/WashStationSlice';
+import { fetchSubscriptions } from '../store/SubscriptionSlice';
 
 
 
@@ -19,6 +20,7 @@ function HomeScreen({ navigation }: Props) {
   useEffect(() => {
     dispatch(fetchWashStations());
   }, [dispatch]);
+  console.log(washStations, "washStations in HomeScreen")
 
   return (
      <ScrollView m={6}>

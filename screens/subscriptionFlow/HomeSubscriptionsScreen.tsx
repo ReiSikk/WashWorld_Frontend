@@ -37,7 +37,7 @@ function HomeSubscriptionsScreen({ navigation }: Props) {
     const payByPlatePlan = subscriptions.find(plan => plan.name === "Pay by Plate");
     if (type === 'PayByPlate' && payByPlatePlan){
       setSelectedPlan(payByPlatePlan.id);
-      navigation.navigate('EnterLicensePlate', {subscriptionPlanID: payByPlatePlan.id});
+      navigation.navigate('PlanOverview', {subscriptionPlanID: payByPlatePlan.id-1});
     }
   }
 

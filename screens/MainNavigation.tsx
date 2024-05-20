@@ -48,7 +48,7 @@ export type RootStackParamList = {
     PaymentMethods: undefined;
     Settings: undefined;
     WashHistory: undefined;
-    Location: undefined;
+    Location: {locationID: number};
   };
   
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -82,6 +82,7 @@ const HomeStackNavigator = () => {
           <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate}/>
           <Stack.Screen name="OrderSummary" component={OrderSummary}/>
           <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}/>
+          <Stack.Screen name="Location" component={Location} />
         </Stack.Navigator>
     )
   }
@@ -125,7 +126,7 @@ const HomeStackNavigator = () => {
             screenOptions={({ navigation }) => ({
                     tabBarActiveTintColor: '#1A1A1A',
                     tabBarInactiveTintColor: '#666666',
-                    headerShown: false,
+                    headerShown:true,
                     })}
       >
           <Stack.Screen name="LocationsScreen" component={LocationsScreen} options={{ headerLeft: () => null }} />

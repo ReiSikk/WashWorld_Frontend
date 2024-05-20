@@ -34,6 +34,7 @@ const validate = () => {
   if (loginForm.email === '') {
     newErrors.email = 'Please enter your email';
     valid = false;
+    //the redux below expects a string with a following pattern 'something + @ + something + . + something'
   } else if (!/\S+@\S+\.\S+/.test(loginForm.email)) {
     newErrors.email = 'Please enter a valid email address';
     valid = false;

@@ -135,16 +135,17 @@ const HomeStackNavigator = () => {
   }
 
 const MainNavigation = () => {
-    //TODO: implement redux
     const dispatch = useDispatch<AppDispatch>();
     
-    //TODO: get user state from redux
-    //const isSignedIn = useSelector((state: RootState) => state.member.token);
-    const isSignedIn = false;
+    //getting the token from the store
+    const isLoggedIn = useSelector((state: RootState) => state.member.token);
+
+    //if there's a need to manually switch between logged in and logged out states
+     //const isSignedIn = false;
   
       return (
           <NavigationContainer>
-          { isSignedIn ? (
+          { isLoggedIn ? (
               <>
                   <Tab.Navigator
                    screenOptions={({ navigation }) => ({

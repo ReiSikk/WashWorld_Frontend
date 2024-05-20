@@ -21,6 +21,7 @@
     "dayjs": "^1.11.11",
     "expo": "^50.0.3",
     "expo-font": "~11.10.3",
+    "expo-secure-store": "^13.0.1",
     "expo-splash-screen": "~0.26.5",
     "expo-status-bar": "~1.11.1",
     "moment": "^2.30.1",

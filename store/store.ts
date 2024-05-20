@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { subscriptionSlice } from './SubscriptionSlice'
 import { stepSlice } from './StepSlice'
+import { MemberSlice } from './MemberSlice'
 import { cardSlice } from './CardSlice'
 import { washStationSlice } from './WashStationSlice'
 
@@ -8,6 +9,7 @@ export const store = configureStore({
   reducer: {
     subscription: subscriptionSlice.reducer,
     step: stepSlice.reducer,
+    member: MemberSlice.reducer,
     cards: cardSlice.reducer,
     washStations: washStationSlice.reducer
   },

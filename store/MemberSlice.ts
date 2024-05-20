@@ -39,17 +39,17 @@ const initialState: MemberState = {
    // cars: []
 };
 
-/* export const login = createAsyncThunk(
+ export const login = createAsyncThunk(
     'auth/login',
     async (credentials: { email: string; password: string }, thunkAPI) => {
     
-            
+            console.log("credentials in login", credentials)
             const response = await MemberQueries.login(credentials.email, credentials.password);
             console.log(response);
             return response;
             
     }
-); */
+); 
 
 export const signup = createAsyncThunk(
     'auth/signup',
@@ -80,19 +80,19 @@ export const MemberSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-       /*      .addCase(login.pending, (state) => {
+             .addCase(login.pending, (state) => {
                 state.loading = true;
                 state.error = null;
-            }) */
-          /*   .addCase(login.fulfilled, (state, action) => {
+            }) 
+            .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
                 state.token = action.payload.access_token;
                 SecureStore.setItemAsync('token', action.payload.access_token);
-            }) */
-       /*      .addCase(login.rejected, (state, action) => {
+            }) 
+            .addCase(login.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
-            }) */
+            }) 
             .addCase(signup.pending, (state) => {
                 state.loading = true;
                 state.error = null;

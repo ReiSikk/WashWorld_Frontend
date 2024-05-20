@@ -59,16 +59,17 @@ export const cardSlice = createSlice({
       state.cards = action.payload;
     //   state.entities.push(action.payload)
     }),
-    builder.addCase(createCard.fulfilled, (state, action) => {
+    builder
+
+    .addCase(createCard.fulfilled, (state, action) => {
         // Add user to the state array
         console.log("createCard.fulfilled in cardSlice called with:", action.payload);
-        
-        state.cards.push(action.payload)
+        if(action.payload.cardNumber) {
+          state.cards.push(action.payload)
+        } else {
+          alert("Card already added to account")
+        }
       })
-
-   /*    builder.addCase(deleteEntry.fulfilled, (state, action) => {
-        state.entries = state.entries.filter(entry => entry.id !== action.payload.id);
-      }); */
 }
 })
 

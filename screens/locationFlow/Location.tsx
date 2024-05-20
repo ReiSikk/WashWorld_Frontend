@@ -11,6 +11,7 @@ import { RootState } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { WashStationQueries } from '../../api/WashStationQueries';
+import { format, parseISO } from 'date-fns';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Location">
@@ -28,8 +29,11 @@ function Location({ route, navigation}: Props) {
   const dispatch: AppDispatch = useDispatch();
   const { locationID } = route.params;
   const washStations = useSelector((state: RootState) => state.washStations.washStations);
+
   const location = washStations.find(station => station.id === locationID);
   const [washBays, setWashBays] = useState<WashBay[]>([]);
+  const [isStationOpen, setIsStationOpen] = useState<boolean | null>(null);
+
   
 
   useEffect(() => {
@@ -37,10 +41,16 @@ function Location({ route, navigation}: Props) {
       const data = await WashStationQueries.fetchStationsWithBays(locationID);
       setWashBays(data);
     };
-
+  
+    const fetchStationOpenStatus = async () => {
+      const isOpen = await WashStationQueries.isStationOpen(locationID);
+      setIsStationOpen(isOpen);
+    };
+  
     fetchWashBays();
+    fetchStationOpenStatus();
   }, [locationID]);
-  console.log(washBays, "washBays in Location")
+
 
 
   return (
@@ -53,8 +63,10 @@ function Location({ route, navigation}: Props) {
           </HStack>
           <HStack>
           <Ionicons name="time-outline" size={24} color="black" />
-    <Text color="greenWhite" ml="2">Open</Text>
-          <Text> - 24/7</Text>
+      <Text color="greenWhite" ml="2" pr={2}>{isStationOpen ? 'Open' : 'Closed'}</Text>
+      <Text>
+        {location?.openingTime.split(':').slice(0, 2).join(':')} - {location?.closingTime.split(':').slice(0, 2).join(':')}
+      </Text>
           </HStack>
           <HStack space={2}>
           <Ionicons name="map-outline" size={24} color="black" />
@@ -62,9 +74,6 @@ function Location({ route, navigation}: Props) {
           </HStack>
           </VStack>
          <VStack>
-<Text>Max height: 2.6m</Text>
-<Text>Side mirror to side mirror: 2.55m</Text>
-<Text>Max wheel width: 2.15m</Text>
 </VStack>
 
     <Button my="4">Get directions</Button>

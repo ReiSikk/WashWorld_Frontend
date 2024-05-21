@@ -1,12 +1,11 @@
 import { SuperQueries } from "./SuperQueries";
 import { createMemberDTO } from "../entities/CreateMemberDTO";
+import * as SecureStore from 'expo-secure-store';
 
 export class MemberQueries extends SuperQueries {
     static baseUrl = SuperQueries.baseUrl + 'auth/'
 
     static async login( email: string, password: string) {
-console.log("calling...", this.baseUrl + "login");
-console.log(email, password, "email and password")
 
        const response = await fetch(this.baseUrl + "login", { 
           method: 'POST',
@@ -16,6 +15,8 @@ console.log(email, password, "email and password")
            body: JSON.stringify({ email, password})
        });
         const data = await response.json();
+        //store token in secure store
+        SecureStore.setItemAsync('token', data.token);
        console.log(data, "data from login response");
         
         return data;

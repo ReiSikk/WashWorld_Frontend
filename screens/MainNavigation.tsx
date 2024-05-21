@@ -27,6 +27,7 @@ import sizes from 'native-base/lib/typescript/theme/base/sizes';
 import Location from './locationFlow/Location';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
+import { logout } from '../store/MemberSlice';
 
 //define route params types
 export type RootStackParamList = {
@@ -55,6 +56,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 const HomeStackNavigator = () => {
+  const dispatch = useDispatch<AppDispatch>();
     return (
       <Stack.Navigator      screenOptions={({ navigation }) => ({
         tabBarActiveTintColor: '#1A1A1A',
@@ -62,6 +64,7 @@ const HomeStackNavigator = () => {
         headerShown: true,
           headerRight: () => (     
               <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
+              onPress={() => dispatch(logout())}
                variant={"outline"} _icon={{
                 as: AntDesign,
                 name: "logout"

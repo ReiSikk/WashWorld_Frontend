@@ -52,16 +52,15 @@ const validate = () => {
 
   const handleLogin = async () => {
     //validate() ? console.log('Submitted') : console.log('Validation Failed');
-    const response = await dispatch(login({email, password}))
+
+      const response = await dispatch(login({email, password}))
+      if (response.payload.access_token) {
+        console.log(response.payload.access_token, "response in login screen")
+        dispatch(setToken(response.payload.access_token))
+      } else {
+        alert(response.payload.message)
+      }
  }
-
- useEffect(() => {
-  async function readFromSecureStore() {
-      const token = await SecureStore.getItemAsync('token');
-      token && dispatch(setToken(token))
-  }
-}, [])
-
 
   return (
     <View>

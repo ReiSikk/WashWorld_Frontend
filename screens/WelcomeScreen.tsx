@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Text, View, useTheme, Button, Input, Box, Heading, Link, Flex} from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './MainNavigation';
+import { setToken } from '../store/MemberSlice';
+import { useDispatch } from 'react-redux';
+import * as SecureStore from'expo-secure-store';
+import { AppDispatch, RootState } from '../store/store';
+
+
+
 
 type Props = NativeStackScreenProps<RootStackParamList, "WelcomeScreen">
 
 function WelcomeScreen({ navigation }: Props) {
+  const dispatch = useDispatch<AppDispatch>();
+
+
+  useEffect(() => {
+    async function readFromSecureStore() {
+        const token = await SecureStore.getItemAsync('token');
+        token && dispatch(setToken(token))
+    }
+    readFromSecureStore();
+  }, [])
 
 
   return (

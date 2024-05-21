@@ -22,14 +22,13 @@ interface Member {
     active: boolean;
     joinDate: Date;
     loyaltyPoints: number;
-    //role: Role
+    role: Role
 }
 
-/* export enum Role {
+ export enum Role {
     User = 'user',
-    PremiumUser = 'premium',
     Admin = 'admin',
-} */
+} 
 
 const initialState: MemberState = {
     member: null,

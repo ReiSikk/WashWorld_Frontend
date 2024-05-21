@@ -29,7 +29,8 @@ console.log(email, password, "email and password")
             },
             body: JSON.stringify(member)
          });
-         const data = response.json();
+         const data = await response.json();
+         console.log(data, "data from signup response");
 
          return data;  
          }

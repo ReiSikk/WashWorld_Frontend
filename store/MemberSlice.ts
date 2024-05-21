@@ -43,7 +43,6 @@ const initialState: MemberState = {
     'auth/login',
     async (credentials: { email: string; password: string }, thunkAPI) => {
     
-            console.log("credentials in login", credentials)
             const response = await MemberQueries.login(credentials.email, credentials.password);
             console.log(response);
             return response;

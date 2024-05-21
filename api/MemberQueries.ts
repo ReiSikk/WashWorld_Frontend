@@ -29,7 +29,7 @@ console.log(email, password, "email and password")
             },
             body: JSON.stringify(member)
          });
-         const data = response.json();
+         const data = await response.json();
 
          return data;  
          }

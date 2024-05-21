@@ -51,7 +51,6 @@ const validate = () => {
 
 
   const handleLogin = async () => {
-    console.log(email, password, 'email and password')
     //validate() ? console.log('Submitted') : console.log('Validation Failed');
     const response = await dispatch(login({email, password}))
  }

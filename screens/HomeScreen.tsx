@@ -13,6 +13,8 @@ import { fetchSubscriptions } from '../store/SubscriptionSlice';
 
 type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 
+
+
 function HomeScreen({ navigation }: Props) {
  const dispatch: AppDispatch = useDispatch();
  const washStations = useSelector((state: RootState) => state.washStations.washStations);

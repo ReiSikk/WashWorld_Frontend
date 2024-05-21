@@ -38,9 +38,12 @@ const newMember: createMemberDTO = {
 };
 
     dispatch(signup(newMember))
-    .then(() => {
-    navigation.navigate('LoginScreen')
-  })
+    .then((response) => {
+      if (!response.payload.error) {
+        navigation.navigate('LoginScreen');
+    } else {
+      alert(response.payload.message)
+      }})
 }
 
   return (

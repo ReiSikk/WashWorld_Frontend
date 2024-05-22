@@ -1,6 +1,7 @@
 import { SuperQueries } from "./SuperQueries";
 import { createMemberDTO } from "../entities/CreateMemberDTO";
 import * as SecureStore from 'expo-secure-store';
+import { setMemberID } from '../store/MemberSlice';
 
 export class MemberQueries extends SuperQueries {
     static baseUrl = SuperQueries.baseUrl + 'auth/'
@@ -33,8 +34,21 @@ export class MemberQueries extends SuperQueries {
          const data = await response.json();
 
          return data;  
-         }
-         
+   }
+
+   static async getMember() {
+    const token = await SecureStore.getItemAsync('token')
+         const response = await fetch(this.baseUrl + "profile", {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+            console.log(data, "data from getMember response");
+            return data;
+        }
+
     static async logout() {
         console.log("Not implemented yet");
     } 

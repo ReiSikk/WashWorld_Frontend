@@ -4,11 +4,13 @@ import { createMemberDTO } from '../entities/CreateMemberDTO';
 import { MemberQueries } from '../api/MemberQueries';
 
 
+
 interface MemberState {
     member: Member | null;
     token: string | null;
     loading: boolean;
     error: string | null;
+    memberID: number | null;
     //cars: Car[]
 
 }
@@ -36,6 +38,7 @@ const initialState: MemberState = {
     token: null,
     loading: false,
     error: null,
+    memberID: null,
    // cars: []
 };
 
@@ -44,7 +47,6 @@ const initialState: MemberState = {
     async (credentials: { email: string; password: string }, thunkAPI) => {
     
             const response = await MemberQueries.login(credentials.email, credentials.password);
-            console.log(response, "response in login memberSLice");
             return response;
             
     }
@@ -64,18 +66,27 @@ export const signup = createAsyncThunk(
     }
 );
 
+export const getProfile = createAsyncThunk(
+    'auth/profile',
+    async (thunkAPI) => {
+            return await MemberQueries.getMember();
+    },
+);
+
 export const MemberSlice = createSlice({
     name: 'member',
     initialState,
     reducers: {
         setToken: (state, action: PayloadAction<string>) => {
-            console.log("action.payload in setToken", action.payload);
             state.token = action.payload;
         }, 
          logout: (state) => {
             state.token = '';
             SecureStore.deleteItemAsync('token')
         }, 
+        setMemberID: (state, action: PayloadAction<number>) => {
+            state.memberID = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -103,10 +114,13 @@ export const MemberSlice = createSlice({
            .addCase(signup.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
-            }); 
+            })
+            .addCase(getProfile.fulfilled, (state, action) => {
+                state.memberID = action.payload;
+            })
     },
 });
 
-export const { setToken, logout } = MemberSlice.actions
+export const { setToken, logout, setMemberID } = MemberSlice.actions
 
 export default MemberSlice.reducer;

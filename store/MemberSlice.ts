@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import * as SecureStore from 'expo-secure-store';
 import { createMemberDTO } from '../entities/CreateMemberDTO';
 import { MemberQueries } from '../api/MemberQueries';
+import { CreateCarDto } from '../entities/CreateCarDTO';
 
 
 
@@ -10,7 +11,7 @@ interface MemberState {
     token: string | null;
     loading: boolean;
     error: string | null;
-    memberID: number | null;
+    memberID: string | null;
     //cars: Car[]
 
 }
@@ -26,6 +27,11 @@ interface Member {
     loyaltyPoints: number;
     //role: Role
 }
+
+interface ConfirmSubscriptionPayload {
+    memberID: string;
+    createCarDtos: CreateCarDto[];
+  }
 
 /* export enum Role {
     User = 'user',
@@ -84,9 +90,14 @@ export const MemberSlice = createSlice({
             state.token = '';
             SecureStore.deleteItemAsync('token')
         }, 
-        setMemberID: (state, action: PayloadAction<number>) => {
+        setMemberID: (state, action: PayloadAction<string>) => {
             state.memberID = action.payload;
-        }
+        },
+        createSubscription: (state, action: PayloadAction<ConfirmSubscriptionPayload>) => {
+            state.memberID = action.payload.memberID;
+            console.log(action.payload, "action.payload in createSubscription")
+            MemberQueries.confirmSubscription(action.payload);
+          }
     },
     extraReducers: (builder) => {
         builder
@@ -121,6 +132,6 @@ export const MemberSlice = createSlice({
     },
 });
 
-export const { setToken, logout, setMemberID } = MemberSlice.actions
+export const { setToken, logout, setMemberID, createSubscription } = MemberSlice.actions
 
 export default MemberSlice.reducer;

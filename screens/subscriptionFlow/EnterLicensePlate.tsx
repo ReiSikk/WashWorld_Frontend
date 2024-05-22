@@ -14,9 +14,9 @@ import  { setCarsState }  from "../../store/SubscriptionSlice";
 
 type Props = NativeStackScreenProps<RootStackParamList, "EnterLicensePlate">
 type Car = {
-  plateNumber: string;
+  licensePlate: string;
   country: string;
-  plateNumberError: string;
+  licensePlateError: string;
   countryError: string;
 };
 
@@ -28,28 +28,27 @@ const EnterLicensePlate = ({route, navigation}: Props) => {
   const dispatch: AppDispatch = useDispatch();
   const stateCars = useSelector((state: RootState) => state.subscription.cars);
   console.log(stateCars, "stateCars in enterPlate state");
-  console.log(subscriptionPlanID, "subscriptionID in enterPlate state");
  
   
 
   const [cars, setCars] = useState<Car[]>([
     {
-      plateNumber: stateCars[0]?.plateNumber ||'',
+      licensePlate: stateCars[0]?.licensePlate ||'',
       country: stateCars[0]?.country ||'',
-      plateNumberError: '',
+      licensePlateError: '',
       countryError: '',
     },
     {
-      plateNumber: stateCars[1]?.plateNumber ||'',
+      licensePlate: stateCars[1]?.licensePlate ||'',
       country: stateCars[1]?.country ||'',
-      plateNumberError: '',
+      licensePlateError: '',
       countryError: '',
     },
   ]);
 
   const [addSecondPlate, setAddSecondPlate] = useState(false);
   useEffect(() => {
-    if (stateCars[1]?.plateNumber && stateCars[1]?.country) {
+    if (stateCars[1]?.licensePlate && stateCars[1]?.country) {
       setAddSecondPlate(true);
     } else {
       setAddSecondPlate(false);
@@ -80,15 +79,15 @@ const handleCountryChange = (index:any, value:string) => {
 };
 
 const validateNumberPlate = (index: number, value: string) => {
-  let plateNumberError = '';
+  let licensePlateError = '';
   if (value === undefined || value.length < 3) {
-    plateNumberError = 'Invalid plate number';
+    licensePlateError = 'Invalid plate number';
   }
 
   const newCars = cars.map((car, i) => {
     if (i === index) {
         const trimmedPlateNumber = value.replace(/\s/g, '').toUpperCase();
-      return { ...car, plateNumber: trimmedPlateNumber, plateNumberError };
+      return { ...car, licensePlate: trimmedPlateNumber, licensePlateError };
     }
     return car;
   });
@@ -107,9 +106,9 @@ const validateForm = () => {
     // Always validate first car and second car if it exists
     if (index === 0 || (index === 1 && addSecondPlate)) {
       validatedCountry = handleCountryChange(index, car.country);
-      validatedPlate = validateNumberPlate(index, car.plateNumber);
+      validatedPlate = validateNumberPlate(index, car.licensePlate);
 
-      if (validatedCountry.countryError || validatedPlate.plateNumberError || !car.country || !car.plateNumber) {
+      if (validatedCountry.countryError || validatedPlate.licensePlateError || !car.country || !car.licensePlate) {
         isFormValid = false;
       }
     }
@@ -121,7 +120,7 @@ const validateForm = () => {
 
   if (isFormValid) {
     const trimmedCarsPayload = newCars.filter((_, i) => i === 0 || (i === 1 && addSecondPlate))
-                                      .map(({ country, plateNumber }) => ({ country, plateNumber }));
+                                      .map(({ country, licensePlate }) => ({ country, licensePlate }));
     dispatch(setCarsState(trimmedCarsPayload));
     navigation.navigate('OrderSummary', { subscriptionPlanID: subscriptionPlanID});
   } else {
@@ -143,14 +142,14 @@ const validateForm = () => {
       </Text>
 
     <VStack space={4}>
-      <FormControl isRequired isInvalid={!!cars[0].plateNumberError}>
+      <FormControl isRequired isInvalid={!!cars[0].licensePlateError}>
         <FormControl.Label _text={{bold: true}}>Plate number</FormControl.Label>
         <Input 
           placeholder="ABC 123"
-          value={cars[0].plateNumber}
+          value={cars[0].licensePlate}
           onChangeText={(value) => validateNumberPlate(0,value)}
         />
-        <FormControl.ErrorMessage>{cars[0].plateNumberError}</FormControl.ErrorMessage>
+        <FormControl.ErrorMessage>{cars[0].licensePlateError}</FormControl.ErrorMessage>
       </FormControl>
       <FormControl isRequired isInvalid={!!cars[0].countryError}>
         <FormControl.Label _text={{bold: true}}>Country</FormControl.Label>
@@ -170,14 +169,14 @@ const validateForm = () => {
       </Pressable>
       {addSecondPlate && (
         <VStack space={4}>
-        <FormControl isRequired isInvalid={!!cars[1].plateNumberError}>
+        <FormControl isRequired isInvalid={!!cars[1].licensePlateError}>
           <FormControl.Label _text={{bold: true}}>Plate number</FormControl.Label>
           <Input 
             placeholder="ABC 123"
-            value={cars[1].plateNumber}
+            value={cars[1].licensePlate}
             onChangeText={(value) => validateNumberPlate(1,value)}
           />
-          <FormControl.ErrorMessage>{cars[1].plateNumberError}</FormControl.ErrorMessage>
+          <FormControl.ErrorMessage>{cars[1].licensePlateError}</FormControl.ErrorMessage>
         </FormControl>
         <FormControl isRequired isInvalid={!!cars[1].countryError}>
           <FormControl.Label _text={{bold: true}}>Country</FormControl.Label>

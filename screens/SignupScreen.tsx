@@ -26,9 +26,6 @@ function SignupScreen({ navigation }: Props) {
 
   const handleSignup = () => {
 
-    console.log(form)
-
-
 const newMember: createMemberDTO = {
   email: form.email,
   password: form.password,

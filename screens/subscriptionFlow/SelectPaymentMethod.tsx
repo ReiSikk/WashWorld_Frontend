@@ -9,15 +9,14 @@ import { createSubscription } from '../../store/MemberSlice'
 
 
 function SelectPaymentMethod() {
-  //dispatch
-  const dispatch: AppDispatch = useDispatch();
+const dispatch: AppDispatch = useDispatch();
 const memberID = useSelector((state: RootState) => state.member.memberID);
 const memberCars = useSelector((state: RootState) => state.subscription.cars);
 const subscriptionPlanID = useSelector((state: RootState) => state.subscription.selectedSubscription);
-console.log(subscriptionPlanID, "subscriptionPlanID in Select Payment Method")
+//console.log(subscriptionPlanID, "subscriptionPlanID in Select Payment Method")
 const paymentMethodID = useSelector((state: RootState) => state.subscription.selectedPaymentMethodID);
-console.log(paymentMethodID, "paymentMethodID in Select Payment Method")
-console.log(memberID, memberCars)
+//console.log(paymentMethodID, "paymentMethodID in Select Payment Method")
+//console.log(memberID, memberCars)
 
 
 const createCarDtos = memberCars.map(car => ({
@@ -27,14 +26,6 @@ const createCarDtos = memberCars.map(car => ({
   paymentCardId: paymentMethodID,
 }));
 console.log(createCarDtos, "createCarDtos in Select Payment Method")
-const [formData, setFormData] = useState({
-  memberID: memberID,
-  createCarDtos: createCarDtos
-});
-
-console.log(formData, "formData in Select Payment Method")
-
-
 
   return (
     <>

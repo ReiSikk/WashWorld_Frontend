@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { Card } from '../entities/card'
 import { PaymentCardQueries } from '../api/PaymentCardQueries'
 import { CreateCardDTO } from '../entities/CreateCardDTO'
+import { MemberPaymentCardQueries } from '../api/MemberPaymentCardQueries'
 
 export interface CardState {
   cards: Card[]
@@ -18,7 +19,7 @@ console.log("initialState in CardSlice.ts", initialState);
 export const fetchCards = createAsyncThunk(
     'fetchCards',
     async (thunkAPI) => {
-      return await PaymentCardQueries.fetchAll();
+      return await MemberPaymentCardQueries.fetchAll();
     },
   )
 
@@ -54,10 +55,7 @@ export const cardSlice = createSlice({
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchCards.fulfilled, (state, action) => {
-      // Add user to the state array
-      
-      state.cards = action.payload;
-    //   state.entities.push(action.payload)
+      state.cards = Array.isArray(action.payload) ? action.payload : [];
     }),
     builder
 

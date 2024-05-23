@@ -151,7 +151,9 @@ useEffect(() => {
           </Text>
         </VStack>
         <VStack space={4}>
-          {cardsFromStore.cards.map((method, index) => (
+          {cardsFromStore && cardsFromStore.cards.length > 0 ?
+          
+         ( cardsFromStore.cards.map((method, index) => (
             <Pressable
               key={index}
               color={'black'}
@@ -169,7 +171,11 @@ useEffect(() => {
                 <AntDesign name="right" size={14} marginLeft={'auto'} />
               </HStack>
             </Pressable>
-          ))}
+          ))) : 
+          (
+            null
+          )
+          }
           <Pressable
             color={'black'}
             padding={4}

@@ -39,30 +39,27 @@ function Location({ route, navigation}: Props) {
 
   const role = useSelector((state: RootState) => state.member.role);
 
-  const changeWashBayStatus = async (bayId: number) => {
-    console.log(role, "role")
-  console.log(bayId, "bayid")
-  const updatedAvailability = false;
+  const fetchWashBays = async () => {
+    const data = await WashStationQueries.fetchStationsWithBays(locationID);
+    setWashBays(data);
+  };
 
-    //call backend to update the availibility via WashBayQueries
+  const changeWashBayStatus = async (bayId: number) => {
+    const bayToUpdate = washBays.find(bay => bay.id === bayId);
+    const currentStatus = bayToUpdate?.available;
+    const updatedAvailability = !currentStatus;
 
     const updatedBay = await WashBayQueries.updateWashBay(bayId, updatedAvailability);
 
-    // update local state after update
-
-  /*   setWashBays(prevState =>
+    setWashBays(prevState =>
       prevState.map(bay => (bay.id === bayId ? { ...bay, available: updatedBay.available } : bay))
-    ) */
+    )
+    fetchWashBays();
   } 
 
 
 
   useEffect(() => {
-    const fetchWashBays = async () => {
-      const data = await WashStationQueries.fetchStationsWithBays(locationID);
-      setWashBays(data);
-    };
-  
     const fetchStationOpenStatus = async () => {
       const isOpen = await WashStationQueries.isStationOpen(locationID);
       setIsStationOpen(isOpen);
@@ -71,8 +68,6 @@ function Location({ route, navigation}: Props) {
     fetchWashBays();
     fetchStationOpenStatus();
   }, [locationID]);
-
-
 
 
   return (
@@ -114,8 +109,8 @@ function Location({ route, navigation}: Props) {
       <VStack space={4} mb="8">
         {washBays.map((bay, index) => (
           bay.bayType === "Automatic" &&
-          <VStack space={2} bg={'white'} py={4} px={6} justifyContent={'space-between'} borderRadius="sm">
-          <HStack key={index} space={4} justifyContent={'space-between'}>
+          <VStack key={index} space={2} bg={'white'} py={4} px={6} justifyContent={'space-between'} borderRadius="sm">
+          <HStack space={4} justifyContent={'space-between'}>
           <Text fontFamily={'extrabold'} fontSize={'lg'}>Automatic wash bay {bay.bayNr}</Text>
           <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg={bay.available ? "greenWhite" : "orange"}>{bay.available ? "Available" : "Not available"}</Badge>
           </HStack>
@@ -124,11 +119,11 @@ function Location({ route, navigation}: Props) {
           <Text>Max height: {bay.dimensionHeight}</Text>
           <Text>Max width: {bay.dimensionWidth}</Text>
           </VStack>
-          {//role === 'admin' && 
-          bay.available && (
+          {role === 'admin' && 
+          bay && (
     <>
     <Text fontSize="lg" fontWeight="extrabold" mt="4">Admin settings</Text>
-      <Button bg='orange' my="2" onPress={() => changeWashBayStatus(bay.id)}>Set wash bay to unavailable</Button>
+      <Button bg={bay.available ? "orange" : "greenWhite"} my="2" onPress={() => changeWashBayStatus(bay.id)}>{bay.available === true ? "Set wash bay to unavailable" : "Set wash bay to be available"}</Button>
       </>
             )}
           </VStack>
@@ -144,8 +139,8 @@ function Location({ route, navigation}: Props) {
       <VStack space={4}>
       {washBays.map((bay, index) => (
           bay.bayType === "Self wash" &&
-          <VStack space={2} bg={'white'} py={4} px={6} justifyContent={'space-between'} borderRadius="sm">
-          <HStack key={index} space={4} justifyContent={'space-between'}>
+          <VStack  key={index} space={2} bg={'white'} py={4} px={6} justifyContent={'space-between'} borderRadius="sm">
+          <HStack space={4} justifyContent={'space-between'}>
           <Text fontSize='lg' fontWeight="extrabold">Self-wash bay {bay.bayNr}</Text>
           <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg={bay.available ? "greenWhite" : "orange"}>{bay.available ? "Available" : "Not available"}</Badge>
           </HStack>
@@ -154,11 +149,11 @@ function Location({ route, navigation}: Props) {
           <Text>Max height: {bay.dimensionHeight}</Text>
           <Text>Max width: {bay.dimensionWidth}</Text>
           </VStack>
-          {//role === 'admin' && 
-          bay.available && (
+          {role === 'admin' && 
+          bay && (
             <>
             <Text fontSize="lg" fontWeight="extrabold" mt="4">Admin settings</Text>
-              <Button bg='orange' my="2" onPress={() => changeWashBayStatus(bay.id)}>Set wash bay to unavailable</Button>
+              <Button bg={bay.available ? "orange" : "greenWhite"}  my="2" onPress={() => changeWashBayStatus(bay.id)}>{bay.available === true ? "Set wash bay to unavailable" : "Set wash bay to be available"}</Button>
               </>
             )}
           </VStack>

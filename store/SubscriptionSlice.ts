@@ -2,24 +2,28 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { SubscriptionQueries } from '../api/SubscriptionQueries'
 import { Subscription } from '../entities/subscription'
+import { Card } from '../entities/card'
 
 export interface SubscriptionState {
   subscriptions: Subscription[]
-  selectedSubscription?: Subscription | null
+  selectedSubscription: string
   cars: CarState[]
+  selectedPaymentMethodID: string;
 }
 
 export interface CarState {
-  plateNumber: string;
+  licensePlate: string;
   country: string;
-  plateNumberError: string;
+  licensePlateError: string;
   countryError: string;
 }
 
+
 const initialState: SubscriptionState = {
   subscriptions: [],
-  selectedSubscription: null,
+  selectedSubscription: '',
   cars: [],
+  selectedPaymentMethodID: '',
 }
 
 
@@ -44,6 +48,10 @@ export const subscriptionSlice = createSlice({
       state.cars = action.payload;
       console.log(state.cars, "cars in redux state");
     },
+    setSelectedPaymentMethodID: (state, action) => {
+      state.selectedPaymentMethodID = action.payload;
+      console.log(state.selectedPaymentMethodID, "selectedPaymentMethodID in redux state");
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -56,6 +64,6 @@ export const subscriptionSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 // ACTIONS
-export const { selectSubscription, setCarsState } = subscriptionSlice.actions
+export const { selectSubscription, setCarsState, setSelectedPaymentMethodID  } = subscriptionSlice.actions
 
 export default subscriptionSlice.reducer

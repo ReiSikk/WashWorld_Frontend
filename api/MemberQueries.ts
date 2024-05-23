@@ -1,11 +1,14 @@
 import { SuperQueries } from "./SuperQueries";
 import { createMemberDTO } from "../entities/CreateMemberDTO";
+import * as SecureStore from 'expo-secure-store';
+import { setMemberID } from '../store/MemberSlice';
+import { CreateCarDto } from "../entities/CreateCarDTO";
 
 export class MemberQueries extends SuperQueries {
     static baseUrl = SuperQueries.baseUrl + 'auth/'
+    static memberUrl = SuperQueries.baseUrl + 'member/'
 
     static async login( email: string, password: string) {
-console.log("calling...", this.baseUrl + "login");
 
        const response = await fetch(this.baseUrl + "login", { 
           method: 'POST',
@@ -15,6 +18,8 @@ console.log("calling...", this.baseUrl + "login");
            body: JSON.stringify({ email, password})
        });
         const data = await response.json();
+        //store token in secure store
+        SecureStore.setItemAsync('token', data.token);
        console.log(data, "data from login response");
         
         return data;
@@ -31,8 +36,41 @@ console.log("calling...", this.baseUrl + "login");
          const data = await response.json();
 
          return data;  
-         }
-         
+   }
+
+   static async getMember() {
+    const token = await SecureStore.getItemAsync('token')
+         const response = await fetch(this.baseUrl + "profile", {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+            console.log(data, "data from getMember response");
+            return data;
+    }
+
+    static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[]}) {
+        console.log(formData, "formData in confirmSubscription")
+
+        const response = await fetch(this.memberUrl+`${formData.memberID}/add-car`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+      
+        if (!response.ok) {
+          // handle error
+        }
+    
+        const data = await response.json();
+        // do something with the data
+        console.log(data, "data from confirmSubscription response");
+    }
+
     static async logout() {
         console.log("Not implemented yet");
     } 

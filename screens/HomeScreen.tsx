@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { fetchWashStations } from '../store/WashStationSlice';
 import { fetchSubscriptions } from '../store/SubscriptionSlice';
+import { getProfile } from '../store/MemberSlice';
+
 
 
 
@@ -16,12 +18,15 @@ type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 
 
 function HomeScreen({ navigation }: Props) {
- const dispatch: AppDispatch = useDispatch();
- const washStations = useSelector((state: RootState) => state.washStations.washStations);
-  
-  useEffect(() => {
-    dispatch(fetchWashStations());
-  }, [dispatch]);
+const dispatch: AppDispatch = useDispatch();
+const washStations = useSelector((state: RootState) => state.washStations.washStations);
+
+
+
+useEffect(() => {
+  dispatch(fetchWashStations());
+  dispatch(getProfile());
+}, [dispatch]);
 
   return (
      <ScrollView m={6}>

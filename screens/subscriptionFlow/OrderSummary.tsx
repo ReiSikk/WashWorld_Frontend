@@ -39,7 +39,7 @@ function OrderSummary({navigation, route}: Props) {
       <HStack key={index} p="4" bg="grey10" alignItems={'center'} justifyContent={'flex-start'} space={4}>
         <FontAwesome5 name="car" size={24} color="black" />
         <Text color="black" fontSize="2xl" fontWeight={'extrabold'}>
-          {car.plateNumber} {car.country}
+          {car.licensePlate} {car.country}
         </Text>
       </HStack>
     ))}

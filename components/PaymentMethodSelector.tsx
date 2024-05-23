@@ -5,8 +5,9 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { CreateCardDTO } from '../entities/CreateCardDTO';
 import { createCard, fetchCards } from '../store/CardSlice';
-import { parse, isValid, endOfMonth } from 'date-fns';
+import { parse, isValid, endOfMonth, set } from 'date-fns';
 import { useSelector } from 'react-redux';
+import { setSelectedPaymentMethodID } from '../store/SubscriptionSlice';
 
 const PaymentMethodSelector: React.FC = () => {
   //redux
@@ -16,7 +17,8 @@ const PaymentMethodSelector: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const [cardAdded, setCardAdded] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState('');
-  console.log(selectedMethod, "selectedMethod in PaymentMethodSelector")
+
+  //console.log(selectedMethod, "selectedMethod in PaymentMethodSelector")
 
 
   const [formData, setFormData] = useState({
@@ -149,14 +151,19 @@ useEffect(() => {
           </Text>
         </VStack>
         <VStack space={4}>
-          {cardsFromStore.cards.map((method, index) => (
+          {cardsFromStore && cardsFromStore.cards.length > 0 ?
+          
+         ( cardsFromStore.cards.map((method, index) => (
             <Pressable
               key={index}
               color={'black'}
               padding={4}
               bg={selectedMethod === method.cardNumber ? 'greenWhite' : 'grey10'}
               borderRadius={4}
-              onPress={() => setSelectedMethod(method.cardNumber)}
+              onPress={() => dispatch(
+                setSelectedPaymentMethodID(method.id),
+                setSelectedMethod(method.cardNumber)
+              )}
             >
               <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
                 <Text>{method.nameOnCard}</Text>
@@ -164,7 +171,11 @@ useEffect(() => {
                 <AntDesign name="right" size={14} marginLeft={'auto'} />
               </HStack>
             </Pressable>
-          ))}
+          ))) : 
+          (
+            null
+          )
+          }
           <Pressable
             color={'black'}
             padding={4}

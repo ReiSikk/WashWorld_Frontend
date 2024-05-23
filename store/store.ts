@@ -11,7 +11,7 @@ export const store = configureStore({
     step: stepSlice.reducer,
     member: MemberSlice.reducer,
     cards: cardSlice.reducer,
-    washStations: washStationSlice.reducer
+    washStations: washStationSlice.reducer,
   },
 })
 

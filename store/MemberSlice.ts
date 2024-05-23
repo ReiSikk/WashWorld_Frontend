@@ -9,7 +9,7 @@ interface MemberState {
     token: string | null;
     loading: boolean;
     error: string | null;
-    //cars: Car[]
+    role: Role | null;
 
 }
 
@@ -22,21 +22,20 @@ interface Member {
     active: boolean;
     joinDate: Date;
     loyaltyPoints: number;
-    //role: Role
+    role: Role
 }
 
-/* export enum Role {
+ export enum Role {
     User = 'user',
-    PremiumUser = 'premium',
     Admin = 'admin',
-} */
+} 
 
 const initialState: MemberState = {
     member: null,
     token: null,
     loading: false,
     error: null,
-   // cars: []
+   role: null,
 };
 
  export const login = createAsyncThunk(
@@ -86,6 +85,7 @@ export const MemberSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
                 state.token = action.payload.access_token;
+                state.role = action.payload.role;
                 SecureStore.setItemAsync('token', action.payload.access_token);
             }) 
             .addCase(login.rejected, (state, action) => {

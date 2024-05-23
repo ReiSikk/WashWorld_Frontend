@@ -6,7 +6,6 @@ export class MemberQueries extends SuperQueries {
 
     static async login( email: string, password: string) {
 console.log("calling...", this.baseUrl + "login");
-console.log(email, password, "email and password")
 
        const response = await fetch(this.baseUrl + "login", { 
           method: 'POST',

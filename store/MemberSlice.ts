@@ -82,6 +82,13 @@ export const getProfile = createAsyncThunk(
     },
 );
 
+export const getMemberDetails = createAsyncThunk(
+    'auth/profile/details',
+    async (memberID: number, thunkAPI) => {
+            return await MemberQueries.getMemberDetails(memberID);
+    },
+);
+
 export const MemberSlice = createSlice({
     name: 'member',
     initialState,
@@ -132,6 +139,9 @@ export const MemberSlice = createSlice({
             })
             .addCase(getProfile.fulfilled, (state, action) => {
                 state.memberID = action.payload;
+            })
+            .addCase(getMemberDetails.fulfilled, (state, action) => {
+                state.member = action.payload;
             })
     },
 });

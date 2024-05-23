@@ -3,6 +3,8 @@ import { createMemberDTO } from "../entities/CreateMemberDTO";
 import * as SecureStore from 'expo-secure-store';
 import { setMemberID } from '../store/MemberSlice';
 import { CreateCarDto } from "../entities/CreateCarDTO";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 export class MemberQueries extends SuperQueries {
     static baseUrl = SuperQueries.baseUrl + 'auth/'
@@ -51,6 +53,19 @@ export class MemberQueries extends SuperQueries {
             return data;
     }
 
+   static async getMemberDetails(memberID: number) {
+    const token = await SecureStore.getItemAsync('token')
+         const response = await fetch(this.memberUrl + `${memberID}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+            console.log(data, "data from getMemberDetails response");
+            return data;
+    }
+
     static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[]}) {
         console.log(formData, "formData in confirmSubscription")
 
@@ -67,8 +82,7 @@ export class MemberQueries extends SuperQueries {
         }
     
         const data = await response.json();
-        // do something with the data
-        console.log(data, "data from confirmSubscription response");
+        console.log(data, "data in confirmSubscription")
     }
 
     static async logout() {

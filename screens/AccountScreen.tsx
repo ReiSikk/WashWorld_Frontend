@@ -49,7 +49,7 @@ function AccountScreen({ navigation }: Props) {
             {car.licensePlate} {car.country}
           </Text>
             </Flex>
-          <AntDesign name={showDetails ? 'down' : 'right'} size={24} color="white" />
+          <AntDesign name={showDetails[index] ? 'down' : 'right'} size={24} color="white" />
           </HStack>
           {showDetails[index] &&
           <HStack space={2} mt={'auto'} mb={0} pt={4} alignItems="baseline" justifyContent={'space-between'}>

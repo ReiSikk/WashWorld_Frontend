@@ -5,6 +5,8 @@ export class Card {
     cardNumber: string;
     expirationDate: Date;
     cvv: string;
+    isDefaultMethod: boolean;
+    isActive: boolean;
   
     constructor(
         id: number,
@@ -12,6 +14,9 @@ export class Card {
         cardNumber: string,
         expirationDate: Date,
         cvv: string,
+        isDefaultMethod: boolean,
+        isActive: boolean
+
    
     ) {
       this.id = id;
@@ -19,5 +24,7 @@ export class Card {
         this.cardNumber = cardNumber;
         this.expirationDate = expirationDate;
         this.cvv = cvv;
+        this.isDefaultMethod = isDefaultMethod;
+        this.isActive = isActive;
     }
   }

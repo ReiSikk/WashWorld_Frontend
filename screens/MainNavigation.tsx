@@ -28,6 +28,7 @@ import Location from './locationFlow/Location';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
 import { logout } from '../store/MemberSlice';
+import PaymentStatus from './subscriptionFlow/PaymentStatus';
 
 //define route params types
 export type RootStackParamList = {
@@ -44,6 +45,7 @@ export type RootStackParamList = {
     EnterLicensePlate: { subscriptionPlanID: number};
     OrderSummary: { subscriptionPlanID: number };
     SelectPaymentMethod: undefined;
+    PaymentStatus: undefined;
     Contact: undefined;
     FAQ: undefined;
     PaymentMethods: undefined;
@@ -85,6 +87,7 @@ const HomeStackNavigator = () => {
           <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate}/>
           <Stack.Screen name="OrderSummary" component={OrderSummary}/>
           <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}/>
+          <Stack.Screen name="PaymentStatus" component={PaymentStatus}/>
           <Stack.Screen name="Location" component={Location} />
         </Stack.Navigator>
     )

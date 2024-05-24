@@ -77,7 +77,7 @@ export class MemberQueries extends SuperQueries {
         });
       
         if (!response.ok) {
-            alert("Failed to add cars to subscription")
+            alert("Failed to add cars to subscription, please try again")
         }
     
         const data = await response.json();

@@ -5,18 +5,21 @@ import PaymentMethodSelector from '../../components/PaymentMethodSelector'
 import { AppDispatch, RootState } from '../../store/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { CreateCarDto } from '../../entities/CreateCarDTO'
-import { createSubscription } from '../../store/MemberSlice'
+import { confirmSubscription, createSubscription } from '../../store/MemberSlice'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../MainNavigation'
 
+type Props = NativeStackScreenProps<RootStackParamList, "SelectPaymentMethod">
 
-function SelectPaymentMethod() {
+function SelectPaymentMethod({route, navigation}: Props) {
 const dispatch: AppDispatch = useDispatch();
 const memberID = useSelector((state: RootState) => state.member.memberID);
 const memberCars = useSelector((state: RootState) => state.subscription.cars);
 const subscriptionPlanID = useSelector((state: RootState) => state.subscription.selectedSubscription);
-//console.log(subscriptionPlanID, "subscriptionPlanID in Select Payment Method")
+
 const paymentMethodID = useSelector((state: RootState) => state.subscription.selectedPaymentMethodID);
-//console.log(paymentMethodID, "paymentMethodID in Select Payment Method")
-//console.log(memberID, memberCars)
+const subscriptionStatus = useSelector((state: RootState) => state.member.subscriptionStatus);
+console.log(subscriptionStatus, "subscriptionStatus in Select Payment Method")
 
 
 const createCarDtos = memberCars.map(car => ({
@@ -33,7 +36,7 @@ console.log(createCarDtos, "createCarDtos in Select Payment Method")
     <ProgressSteps currentStep={2} totalSteps={4} />
     <ScrollView>
     <PaymentMethodSelector />
-      </ScrollView>
+    </ScrollView>
       </VStack>
       <Flex  flexDirection="row" mt={'auto'} px={0} bg={'white'} width={"100%"} h={"10%"}  justifyContent="center" alignItems={'center'}>
 
@@ -41,10 +44,14 @@ console.log(createCarDtos, "createCarDtos in Select Payment Method")
       <Box>
     <Button width={"100%"} colorScheme="green" onPress={() => {
       if (memberID !== null) {
-        dispatch(createSubscription({
+        dispatch(confirmSubscription({
           memberID: memberID,
           createCarDtos: createCarDtos
         }));
+        if(subscriptionStatus === 'succeeded') {
+          console.log('Subscription confirmed');
+          navigation.navigate('PaymentStatus');
+        }
       } else {
         // Handle the case when memberID is null
         console.error('memberID is null');

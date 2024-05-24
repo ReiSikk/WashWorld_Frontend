@@ -16,6 +16,7 @@ interface MemberState {
     memberID: string | null;
     cars: Car[],
     role: Role | null;
+    subscriptionStatus: string | null;
 
 }
 
@@ -51,6 +52,7 @@ const initialState: MemberState = {
     memberID: null,
     cars: [],
     role: null,
+    subscriptionStatus: 'none',
 };
 
  export const login = createAsyncThunk(
@@ -96,6 +98,15 @@ export const getMemberCars = createAsyncThunk(
             return await CarQueries.fetchAll();
     },
 );
+
+export const confirmSubscription = createAsyncThunk(
+    'member/createSubscription',
+    async (payload: ConfirmSubscriptionPayload, thunkAPI) => {
+      // Call your API here
+      return await MemberQueries.confirmSubscription(payload);
+      // You can return the response data and it will be used as the payload for the fulfilled action
+    });
+
 
 export const MemberSlice = createSlice({
     name: 'member',
@@ -154,6 +165,12 @@ export const MemberSlice = createSlice({
             .addCase(getMemberCars.fulfilled, (state, action) => {
                 state.cars = action.payload;
             })
+            .addCase(confirmSubscription.fulfilled, (state, action) => {
+                state.subscriptionStatus = 'succeeded';
+              })
+            .addCase(confirmSubscription.rejected, (state, action) => {
+                state.subscriptionStatus = 'failed';
+              })
     },
 });
 

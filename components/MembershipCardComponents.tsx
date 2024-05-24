@@ -11,11 +11,11 @@ const MembershipCard = () => {
   const member = useSelector((state: RootState) => state.member.member);
   const memberID = useSelector((state: RootState) => state.member.memberID);
  useEffect(() => {
-  if(memberID && memberID !== null) {
+  if(memberID) {
     const memberIDNumber = parseInt(memberID);
     dispatch(getMemberDetails(memberIDNumber));
   }
- },[memberID])
+ },[member])
 
 
 

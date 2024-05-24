@@ -62,7 +62,6 @@ export class MemberQueries extends SuperQueries {
                 },
             });
             const data = await response.json();
-            console.log(data, "data from getMemberDetails response");
             return data;
     }
  
@@ -78,7 +77,7 @@ export class MemberQueries extends SuperQueries {
         });
       
         if (!response.ok) {
-          // handle error
+            alert("Failed to add cars to subscription")
         }
     
         const data = await response.json();

@@ -16,12 +16,13 @@ function AccountScreen({ navigation }: Props) {
   const dispatch: AppDispatch = useDispatch();
   const memberCars = useSelector((state: RootState) => state.member.cars);
   const memberID = useSelector((state: RootState) => state.member.memberID);
-  const [showDetails, setShowDetails] = useState(false);
+//ensure array of booleans is same as cars array
+  const [showDetails, setShowDetails] = useState(new Array(memberCars.length).fill(false));
 
 
   useEffect(() => {
     dispatch(getProfile());
-    if(memberID) {
+    if(memberID && memberID !== null) {
       const memberIDNumber = parseInt(memberID);
       dispatch(getMemberDetails(memberIDNumber))
     } 
@@ -34,8 +35,13 @@ function AccountScreen({ navigation }: Props) {
       <VStack space={4} pb={4}>
       <Text fontSize="lg" fontWeight="bold" mt="4">My cars</Text>
       {memberCars && memberCars.length > 0 ? memberCars.map((car, index) => (
-        <Pressable onPress={() => setShowDetails(!showDetails)}>
-        <Flex bg={'greenWhite'} p={4} rounded={'sm'} key={index}> 
+        <Pressable onPress={() => {
+          const newShowDetails = [...showDetails];
+          newShowDetails[index] = !newShowDetails[index];
+        setShowDetails(newShowDetails)}
+        }
+         key={index}>
+        <Flex bg={'greenWhite'} p={4} rounded={'sm'}> 
           <HStack space={4} alignItems="center" justifyContent={'space-between'}>
             <Flex flexDirection={'row'}>
           <FontAwesome5 name="car" size={36} color="white" />
@@ -45,7 +51,7 @@ function AccountScreen({ navigation }: Props) {
             </Flex>
           <AntDesign name={showDetails ? 'down' : 'right'} size={24} color="white" />
           </HStack>
-          {showDetails &&
+          {showDetails[index] &&
           <HStack space={2} mt={'auto'} mb={0} pt={4} alignItems="baseline" justifyContent={'space-between'}>
             <HStack space={2} alignItems={'baseline'}>
           <Text color="white" fontSize="lg" fontWeight={'extrabold'}>

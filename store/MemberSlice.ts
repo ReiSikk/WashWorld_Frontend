@@ -3,6 +3,8 @@ import * as SecureStore from 'expo-secure-store';
 import { createMemberDTO } from '../entities/CreateMemberDTO';
 import { MemberQueries } from '../api/MemberQueries';
 import { CreateCarDto } from '../entities/CreateCarDTO';
+import { CarQueries } from '../api/CarQueries';
+import { Car } from '../entities/car';
 
 
 
@@ -12,7 +14,7 @@ interface MemberState {
     loading: boolean;
     error: string | null;
     memberID: string | null;
-    //cars: Car[]
+    cars: Car[],
     role: Role | null;
 
 }
@@ -47,8 +49,8 @@ const initialState: MemberState = {
     loading: false,
     error: null,
     memberID: null,
-   // cars: []
-   role: null,
+    cars: [],
+    role: null,
 };
 
  export const login = createAsyncThunk(
@@ -86,6 +88,12 @@ export const getMemberDetails = createAsyncThunk(
     'auth/profile/details',
     async (memberID: number, thunkAPI) => {
             return await MemberQueries.getMemberDetails(memberID);
+    },
+);
+export const getMemberCars = createAsyncThunk(
+    'getMemberCars',
+    async (thunkAPI) => {
+            return await CarQueries.fetchAll();
     },
 );
 
@@ -142,6 +150,9 @@ export const MemberSlice = createSlice({
             })
             .addCase(getMemberDetails.fulfilled, (state, action) => {
                 state.member = action.payload;
+            })
+            .addCase(getMemberCars.fulfilled, (state, action) => {
+                state.cars = action.payload;
             })
     },
 });

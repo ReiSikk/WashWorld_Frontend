@@ -65,7 +65,7 @@ export class MemberQueries extends SuperQueries {
             console.log(data, "data from getMemberDetails response");
             return data;
     }
-
+ 
     static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[]}) {
         console.log(formData, "formData in confirmSubscription")
 

@@ -17,6 +17,7 @@ interface MemberState {
     cars: Car[],
     role: Role | null;
     subscriptionStatus: string | null;
+    tokenStatus: string;
 
 }
 
@@ -53,6 +54,7 @@ const initialState: MemberState = {
     cars: [],
     role: null,
     subscriptionStatus: 'none',
+    tokenStatus: 'idle',
 };
 
  export const login = createAsyncThunk(
@@ -83,6 +85,12 @@ export const getProfile = createAsyncThunk(
     'auth/profile',
     async (thunkAPI) => {
             return await MemberQueries.getMember();
+    },
+);
+export const checkTokenValidity = createAsyncThunk(
+    'auth/profile/check-token',
+    async (thunkAPI) => {
+            return await MemberQueries.getTokenValidity();
     },
 );
 
@@ -116,6 +124,7 @@ export const MemberSlice = createSlice({
             state.token = action.payload;
         }, 
          logout: (state) => {
+            console.log("logout called")
             state.token = '';
             SecureStore.deleteItemAsync('token')
         }, 
@@ -158,6 +167,19 @@ export const MemberSlice = createSlice({
             })
             .addCase(getProfile.fulfilled, (state, action) => {
                 state.memberID = action.payload;
+            })
+            .addCase(checkTokenValidity.pending, (state, action) => {
+                state.tokenStatus = 'loading';
+            })
+            .addCase(checkTokenValidity.fulfilled, (state, action) => {
+                if (action.payload.valid) {
+                    state.tokenStatus = 'success';
+                  } else {
+                    state.tokenStatus = 'failed';
+                  }
+            })
+            .addCase(checkTokenValidity.rejected, (state, action) => {
+                state.tokenStatus = 'failed';
             })
             .addCase(getMemberDetails.fulfilled, (state, action) => {
                 state.member = action.payload;

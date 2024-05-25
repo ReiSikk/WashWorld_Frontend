@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { fetchWashStations } from '../store/WashStationSlice';
 import { fetchSubscriptions } from '../store/SubscriptionSlice';
-import { getProfile } from '../store/MemberSlice';
+import { checkTokenValidity, getProfile } from '../store/MemberSlice';
 
 
 
@@ -20,13 +20,28 @@ type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 function HomeScreen({ navigation }: Props) {
 const dispatch: AppDispatch = useDispatch();
 const washStations = useSelector((state: RootState) => state.washStations.washStations);
+const tokenStatus = useSelector((state: RootState) => state.member.tokenStatus);
 
 
 
 useEffect(() => {
   dispatch(fetchWashStations());
   dispatch(getProfile());
+  dispatch(checkTokenValidity())
 }, [dispatch]);
+
+useEffect(() => {
+  if (tokenStatus === 'failed') {
+    navigation.navigate('LoginScreen');
+  }
+  console.log(tokenStatus, "tokenStatus in HomeScreen useEffect");
+
+
+}, [tokenStatus, navigation]);
+
+
+
+
 
   return (
      <ScrollView m={6}>

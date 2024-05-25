@@ -52,6 +52,18 @@ export class MemberQueries extends SuperQueries {
             console.log(data, "data from getMember response");
             return data;
     }
+   static async getTokenValidity() {
+    const token = await SecureStore.getItemAsync('token')
+         const response = await fetch(this.baseUrl + "check-token", {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+            console.log(data, "data from getTokenValidity response");
+            return data;
+    }
 
    static async getMemberDetails(memberID: number) {
     const token = await SecureStore.getItemAsync('token')

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -27,7 +27,7 @@ import sizes from 'native-base/lib/typescript/theme/base/sizes';
 import Location from './locationFlow/Location';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
-import { logout } from '../store/MemberSlice';
+import { checkTokenValidity, logout } from '../store/MemberSlice';
 import PaymentStatus from './subscriptionFlow/PaymentStatus';
 
 //define route params types
@@ -89,12 +89,14 @@ const HomeStackNavigator = () => {
           <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}/>
           <Stack.Screen name="PaymentStatus" component={PaymentStatus}/>
           <Stack.Screen name="Location" component={Location} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
         </Stack.Navigator>
     )
   }
 
 
   const AccountStackNavigator = () => {
+    const dispatch = useDispatch<AppDispatch>();
     return (
       <Stack.Navigator
             screenOptions={({ navigation }) => ({
@@ -103,6 +105,7 @@ const HomeStackNavigator = () => {
                     headerShown: true,
                       headerRight: () => (     
                           <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
+                          onPress={() => dispatch(logout())}
                            variant={"outline"} _icon={{
                             as: AntDesign,
                             name: "logout"
@@ -127,12 +130,21 @@ const HomeStackNavigator = () => {
   }
 
   const LocationsStackNavigator = () => {
+    const dispatch = useDispatch<AppDispatch>();
     return (
       <Stack.Navigator
             screenOptions={({ navigation }) => ({
                     tabBarActiveTintColor: '#1A1A1A',
                     tabBarInactiveTintColor: '#666666',
                     headerShown:true,
+                    headerRight: () => (     
+                      <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
+                      onPress={() => dispatch(logout())}
+                       variant={"outline"} _icon={{
+                        as: AntDesign,
+                        name: "logout"
+                      }} />
+                  ),
                     })}
       >
           <Stack.Screen name="LocationsScreen" component={LocationsScreen} options={{ headerLeft: () => null }} />
@@ -145,14 +157,12 @@ const MainNavigation = () => {
     const dispatch = useDispatch<AppDispatch>();
     
     //getting the token from the store
-    const isLoggedIn = useSelector((state: RootState) => state.member.token);
+    const token = useSelector((state: RootState) => state.member.token);
 
-    //if there's a need to manually switch between logged in and logged out states
-     //const isSignedIn = false;
-  
+
       return (
           <NavigationContainer>
-          { isLoggedIn ? (
+          { token ? (
               <>
                   <Tab.Navigator
                    screenOptions={({ navigation }) => ({

@@ -52,6 +52,22 @@ export class MemberQueries extends SuperQueries {
             console.log(data, "data from getMember response");
             return data;
     }
+   static async getTokenValidity() {
+    const token = await SecureStore.getItemAsync('token')
+    try {
+         const response = await fetch(this.baseUrl + "check-token", {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+            console.log(data, "data from getTokenValidity response");
+            return data;
+        } catch (error) {
+            console.log(error, "error in getTokenValidity")
+        }
+    }
 
    static async getMemberDetails(memberID: number) {
     const token = await SecureStore.getItemAsync('token')
@@ -62,10 +78,9 @@ export class MemberQueries extends SuperQueries {
                 },
             });
             const data = await response.json();
-            console.log(data, "data from getMemberDetails response");
             return data;
     }
-
+ 
     static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[]}) {
         console.log(formData, "formData in confirmSubscription")
 
@@ -78,7 +93,7 @@ export class MemberQueries extends SuperQueries {
         });
       
         if (!response.ok) {
-          // handle error
+            alert("Failed to add cars to subscription, please try again")
         }
     
         const data = await response.json();

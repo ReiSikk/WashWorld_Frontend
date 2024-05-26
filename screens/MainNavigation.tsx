@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -27,7 +27,9 @@ import sizes from 'native-base/lib/typescript/theme/base/sizes';
 import Location from './locationFlow/Location';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
-import { logout } from '../store/MemberSlice';
+import { checkTokenValidity, logout, setToken } from '../store/MemberSlice';
+import PaymentStatus from './subscriptionFlow/PaymentStatus';
+import * as SecureStore from 'expo-secure-store';
 
 //define route params types
 export type RootStackParamList = {
@@ -44,6 +46,7 @@ export type RootStackParamList = {
     EnterLicensePlate: { subscriptionPlanID: number};
     OrderSummary: { subscriptionPlanID: number };
     SelectPaymentMethod: undefined;
+    PaymentStatus: undefined;
     Contact: undefined;
     FAQ: undefined;
     PaymentMethods: undefined;
@@ -85,13 +88,16 @@ const HomeStackNavigator = () => {
           <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate}/>
           <Stack.Screen name="OrderSummary" component={OrderSummary}/>
           <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}/>
+          <Stack.Screen name="PaymentStatus" component={PaymentStatus}/>
           <Stack.Screen name="Location" component={Location} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
         </Stack.Navigator>
     )
   }
 
 
   const AccountStackNavigator = () => {
+    const dispatch = useDispatch<AppDispatch>();
     return (
       <Stack.Navigator
             screenOptions={({ navigation }) => ({
@@ -100,6 +106,7 @@ const HomeStackNavigator = () => {
                     headerShown: true,
                       headerRight: () => (     
                           <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
+                          onPress={() => dispatch(logout())}
                            variant={"outline"} _icon={{
                             as: AntDesign,
                             name: "logout"
@@ -124,12 +131,21 @@ const HomeStackNavigator = () => {
   }
 
   const LocationsStackNavigator = () => {
+    const dispatch = useDispatch<AppDispatch>();
     return (
       <Stack.Navigator
             screenOptions={({ navigation }) => ({
                     tabBarActiveTintColor: '#1A1A1A',
                     tabBarInactiveTintColor: '#666666',
                     headerShown:true,
+                    headerRight: () => (     
+                      <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
+                      onPress={() => dispatch(logout())}
+                       variant={"outline"} _icon={{
+                        as: AntDesign,
+                        name: "logout"
+                      }} />
+                  ),
                     })}
       >
           <Stack.Screen name="LocationsScreen" component={LocationsScreen} options={{ headerLeft: () => null }} />
@@ -142,14 +158,27 @@ const MainNavigation = () => {
     const dispatch = useDispatch<AppDispatch>();
     
     //getting the token from the store
-    const isLoggedIn = useSelector((state: RootState) => state.member.token);
+    const token = useSelector((state: RootState) => state.member.token);
+    console.log(token, "token in MainNavigation")
+    //getting the token status from the store
+    const userAuthenticated = useSelector((state: RootState) => state.member.isAuthenticated);
+    console.log(userAuthenticated, "userAuthenticated in MainNavigation")
+    useEffect(() => {
+      const loadToken = async () => {
+        const token = await SecureStore.getItemAsync('token')
+        console.log("stored:", token)
+        if (token) {
+          dispatch(setToken(token))
+          dispatch(checkTokenValidity())
+        }
+      }
+      loadToken()
+    },[])
 
-    //if there's a need to manually switch between logged in and logged out states
-     //const isSignedIn = false;
-  
+
       return (
           <NavigationContainer>
-          { isLoggedIn ? (
+          { userAuthenticated === true ? (
               <>
                   <Tab.Navigator
                    screenOptions={({ navigation }) => ({

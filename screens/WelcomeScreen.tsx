@@ -7,6 +7,7 @@ import { setToken } from '../store/MemberSlice';
 import { useDispatch } from 'react-redux';
 import * as SecureStore from'expo-secure-store';
 import { AppDispatch, RootState } from '../store/store';
+import { getProfile } from '../store/MemberSlice';
 
 
 

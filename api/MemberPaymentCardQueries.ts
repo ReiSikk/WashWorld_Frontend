@@ -18,8 +18,25 @@ export class MemberPaymentCardQueries extends SuperQueries {
         
         });
         const data = await response.json();
+        console.log(data, "data in fetchAll MemberPaymentCardQueries")
         return data;
     }
+
+   
+static async updateMemberPaymentCard(cardId: number, updatedStatus: boolean) {
+    const token = await SecureStore.getItemAsync('token');
+    const response = await fetch(this.baseUrl+`/${cardId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({isDefaultMethod: updatedStatus}),
+    });
+    const data = await response.json();
+    console.log(data, "data in updateMemberPaymentCard in MemberPaymentCardQueries")
+    return data;
+}
     
 
 } 

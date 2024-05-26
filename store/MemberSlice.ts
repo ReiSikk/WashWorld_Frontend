@@ -3,6 +3,8 @@ import * as SecureStore from 'expo-secure-store';
 import { createMemberDTO } from '../entities/CreateMemberDTO';
 import { MemberQueries } from '../api/MemberQueries';
 import { CreateCarDto } from '../entities/CreateCarDTO';
+import { CarQueries } from '../api/CarQueries';
+import { Car } from '../entities/car';
 
 
 
@@ -12,8 +14,10 @@ interface MemberState {
     loading: boolean;
     error: string | null;
     memberID: string | null;
-    //cars: Car[]
+    cars: Car[],
     role: Role | null;
+    subscriptionStatus: string | null;
+    isAuthenticated: boolean | null
 
 }
 
@@ -47,8 +51,10 @@ const initialState: MemberState = {
     loading: false,
     error: null,
     memberID: null,
-   // cars: []
-   role: null,
+    cars: [],
+    role: null,
+    subscriptionStatus: 'none',
+    isAuthenticated: null,
 };
 
  export const login = createAsyncThunk(
@@ -81,6 +87,12 @@ export const getProfile = createAsyncThunk(
             return await MemberQueries.getMember();
     },
 );
+export const checkTokenValidity = createAsyncThunk(
+    'auth/profile/check-token',
+    async (thunkAPI) => {
+            return await MemberQueries.getTokenValidity();
+    },
+);
 
 export const getMemberDetails = createAsyncThunk(
     'auth/profile/details',
@@ -88,6 +100,21 @@ export const getMemberDetails = createAsyncThunk(
             return await MemberQueries.getMemberDetails(memberID);
     },
 );
+export const getMemberCars = createAsyncThunk(
+    'getMemberCars',
+    async (thunkAPI) => {
+            return await CarQueries.fetchAll();
+    },
+);
+
+export const confirmSubscription = createAsyncThunk(
+    'member/createSubscription',
+    async (payload: ConfirmSubscriptionPayload, thunkAPI) => {
+      // Call your API here
+      return await MemberQueries.confirmSubscription(payload);
+      // You can return the response data and it will be used as the payload for the fulfilled action
+    });
+
 
 export const MemberSlice = createSlice({
     name: 'member',
@@ -97,6 +124,7 @@ export const MemberSlice = createSlice({
             state.token = action.payload;
         }, 
          logout: (state) => {
+            console.log("logout called")
             state.token = '';
             SecureStore.deleteItemAsync('token')
         }, 
@@ -140,9 +168,21 @@ export const MemberSlice = createSlice({
             .addCase(getProfile.fulfilled, (state, action) => {
                 state.memberID = action.payload;
             })
+              .addCase(checkTokenValidity.fulfilled, (state, action: PayloadAction<boolean>) => {
+                state.isAuthenticated = action.payload;
+              })
             .addCase(getMemberDetails.fulfilled, (state, action) => {
                 state.member = action.payload;
             })
+            .addCase(getMemberCars.fulfilled, (state, action) => {
+                state.cars = action.payload;
+            })
+            .addCase(confirmSubscription.fulfilled, (state, action) => {
+                state.subscriptionStatus = 'succeeded';
+              })
+            .addCase(confirmSubscription.rejected, (state, action) => {
+                state.subscriptionStatus = 'failed';
+              })
     },
 });
 

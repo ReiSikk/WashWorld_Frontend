@@ -1,12 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { VStack, Text, HStack, Button } from 'native-base'
 import ProgressSteps from '../../components/ProgressSteps'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../MainNavigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+
 
 type Props = NativeStackScreenProps<RootStackParamList, "PaymentStatus">
 
 function PaymentStatus({route, navigation}: Props) {
+  const dispatch: AppDispatch = useDispatch();
+  const subscriptionStatus = useSelector((state: RootState) => state.member.subscriptionStatus);
+  const memberID = useSelector((state: RootState) => state.member.memberID);
+
+ 
+
+  useEffect(() => {
+    if (subscriptionStatus === 'succeeded' && (memberID && memberID !== null)) {
+        const memberIDNumber = parseInt(memberID);
+        setTimeout(() => {
+        navigation.navigate('HomeScreen', { memberID: memberIDNumber });
+        }, 2000)
+    }
+  }, [subscriptionStatus]);
+
   return (
     <>
     <VStack space={4} m="6">

@@ -22,7 +22,6 @@ useEffect(() => {
 , [dispatch]);
 
   const subscription = useSelector((state: RootState) => state.subscription.subscriptions[subscriptionPlanID]);
-  console.log(subscription, "subscription in PlanOverview")
 
   const handleConfirm = (subscription: Subscription) => {
     dispatch(selectSubscription(subscription));

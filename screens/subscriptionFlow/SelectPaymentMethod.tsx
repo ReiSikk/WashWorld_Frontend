@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Button, VStack, ScrollView, Box, Flex } from 'native-base'
 import ProgressSteps from '../../components/ProgressSteps'
 import PaymentMethodSelector from '../../components/PaymentMethodSelector'
@@ -29,6 +29,12 @@ const createCarDtos = memberCars.map(car => ({
   paymentCardId: paymentMethodID,
 }));
 console.log(createCarDtos, "createCarDtos in Select Payment Method")
+useEffect(() => {
+  if (subscriptionStatus === 'succeeded') {
+    console.log('Subscription confirmed');
+    navigation.navigate('PaymentStatus');
+  }
+}, [subscriptionStatus]);
 
   return (
     <>
@@ -48,13 +54,9 @@ console.log(createCarDtos, "createCarDtos in Select Payment Method")
           memberID: memberID,
           createCarDtos: createCarDtos
         }));
-        if(subscriptionStatus === 'succeeded') {
-          console.log('Subscription confirmed');
-          navigation.navigate('PaymentStatus');
-        }
       } else {
         // Handle the case when memberID is null
-        console.error('memberID is null');
+        console.error('Error fetching member');
       }
     }}>
         Continue to payment

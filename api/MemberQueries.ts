@@ -82,22 +82,25 @@ export class MemberQueries extends SuperQueries {
     }
  
     static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[]}) {
-        console.log(formData, "formData in confirmSubscription")
 
-        const response = await fetch(this.memberUrl+`${formData.memberID}/add-car`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
-        });
-      
-        if (!response.ok) {
-            alert("Failed to add cars to subscription, please try again")
-        }
-    
-        const data = await response.json();
-        console.log(data, "data in confirmSubscription")
+        try {
+            const response = await fetch(this.memberUrl+`${formData.memberID}/add-car`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+            });
+        
+            if (!response.ok) {
+              throw new Error('Failed to add cars to subscription, please try again');
+            }
+        
+            const data = await response.json();
+            console.log(data, "data in confirmSubscription");
+          } catch (error) {
+            console.log(error);
+          }
     }
 
     static async logout() {

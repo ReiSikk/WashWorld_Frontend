@@ -111,8 +111,8 @@ export const confirmSubscription = createAsyncThunk(
     'member/createSubscription',
     async (payload: ConfirmSubscriptionPayload, thunkAPI) => {
       // Call your API here
-      return await MemberQueries.confirmSubscription(payload);
-      // You can return the response data and it will be used as the payload for the fulfilled action
+      const response =  await MemberQueries.confirmSubscription(payload);
+      return response;
     });
 
 
@@ -127,6 +127,7 @@ export const MemberSlice = createSlice({
             console.log("logout called")
             state.token = '';
             SecureStore.deleteItemAsync('token')
+            state.isAuthenticated = false;
         }, 
         setMemberID: (state, action: PayloadAction<string>) => {
             state.memberID = action.payload;
@@ -178,7 +179,7 @@ export const MemberSlice = createSlice({
                 state.cars = action.payload;
             })
             .addCase(confirmSubscription.fulfilled, (state, action) => {
-                state.subscriptionStatus = 'succeeded';
+                    state.subscriptionStatus = 'succeeded';
               })
             .addCase(confirmSubscription.rejected, (state, action) => {
                 state.subscriptionStatus = 'failed';

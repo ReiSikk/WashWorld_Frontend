@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from '../store/store';
 import { fetchWashStations } from '../store/WashStationSlice';
 import { fetchSubscriptions } from '../store/SubscriptionSlice';
 import { checkTokenValidity, getProfile } from '../store/MemberSlice';
+import * as SecureStore from 'expo-secure-store';
 
 
 
@@ -17,21 +18,17 @@ type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 
 
 
-function HomeScreen({ navigation }: Props) {
+ function HomeScreen({ navigation }: Props) {
 const dispatch: AppDispatch = useDispatch();
 const washStations = useSelector((state: RootState) => state.washStations.washStations);
-const tokenStatus = useSelector((state: RootState) => state.member.tokenStatus);
-const token = useSelector((state: RootState) => state.member.token);
+const userAuthenticated = useSelector((state: RootState) => state.member.isAuthenticated);
 
 
 
 useEffect(() => {
   dispatch(fetchWashStations());
   dispatch(getProfile());
-  if (tokenStatus === 'failed' || tokenStatus === 'idle') {
-    dispatch(checkTokenValidity());
-  }
-}, [dispatch, tokenStatus]);
+}, [dispatch, userAuthenticated]);
 
 /* useEffect(() => {
   if (token && tokenStatus === 'failed') {

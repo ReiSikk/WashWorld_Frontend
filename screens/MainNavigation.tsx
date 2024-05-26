@@ -27,8 +27,9 @@ import sizes from 'native-base/lib/typescript/theme/base/sizes';
 import Location from './locationFlow/Location';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
-import { checkTokenValidity, logout } from '../store/MemberSlice';
+import { checkTokenValidity, logout, setToken } from '../store/MemberSlice';
 import PaymentStatus from './subscriptionFlow/PaymentStatus';
+import * as SecureStore from 'expo-secure-store';
 
 //define route params types
 export type RootStackParamList = {
@@ -160,13 +161,24 @@ const MainNavigation = () => {
     const token = useSelector((state: RootState) => state.member.token);
     console.log(token, "token in MainNavigation")
     //getting the token status from the store
-    const tokenStatus = useSelector((state: RootState) => state.member.tokenStatus);
-    console.log(tokenStatus, "tokenStatus in MainNavigation")
+    const userAuthenticated = useSelector((state: RootState) => state.member.isAuthenticated);
+    console.log(userAuthenticated, "userAuthenticated in MainNavigation")
+    useEffect(() => {
+      const loadToken = async () => {
+        const token = await SecureStore.getItemAsync('token')
+        console.log("stored:", token)
+        if (token) {
+          dispatch(setToken(token))
+          dispatch(checkTokenValidity())
+        }
+      }
+      loadToken()
+    },[])
 
 
       return (
           <NavigationContainer>
-          { token && tokenStatus ==="success" ? (
+          { userAuthenticated === true ? (
               <>
                   <Tab.Navigator
                    screenOptions={({ navigation }) => ({

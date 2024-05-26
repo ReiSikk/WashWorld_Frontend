@@ -54,7 +54,7 @@ const validate = () => {
     //validate() ? console.log('Submitted') : console.log('Validation Failed');
 
       const response = await dispatch(login({email, password}))
-      if (response && response.payload && response.payload.access_token) {
+      if (response && response.payload.access_token) {
         console.log(response.payload.access_token, "response in login screen")
         dispatch(setToken(response.payload.access_token))
         dispatch(checkTokenValidity())

@@ -17,7 +17,7 @@ interface MemberState {
     cars: Car[],
     role: Role | null;
     subscriptionStatus: string | null;
-    tokenStatus: 'idle' | 'loading' | 'success' | 'failed';
+    isAuthenticated: boolean | null
 
 }
 
@@ -54,7 +54,7 @@ const initialState: MemberState = {
     cars: [],
     role: null,
     subscriptionStatus: 'none',
-    tokenStatus: 'idle',
+    isAuthenticated: null,
 };
 
  export const login = createAsyncThunk(
@@ -168,14 +168,8 @@ export const MemberSlice = createSlice({
             .addCase(getProfile.fulfilled, (state, action) => {
                 state.memberID = action.payload;
             })
-            .addCase(checkTokenValidity.pending, (state) => {
-                state.tokenStatus = 'loading';
-              })
               .addCase(checkTokenValidity.fulfilled, (state, action: PayloadAction<boolean>) => {
-                state.tokenStatus = action.payload ? 'success' : 'failed';
-              })
-              .addCase(checkTokenValidity.rejected, (state) => {
-                state.tokenStatus = 'failed';
+                state.isAuthenticated = action.payload;
               })
             .addCase(getMemberDetails.fulfilled, (state, action) => {
                 state.member = action.payload;

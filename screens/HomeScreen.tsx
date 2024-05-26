@@ -21,23 +21,25 @@ function HomeScreen({ navigation }: Props) {
 const dispatch: AppDispatch = useDispatch();
 const washStations = useSelector((state: RootState) => state.washStations.washStations);
 const tokenStatus = useSelector((state: RootState) => state.member.tokenStatus);
+const token = useSelector((state: RootState) => state.member.token);
 
 
 
 useEffect(() => {
   dispatch(fetchWashStations());
   dispatch(getProfile());
-  dispatch(checkTokenValidity())
-}, [dispatch]);
+  if (tokenStatus === 'failed' || tokenStatus === 'idle') {
+    dispatch(checkTokenValidity());
+  }
+}, [dispatch, tokenStatus]);
 
-useEffect(() => {
-  if (tokenStatus === 'failed') {
+/* useEffect(() => {
+  if (token && tokenStatus === 'failed') {
     navigation.navigate('LoginScreen');
   }
   console.log(tokenStatus, "tokenStatus in HomeScreen useEffect");
 
-
-}, [tokenStatus, navigation]);
+}, [tokenStatus, navigation]); */
 
 
 

@@ -158,11 +158,15 @@ const MainNavigation = () => {
     
     //getting the token from the store
     const token = useSelector((state: RootState) => state.member.token);
+    console.log(token, "token in MainNavigation")
+    //getting the token status from the store
+    const tokenStatus = useSelector((state: RootState) => state.member.tokenStatus);
+    console.log(tokenStatus, "tokenStatus in MainNavigation")
 
 
       return (
           <NavigationContainer>
-          { token ? (
+          { token && tokenStatus ==="success" ? (
               <>
                   <Tab.Navigator
                    screenOptions={({ navigation }) => ({

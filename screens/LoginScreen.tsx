@@ -6,7 +6,7 @@ import { RootStackParamList } from './MainNavigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { useState, useEffect } from "react";
-import { login, setToken} from "../store/MemberSlice";
+import { login, setToken, checkTokenValidity} from "../store/MemberSlice";
 import * as SecureStore from'expo-secure-store';
 
 
@@ -54,9 +54,10 @@ const validate = () => {
     //validate() ? console.log('Submitted') : console.log('Validation Failed');
 
       const response = await dispatch(login({email, password}))
-      if (response.payload.access_token) {
+      if (response && response.payload && response.payload.access_token) {
         console.log(response.payload.access_token, "response in login screen")
         dispatch(setToken(response.payload.access_token))
+        dispatch(checkTokenValidity())
       } else {
         alert(response.payload.message)
       }

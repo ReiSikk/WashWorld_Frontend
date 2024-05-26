@@ -17,7 +17,7 @@ interface MemberState {
     cars: Car[],
     role: Role | null;
     subscriptionStatus: string | null;
-    tokenStatus: string;
+    tokenStatus: 'idle' | 'loading' | 'success' | 'failed';
 
 }
 
@@ -168,19 +168,15 @@ export const MemberSlice = createSlice({
             .addCase(getProfile.fulfilled, (state, action) => {
                 state.memberID = action.payload;
             })
-            .addCase(checkTokenValidity.pending, (state, action) => {
+            .addCase(checkTokenValidity.pending, (state) => {
                 state.tokenStatus = 'loading';
-            })
-            .addCase(checkTokenValidity.fulfilled, (state, action) => {
-                if (action.payload.valid) {
-                    state.tokenStatus = 'success';
-                  } else {
-                    state.tokenStatus = 'failed';
-                  }
-            })
-            .addCase(checkTokenValidity.rejected, (state, action) => {
+              })
+              .addCase(checkTokenValidity.fulfilled, (state, action: PayloadAction<boolean>) => {
+                state.tokenStatus = action.payload ? 'success' : 'failed';
+              })
+              .addCase(checkTokenValidity.rejected, (state) => {
                 state.tokenStatus = 'failed';
-            })
+              })
             .addCase(getMemberDetails.fulfilled, (state, action) => {
                 state.member = action.payload;
             })

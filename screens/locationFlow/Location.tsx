@@ -24,7 +24,6 @@ type WashBay = {
   bayType: string;
   dimensionHeight: string;
   dimensionWidth: string;
-  // include other properties as needed
 };
 
 

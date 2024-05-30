@@ -26,7 +26,6 @@ const createCarDtos = memberCars.map(car => ({
   licensePlate: car.licensePlate,
   country: car.country, 
   subscriptionPlanId: subscriptionPlanID,
-  paymentCardId: paymentMethodID,
 }));
 console.log(createCarDtos, "createCarDtos in Select Payment Method")
 useEffect(() => {
@@ -52,7 +51,8 @@ useEffect(() => {
       if (memberID !== null) {
         dispatch(confirmSubscription({
           memberID: memberID,
-          createCarDtos: createCarDtos
+          createCarDtos: createCarDtos,
+          paymentMethodID: paymentMethodID,
         }));
       } else {
         // Handle the case when memberID is null

@@ -37,6 +37,7 @@ interface Member {
 interface ConfirmSubscriptionPayload {
     memberID: string;
     createCarDtos: CreateCarDto[];
+    paymentMethodID: string;
   }
 
  export enum Role {

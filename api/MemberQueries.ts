@@ -81,7 +81,7 @@ export class MemberQueries extends SuperQueries {
             return data;
     }
  
-    static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[]}) {
+    static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[], paymentMethodID: string}) {
 
         try {
             const response = await fetch(this.memberUrl+`${formData.memberID}/add-car`, {

@@ -17,7 +17,7 @@ const memberID = useSelector((state: RootState) => state.member.memberID);
 const memberCars = useSelector((state: RootState) => state.subscription.cars);
 const subscriptionPlanID = useSelector((state: RootState) => state.subscription.selectedSubscription);
 
-const paymentMethodID = useSelector((state: RootState) => state.subscription.selectedPaymentMethodID);
+const paymentMethodID = useSelector((state: RootState) => state.subscription.selectedPaymentMethodID)
 const subscriptionStatus = useSelector((state: RootState) => state.member.subscriptionStatus);
 console.log(subscriptionStatus, "subscriptionStatus in Select Payment Method")
 

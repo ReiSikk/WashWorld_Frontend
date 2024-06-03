@@ -8,6 +8,7 @@ import { Car } from '../entities/car';
 
 
 
+
 interface MemberState {
     member: Member | null;
     token: string | null;
@@ -129,6 +130,7 @@ export const MemberSlice = createSlice({
             state.token = '';
             SecureStore.deleteItemAsync('token')
             state.isAuthenticated = false;
+            state.subscriptionStatus = 'none';
         }, 
         setMemberID: (state, action: PayloadAction<string>) => {
             state.memberID = action.payload;
@@ -180,7 +182,14 @@ export const MemberSlice = createSlice({
                 state.cars = action.payload;
             })
             .addCase(confirmSubscription.fulfilled, (state, action) => {
+                console.log(action.payload, "action.payload in confirmSubscription fulfilled")
+             /*    if (action.payload && action.payload.success === 'succeeded') {
                     state.subscriptionStatus = 'succeeded';
+                } else {
+                    state.subscriptionStatus = 'failed';
+                } */
+                state.subscriptionStatus = 'succeeded';
+
               })
             .addCase(confirmSubscription.rejected, (state, action) => {
                 state.subscriptionStatus = 'failed';

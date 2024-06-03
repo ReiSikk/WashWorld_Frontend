@@ -18,7 +18,7 @@ export class MemberPaymentCardQueries extends SuperQueries {
         
         });
         const data = await response.json();
-        console.log(data, "data in fetchAll MemberPaymentCardQueries")
+        //console.log(data, "data in fetchAll MemberPaymentCardQueries")
         return data;
     }
 

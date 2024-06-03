@@ -81,7 +81,8 @@ export class MemberQueries extends SuperQueries {
             return data;
     }
  
-    static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[]}) {
+    static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[], paymentMethodID: string}) {
+        console.log('data passed to confirmSubscription in memberQueries', formData)
 
         try {
             const response = await fetch(this.memberUrl+`${formData.memberID}/add-car`, {
@@ -95,7 +96,6 @@ export class MemberQueries extends SuperQueries {
             if (!response.ok) {
               throw new Error('Failed to add cars to subscription, please try again');
             }
-        
             const data = await response.json();
             console.log(data, "data in confirmSubscription");
           } catch (error) {

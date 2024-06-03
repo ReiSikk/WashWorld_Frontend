@@ -17,7 +17,6 @@ export class SubscriptionQueries extends SuperQueries {
         
         });
         const data = await response.json();
-        console.log(data, "data in fetchAll SubscriptionQueries");
         return data;
     }
     

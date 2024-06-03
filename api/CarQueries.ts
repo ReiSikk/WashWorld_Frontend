@@ -17,7 +17,7 @@ static async fetchAll() {
                 },
             });
             const data = await response.json();
-            console.log(data, "data from fetchAll carQueries response");
+            //console.log(data, "data from fetchAll carQueries response");
             return data;
     }
 

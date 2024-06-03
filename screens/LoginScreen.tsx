@@ -15,10 +15,6 @@ type Props = NativeStackScreenProps<RootStackParamList, "LoginScreen">
 
 function LoginScreen({ navigation }: Props) {
   const dispatch = useDispatch<AppDispatch>();
-  const [loginForm, setLoginForm] = useState({
-    email: '',
-    password: '',
-});
 
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
@@ -31,16 +27,16 @@ const validate = () => {
   const newErrors: { email?: string; password?: string } = {};
   let valid = true;
 
-  if (loginForm.email === '') {
+  if (email === '') {
     newErrors.email = 'Please enter your email';
     valid = false;
     //the redux below expects a string with a following pattern 'something + @ + something + . + something'
-  } else if (!/\S+@\S+\.\S+/.test(loginForm.email)) {
+  } else if (!/\S+@\S+\.\S+/.test(email)) {
     newErrors.email = 'Please enter a valid email address';
     valid = false;
   }
-  if (loginForm.password.length < 3) {
-    newErrors.password = 'Password must be at least 3 characters long';
+  if (password.length < 8) {
+    newErrors.password = 'Password must be at least 8 characters long';
     valid = false;
   }
 
@@ -48,10 +44,20 @@ const validate = () => {
   return valid;
 };
 
+const handleEmailChange = (value: string) => {
+  setEmail(value);
+  if (errors.email) validate();
+};
+
+const handlePasswordChange = (value: string) => {
+  setPassword(value);
+  if (errors.password) validate();
+};
+
 
 
   const handleLogin = async () => {
-    //validate() ? console.log('Submitted') : console.log('Validation Failed');
+    if (validate()){
 
       const response = await dispatch(login({email, password}))
       if (response && response.payload.access_token) {
@@ -60,7 +66,8 @@ const validate = () => {
         dispatch(checkTokenValidity())
       } else {
         alert(response.payload.message)
-      }
+      } 
+    }
  }
 
   return (
@@ -72,7 +79,7 @@ const validate = () => {
         </Heading>
           <FormControl isRequired isInvalid={'email' in errors}>
               <FormControl.Label>E-mail</FormControl.Label>
-              <Input type="text" placeholder="Your email" autoCapitalize="none" onChangeText={setEmail} />
+              <Input type="text" placeholder="Your email" autoCapitalize="none" onChangeText={handleEmailChange} />
             {'email' in errors && <FormControl.ErrorMessage>{errors.email}</FormControl.ErrorMessage>}
           </FormControl>
         </Box>
@@ -80,7 +87,7 @@ const validate = () => {
         <Box w="100%" maxWidth="300px">
           <FormControl isRequired isInvalid={'password' in errors}>
               <FormControl.Label>Password</FormControl.Label>
-              <Input type="password" placeholder="Password" onChangeText={setPassword} />
+              <Input type="password" placeholder="Password" onChangeText={handlePasswordChange}  />
       {'password' in errors && <FormControl.ErrorMessage>{errors.password}</FormControl.ErrorMessage>}
           </FormControl>
           <Link _text={{

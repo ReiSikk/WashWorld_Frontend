@@ -80,7 +80,7 @@ const handleCountryChange = (index:any, value:string) => {
 
 const validateNumberPlate = (index: number, value: string) => {
   let licensePlateError = '';
-  if (value === undefined || value.length < 3) {
+  if (value === undefined || value.length < 3 || value.length > 12) {
     licensePlateError = 'Invalid plate number';
   }
 

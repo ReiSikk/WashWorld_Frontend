@@ -135,6 +135,10 @@ export const MemberSlice = createSlice({
         setMemberID: (state, action: PayloadAction<string>) => {
             state.memberID = action.payload;
         },
+        resetSubscriptionStatus: (state) => {
+            state.subscriptionStatus = 'none';
+        },
+
         createSubscription: (state, action: PayloadAction<ConfirmSubscriptionPayload>) => {
             state.memberID = action.payload.memberID;
             console.log(action.payload, "action.payload in createSubscription")
@@ -183,11 +187,6 @@ export const MemberSlice = createSlice({
             })
             .addCase(confirmSubscription.fulfilled, (state, action) => {
                 console.log(action.payload, "action.payload in confirmSubscription fulfilled")
-             /*    if (action.payload && action.payload.success === 'succeeded') {
-                    state.subscriptionStatus = 'succeeded';
-                } else {
-                    state.subscriptionStatus = 'failed';
-                } */
                 state.subscriptionStatus = 'succeeded';
 
               })
@@ -197,6 +196,6 @@ export const MemberSlice = createSlice({
     },
 });
 
-export const { setToken, logout, setMemberID, createSubscription } = MemberSlice.actions
+export const { setToken, logout, setMemberID, createSubscription, resetSubscriptionStatus } = MemberSlice.actions
 
 export default MemberSlice.reducer;

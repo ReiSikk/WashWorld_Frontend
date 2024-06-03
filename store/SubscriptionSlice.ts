@@ -52,6 +52,9 @@ export const subscriptionSlice = createSlice({
       state.selectedPaymentMethodID = action.payload;
       console.log(state.selectedPaymentMethodID, "selectedPaymentMethodID in redux state");
     },
+    resetCarsState: (state) => {
+      state.cars = [];
+    }
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -64,6 +67,6 @@ export const subscriptionSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 // ACTIONS
-export const { selectSubscription, setCarsState, setSelectedPaymentMethodID  } = subscriptionSlice.actions
+export const { selectSubscription, setCarsState, setSelectedPaymentMethodID, resetCarsState  } = subscriptionSlice.actions
 
 export default subscriptionSlice.reducer

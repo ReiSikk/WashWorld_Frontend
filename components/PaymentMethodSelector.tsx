@@ -186,7 +186,7 @@ useEffect(() => {
                 <Text>{method.cardNumber}</Text>
               </HStack>
               <Text fontSize="sm" color={method.isActive ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'}>
-                {method.isActive ? 'Active' : 'Expired'}
+                {method.isActive ? 'Active' : ''}
               </Text>
               <Button fontSize="sm" color={method.isDefaultMethod ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'} 
               onPress={() => {

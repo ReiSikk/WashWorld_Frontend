@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../MainNavigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
+import { resetSubscriptionStatus } from '../../store/MemberSlice';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "PaymentStatus">
@@ -20,6 +21,7 @@ function PaymentStatus({route, navigation}: Props) {
     if (subscriptionStatus === 'succeeded' && (memberID && memberID !== null)) {
         const memberIDNumber = parseInt(memberID);
         setTimeout(() => {
+          dispatch(resetSubscriptionStatus());
         navigation.navigate('HomeScreen', { memberID: memberIDNumber });
         }, 2000)
     }

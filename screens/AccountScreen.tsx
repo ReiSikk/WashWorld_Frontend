@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from '../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMemberDetails, getProfile, getMemberCars } from '../store/MemberSlice';
 import { FontAwesome5, AntDesign } from '@expo/vector-icons';
+import { resetCarsState } from '../store/SubscriptionSlice';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "AccountScreen">
@@ -27,6 +28,7 @@ function AccountScreen({ navigation }: Props) {
       dispatch(getMemberDetails(memberIDNumber))
     } 
     dispatch(getMemberCars())
+    dispatch(resetCarsState());
   }, [dispatch]);
 
   return (

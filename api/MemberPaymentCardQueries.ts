@@ -24,6 +24,7 @@ export class MemberPaymentCardQueries extends SuperQueries {
 
    
 static async updateMemberPaymentCard(cardId: number, updatedStatus: boolean) {
+    console.log(updatedStatus, "updatedStatus in updateMemberPaymentCard")
     const token = await SecureStore.getItemAsync('token');
     const response = await fetch(this.baseUrl+`/${cardId}`, {
         method: 'PATCH',
@@ -31,7 +32,7 @@ static async updateMemberPaymentCard(cardId: number, updatedStatus: boolean) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({isDefaultMethod: updatedStatus}),
+        body: JSON.stringify({ isDefaultMethod: updatedStatus }),
     });
     const data = await response.json();
     console.log(data, "data in updateMemberPaymentCard in MemberPaymentCardQueries")

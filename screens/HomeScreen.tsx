@@ -30,18 +30,6 @@ useEffect(() => {
   dispatch(getProfile());
 }, [dispatch, userAuthenticated]);
 
-/* useEffect(() => {
-  if (token && tokenStatus === 'failed') {
-    navigation.navigate('LoginScreen');
-  }
-  console.log(tokenStatus, "tokenStatus in HomeScreen useEffect");
-
-}, [tokenStatus, navigation]); */
-
-
-
-
-
   return (
      <ScrollView m={6}>
      <Flex flexDirection='column' alignItems='center' justifyContent='center' w="100%" h="fit-content" py="6">

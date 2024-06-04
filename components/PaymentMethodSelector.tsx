@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, VStack, Button, Icon, Pressable, HStack, FormControl, Input, ScrollView, Badge } from 'native-base';
+import { Text, VStack, Button, Icon, Pressable, HStack, FormControl, Input, ScrollView, Badge, Flex } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
@@ -15,13 +15,14 @@ const PaymentMethodSelector: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const cardsFromStore = useSelector((state: RootState) => state.cards);
   const cardsToDisplay = cardsFromStore.cards;
+  const [cards, setCards] = useState(cardsToDisplay);
+
   const selectedPaymentMethodID = useSelector((state: RootState) => state.subscription.selectedPaymentMethodID);
   
   const [showForm, setShowForm] = useState(false);
-  const [cardAdded, setCardAdded] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState('');
 
-  //console.log(selectedMethod, "selectedMethod in PaymentMethodSelector")
+  const [showCardDetails, setShowCardDetails] = useState(new Array(cardsToDisplay.length).fill(false));
 
 
   const [formData, setFormData] = useState({
@@ -39,8 +40,10 @@ useEffect(() => {
   dispatch(fetchCards());
 }, [dispatch]);
 
-
-//useffect to setpaymentmethods
+useEffect(() => {
+  setCards(cards);
+}, [cards])
+console.log( "cards in PaymentMethodSelector")
 
 
   const handleSubmit = () => {
@@ -81,12 +84,6 @@ useEffect(() => {
     };
 
     dispatch(createCard(newCard))
-      .then(() => {
-        setCardAdded(true);
-      })
-      .catch(error => {
-        console.error('Error adding card:', error);
-      });
   };
 
   const handleValidation = () => {
@@ -138,20 +135,27 @@ useEffect(() => {
     }
   };
 
-  const changeCardDefaultState = async (cardId: number) => {
-    console.log(cardId, "cardId in changeCardDefaultState")
+
+  const changeCardDefaultState = async (cardId :number) => {
+    console.log(cardId, "cardId in changeCardDefaultState");
     const cardToUpdate = cardsToDisplay.find(card => card.id === cardId);
-    const currentStatus = cardToUpdate?.isDefaultMethod;
+    if (!cardToUpdate) {
+        console.error('Card not found');
+        return;
+    }
+    const currentStatus = Boolean(cardToUpdate.isDefaultMethod);
+    console.log(currentStatus, "currentStatus in changeCardDefaultState");
     const updatedStatus = !currentStatus;
+    console.log(updatedStatus, "updatedStatus in changeCardDefaultState");
 
     const updatedCard = await MemberPaymentCardQueries.updateMemberPaymentCard(cardId, updatedStatus);
 
     dispatch(fetchCards());
-  } 
+}
 
 
   return (
-    <ScrollView mb={20}>
+    <ScrollView mb={20} showsVerticalScrollIndicator={false}>
       <VStack space={4}>
         <Text size={'xl'} fontWeight={'extrabold'}>
           Wallet
@@ -172,23 +176,39 @@ useEffect(() => {
               key={index}
               color={'black'}
               padding={4}
-              bg={selectedMethod === method.cardNumber ? 'greenWhite' : 'grey10'}
+              bg={'grey10'}
+              shadow={4}
+              borderColor={selectedMethod === method.cardNumber ? 'greenWhite' : 'grey10'}
+              borderWidth={2}
               borderRadius={4}
-              onPress={() => dispatch(
+              onPress={() => {
+                dispatch(
                 setSelectedPaymentMethodID(method.id),
-                setSelectedMethod(method.cardNumber)
-              )}
+                setSelectedMethod(method.cardNumber),
+              )
+              const newShowCardDetails = [...showCardDetails]
+              newShowCardDetails[index] = !newShowCardDetails[index]
+              setShowCardDetails(newShowCardDetails)
+            }
+          }
             > 
-              <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
+              <HStack space={2} justifyContent={'space-between'} alignItems={'center'}>
                 <VStack space={0}>
-              <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
+              <HStack space={4} alignItems="center" justifyContent={'space-between'}>
+                <Flex flexDirection={'row'}>
                 <Text>{method.nameOnCard}</Text>
-                <Text>{method.cardNumber}</Text>
+                <Text ml={4}>{method.cardNumber}</Text>
+                </Flex>
+              <AntDesign name={showCardDetails[index] ? 'down' : 'right'} size={14}/>
               </HStack>
               <Text fontSize="sm" color={method.isActive ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'}>
                 {method.isActive ? 'Active' : ''}
               </Text>
-              <Button fontSize="sm" color={method.isDefaultMethod ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'} 
+              <Text fontSize="sm" color={method.isActive ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'}>
+                {method.isDefaultMethod ? 'Default payment method' : ''}
+              </Text>
+              { showCardDetails[index] && (
+              <Button fontSize="sm" bgColor={method.isDefaultMethod ? "grey60" : 'greenWhite'} width={'fit-content'}  marginRight={'auto'} 
               onPress={() => {
                 if (parseInt(selectedPaymentMethodID) === method.id) {
                   changeCardDefaultState(method.id);
@@ -197,8 +217,8 @@ useEffect(() => {
               >
                 {method.isDefaultMethod ? 'Default' : 'Set as default method'}
               </Button>
+              )}
               </VStack>
-                <AntDesign name="right" size={14} marginLeft={'auto'} />
               </HStack>
             </Pressable>
           ))) : 

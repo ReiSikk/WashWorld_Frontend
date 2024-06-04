@@ -5,6 +5,8 @@ import { MemberQueries } from '../api/MemberQueries';
 import { CreateCarDto } from '../entities/CreateCarDTO';
 import { CarQueries } from '../api/CarQueries';
 import { Car } from '../entities/car';
+import { MemberPaymentCard } from '../entities/memberPaymentCard';
+import { MemberPaymentCardQueries } from '../api/MemberPaymentCardQueries';
 
 
 
@@ -19,6 +21,7 @@ interface MemberState {
     role: Role | null;
     subscriptionStatus: string | null;
     isAuthenticated: boolean | null
+    memberDefaultCard: MemberPaymentCard | null;
 
 }
 
@@ -57,6 +60,7 @@ const initialState: MemberState = {
     role: null,
     subscriptionStatus: 'none',
     isAuthenticated: null,
+    memberDefaultCard: null,
 };
 
  export const login = createAsyncThunk(
@@ -108,6 +112,15 @@ export const getMemberCars = createAsyncThunk(
             return await CarQueries.fetchAll();
     },
 );
+
+export const updateMemberPaymentCard = createAsyncThunk(
+    'updateCards',
+    async (payload: {cardId: number, updatedStatus: boolean}, thunkAPI) => {
+      // Call your API here
+      const response =  await MemberPaymentCardQueries.updateMemberPaymentCard(payload.cardId, payload.updatedStatus);
+      console.log(response, "response in updateMemberPaymentCard in memberSlice")
+      return response;
+    });
 
 export const confirmSubscription = createAsyncThunk(
     'member/createSubscription',
@@ -193,6 +206,10 @@ export const MemberSlice = createSlice({
             .addCase(confirmSubscription.rejected, (state, action) => {
                 state.subscriptionStatus = 'failed';
               })
+            .addCase(updateMemberPaymentCard.fulfilled, (state, action) => {
+                state.memberDefaultCard = action.payload;
+              }
+            )
     },
 });
 

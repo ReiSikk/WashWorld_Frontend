@@ -9,17 +9,20 @@ import { parse, isValid, endOfMonth, set } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { setSelectedPaymentMethodID } from '../store/SubscriptionSlice';
 import { MemberPaymentCardQueries } from '../api/MemberPaymentCardQueries';
+import { updateMemberPaymentCard } from '../store/MemberSlice';
 
-const PaymentMethodSelector: React.FC = () => {
+const PaymentMethodSelector = () => {
   //redux
   const dispatch: AppDispatch = useDispatch();
   const cardsFromStore = useSelector((state: RootState) => state.cards);
   const cardsToDisplay = cardsFromStore.cards;
-  const [cards, setCards] = useState(cardsToDisplay);
-
+  console.log(cardsToDisplay)
   const selectedPaymentMethodID = useSelector((state: RootState) => state.subscription.selectedPaymentMethodID);
-  
+  //look through cardsToDisplay and find the default card
+  const defaultCard = useSelector((state: RootState) => state.member.memberDefaultCard);
+
   const [showForm, setShowForm] = useState(false);
+
   const [selectedMethod, setSelectedMethod] = useState('');
 
   const [showCardDetails, setShowCardDetails] = useState(new Array(cardsToDisplay.length).fill(false));
@@ -41,9 +44,12 @@ useEffect(() => {
 }, [dispatch]);
 
 useEffect(() => {
-  setCards(cards);
-}, [cards])
-console.log( "cards in PaymentMethodSelector")
+  console.log(defaultCard, "defaultCard changed in PaymentMethodSelector")
+  dispatch(fetchCards());
+}
+, [defaultCard]);
+console.log(defaultCard, "defaultCard changed in PaymentMethodSelector")
+
 
 
   const handleSubmit = () => {
@@ -137,19 +143,15 @@ console.log( "cards in PaymentMethodSelector")
 
 
   const changeCardDefaultState = async (cardId :number) => {
-    console.log(cardId, "cardId in changeCardDefaultState");
     const cardToUpdate = cardsToDisplay.find(card => card.id === cardId);
     if (!cardToUpdate) {
         console.error('Card not found');
         return;
     }
     const currentStatus = Boolean(cardToUpdate.isDefaultMethod);
-    console.log(currentStatus, "currentStatus in changeCardDefaultState");
     const updatedStatus = !currentStatus;
-    console.log(updatedStatus, "updatedStatus in changeCardDefaultState");
 
-    const updatedCard = await MemberPaymentCardQueries.updateMemberPaymentCard(cardId, updatedStatus);
-
+    dispatch(updateMemberPaymentCard({cardId, updatedStatus}))
     dispatch(fetchCards());
 }
 
@@ -194,21 +196,21 @@ console.log( "cards in PaymentMethodSelector")
             > 
               <HStack space={2} justifyContent={'space-between'} alignItems={'center'}>
                 <VStack space={0}>
-              <HStack space={4} alignItems="center" justifyContent={'space-between'}>
-                <Flex flexDirection={'row'}>
-                <Text>{method.nameOnCard}</Text>
-                <Text ml={4}>{method.cardNumber}</Text>
-                </Flex>
-              <AntDesign name={showCardDetails[index] ? 'down' : 'right'} size={14}/>
+              <HStack space={6} alignItems="center" justifyContent={'space-between'} width={'100%'}>
+                <HStack alignItems={'baseline'}>
+                <Text fontWeight={'extrabold'}>{method.nameOnCard}</Text>
+                <Text ml={2} fontWeight={'medium'}>{method.cardNumber}</Text>
+                </HStack>
+              <AntDesign name={showCardDetails[index] ? 'down' : 'right'} size={24} marginLeft={'auto'} />
               </HStack>
               <Text fontSize="sm" color={method.isActive ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'}>
-                {method.isActive ? 'Active' : ''}
+                {method.isActive ? 'Active' : ''} {method.isDefaultMethod ? 'Default method' : ''}
               </Text>
-              <Text fontSize="sm" color={method.isActive ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'}>
+              <Text fontSize="sm" color={method.isActive ? "greenWhite" : 'grey60'}>
                 {method.isDefaultMethod ? 'Default payment method' : ''}
               </Text>
               { showCardDetails[index] && (
-              <Button fontSize="sm" bgColor={method.isDefaultMethod ? "grey60" : 'greenWhite'} width={'fit-content'}  marginRight={'auto'} 
+              <Button fontSize="sm" bgColor={method.isDefaultMethod ? "grey60" : 'greenWhite'} width={'100%'} 
               onPress={() => {
                 if (parseInt(selectedPaymentMethodID) === method.id) {
                   changeCardDefaultState(method.id);

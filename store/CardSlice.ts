@@ -4,24 +4,31 @@ import { Card } from '../entities/card'
 import { PaymentCardQueries } from '../api/PaymentCardQueries'
 import { CreateCardDTO } from '../entities/CreateCardDTO'
 import { MemberPaymentCardQueries } from '../api/MemberPaymentCardQueries'
+import { MemberPaymentCard } from '../entities/memberPaymentCard'
+import { Member } from '../entities/member'
 
 export interface CardState {
   cards: Card[]
+  memberDefaultCard: MemberPaymentCard | null
 }
 
 const initialState: CardState = {
   cards: [],
+  memberDefaultCard: null
 }
-console.log("initialState in CardSlice.ts", initialState);
 
 
-// First, create the thunk
 export const fetchCards = createAsyncThunk(
-    'fetchCards',
-    async (thunkAPI) => {
-      return await MemberPaymentCardQueries.fetchAll();
-    },
-  )
+  'fetchCards',
+  async () => {
+    const response = await MemberPaymentCardQueries.fetchAll();
+    // Map the response to ensure correct property names
+    return response.map((card: any) => ({
+      ...card,
+      isDefaultMethod: card.isDefault
+    }));
+  },
+);
 
 
   export const createCard = createAsyncThunk(
@@ -31,7 +38,8 @@ export const fetchCards = createAsyncThunk(
       return await PaymentCardQueries.createCard(card)
     },
   )
-  
+
+
 
 
 /*   export const deleteCard = createAsyncThunk(
@@ -50,24 +58,24 @@ export const cardSlice = createSlice({
   //push new category to the state
        addEntry: (state, action: PayloadAction<Card>) => {
         state.cards.push(action.payload)
-        }
+        },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(fetchCards.fulfilled, (state, action) => {
+    builder
+    .addCase(fetchCards.fulfilled, (state, action) => {
       state.cards = Array.isArray(action.payload) ? action.payload : [];
     }),
     builder
-
     .addCase(createCard.fulfilled, (state, action) => {
         // Add user to the state array
-        console.log("createCard.fulfilled in cardSlice called with:", action.payload);
         if(action.payload.cardNumber) {
           state.cards.push(action.payload)
         } else {
           alert("Card already added to account")
         }
       })
+    
 }
 })
 

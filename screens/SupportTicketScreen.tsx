@@ -44,13 +44,14 @@ const handleSubmit = () => {
       <Text size="lg">Report a problem</Text>
       <FormControl.Label>Describe your problem</FormControl.Label>
         <Input type="text" placeholder="Your problem" autoCapitalize="none" onChangeText={(value: string) =>  setSupportTicketForm({ ...supportTicketForm, description: value })} />
-      <Button onPress={() => setCamera(true)} bg="black">Add a picture</Button>
       {camera ? 
  <Picture 
  setCamera={setCamera}
   setPhotoToDisplay={setPhotoToDisplay}
   photoToDto={(photo: string) => setSupportTicketForm({...supportTicketForm, photo})}
-  ></Picture> : null }
+  ></Picture> : <>
+        <Button onPress={() => setCamera(true)} bg="black">Add a picture</Button>
+        </> }
        <Button onPress={handleSubmit}>Submit</Button>
        </VStack>
     </ScrollView>

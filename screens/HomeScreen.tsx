@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react'
-import { ITheme, Text, useTheme, HStack, ScrollView, Flex, View } from 'native-base'
+import React, {useEffect, useState} from 'react'
+import { ITheme, Text, useTheme, HStack, ScrollView, Flex, View, Fab, Icon } from 'native-base'
 import SquareCard from '../components/SquareCard'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './MainNavigation';
@@ -10,6 +10,8 @@ import { fetchWashStations } from '../store/WashStationSlice';
 import { fetchSubscriptions } from '../store/SubscriptionSlice';
 import { checkTokenValidity, getProfile } from '../store/MemberSlice';
 import * as SecureStore from 'expo-secure-store';
+import { AntDesign } from "@expo/vector-icons";
+import Picture from '../components/Picture';
 
 
 
@@ -22,6 +24,12 @@ type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 const dispatch: AppDispatch = useDispatch();
 const washStations = useSelector((state: RootState) => state.washStations.washStations);
 const userAuthenticated = useSelector((state: RootState) => state.member.isAuthenticated);
+const [camera, setCamera] = useState(false);
+const [photoToDisplay, setPhotoToDisplay] = useState('')
+
+const [savedPhoto, setSavedPhoto] = useState({
+photo: ""
+});
 
 
 
@@ -66,6 +74,9 @@ useEffect(() => {
       onPress={() => navigation.navigate('PlanOverview', {subscriptionPlanID: 5})}
       title='Pay by Plate'
        />
+
+
+ <Fab renderInPortal={false} shadow={2} placement="top-right" size="sm" icon={<Icon color="white" as={AntDesign} name="plus" size="4" />} label="Report a problem" onPress={() => navigation.navigate('SupportTicketScreen')} />
     </ScrollView>
   )
 }

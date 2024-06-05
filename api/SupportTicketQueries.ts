@@ -1,0 +1,24 @@
+import { CreateSupportTicket } from '../entities/CreateSupportTicket';
+import { SuperQueries } from './SuperQueries';
+
+export class SupportTicketQueries extends SuperQueries {
+    static baseUrl = SuperQueries.baseUrl + 'supportticket'
+
+    static async fetchAll() {
+        const response = await fetch(this.baseUrl);
+        const data = await response.json();
+        return data;
+    }
+
+    static async createSupportTicket(supportTicket: CreateSupportTicket) {
+        const response = await fetch(this.baseUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(supportTicket)
+        });
+        const data = await response.json();
+        return data;
+    }
+}

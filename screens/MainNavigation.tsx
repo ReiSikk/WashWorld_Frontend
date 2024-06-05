@@ -30,6 +30,7 @@ import { RootState, AppDispatch } from '../store/store';
 import { checkTokenValidity, logout, setToken } from '../store/MemberSlice';
 import PaymentStatus from './subscriptionFlow/PaymentStatus';
 import * as SecureStore from 'expo-secure-store';
+import SupportTicketScreen from './SupportTicketScreen';
 
 //define route params types
 export type RootStackParamList = {
@@ -53,6 +54,7 @@ export type RootStackParamList = {
     Settings: undefined;
     WashHistory: undefined;
     Location: {locationID: number};
+    SupportTicketScreen: undefined;
   };
   
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -91,6 +93,7 @@ const HomeStackNavigator = () => {
           <Stack.Screen name="PaymentStatus" component={PaymentStatus}/>
           <Stack.Screen name="Location" component={Location} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="SupportTicketScreen" component={SupportTicketScreen} />
         </Stack.Navigator>
     )
   }

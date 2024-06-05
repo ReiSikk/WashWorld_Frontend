@@ -30,6 +30,7 @@ import { RootState, AppDispatch } from '../store/store';
 import { checkTokenValidity, logout, setToken } from '../store/MemberSlice';
 import PaymentStatus from './subscriptionFlow/PaymentStatus';
 import * as SecureStore from 'expo-secure-store';
+import { resetCards } from '../store/CardSlice';
 
 //define route params types
 export type RootStackParamList = {
@@ -66,8 +67,12 @@ const HomeStackNavigator = () => {
         tabBarInactiveTintColor: '#666666',
         headerShown: true,
           headerRight: () => (     
-              <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
-              onPress={() => dispatch(logout())}
+              <IconButton colorScheme="indigo" style={{marginRight: 10, }} key={"outline"} 
+              onPress={() => {
+                dispatch(logout())
+                dispatch(resetCards())
+              }
+                }
                variant={"outline"} _icon={{
                 as: AntDesign,
                 name: "logout"
@@ -81,16 +86,45 @@ const HomeStackNavigator = () => {
           ),
         })}
       >
-          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerLeft: () => null }}  />
-          <Stack.Screen name="HomeSubscriptionsScreen" options={{ headerShown: true }} component={HomeSubscriptionsScreen}
+          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerLeft: () => null,
+              title: 'Home'
+           }}  />
+          <Stack.Screen name="HomeSubscriptionsScreen" options={{ headerShown: true,
+            title: 'Subscriptions'
+
+           }} component={HomeSubscriptionsScreen}
            />
-          <Stack.Screen name="PlanOverview" component={PlanOverview}/>
-          <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate}/>
-          <Stack.Screen name="OrderSummary" component={OrderSummary}/>
-          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}/>
-          <Stack.Screen name="PaymentStatus" component={PaymentStatus}/>
+          <Stack.Screen name="PlanOverview" component={PlanOverview}
+           options={{
+            title: 'Plan Overview',
+          }}
+          />
+          <Stack.Screen name="EnterLicensePlate" component={EnterLicensePlate}
+            options={{
+              title: 'Car Registration',
+            }}
+          />
+          <Stack.Screen name="OrderSummary" component={OrderSummary}
+            options={{
+              title: 'Order Summary',
+            }}
+          />
+          <Stack.Screen name="SelectPaymentMethod" component={SelectPaymentMethod}
+            options={{
+              title: 'Payment Methods',
+            }}
+          />
+          <Stack.Screen name="PaymentStatus" component={PaymentStatus}
+            options={{
+              title: 'Subscription Status',
+            }}
+          />
           <Stack.Screen name="Location" component={Location} />
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen}
+            options={{
+              title: 'Login to your account',
+            }}
+           />
         </Stack.Navigator>
     )
   }
@@ -106,7 +140,12 @@ const HomeStackNavigator = () => {
                     headerShown: true,
                       headerRight: () => (     
                           <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
-                          onPress={() => dispatch(logout())}
+                          onPress={() =>
+                            {
+                              dispatch(logout())
+                              dispatch(resetCards())
+                            }
+                            }
                            variant={"outline"} _icon={{
                             as: AntDesign,
                             name: "logout"
@@ -120,12 +159,27 @@ const HomeStackNavigator = () => {
                       ),
                     })}
       >
-          <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ headerLeft: () => null }} />
+          <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ headerLeft: () => null ,
+          title: 'My account'
+          }
+        } />
           <Stack.Screen name="Contact" component={Contact} />
-          <Stack.Screen name="FAQ" component={FAQ} />
-          <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
+          <Stack.Screen name="FAQ" component={FAQ}
+          options={{
+            title: 'Frequently Asked Questions'
+          }}
+           />
+          <Stack.Screen name="PaymentMethods" component={PaymentMethods}
+          options={{
+            title: 'Payment Methods'
+          }}
+           />
           <Stack.Screen name="Settings" component={Settings} />
-          <Stack.Screen name="WashHistory" component={WashHistory} />
+          <Stack.Screen name="WashHistory" component={WashHistory}
+          options={{
+            title: 'My wash history'
+          }}
+           />
         </Stack.Navigator>
     )
   }
@@ -140,7 +194,12 @@ const HomeStackNavigator = () => {
                     headerShown:true,
                     headerRight: () => (     
                       <IconButton colorScheme="indigo" style={{marginRight: 10}} key={"outline"} 
-                      onPress={() => dispatch(logout())}
+                      onPress={() => {
+                        dispatch(logout())
+                         dispatch(resetCards())
+
+                      }
+                      }
                        variant={"outline"} _icon={{
                         as: AntDesign,
                         name: "logout"
@@ -148,7 +207,10 @@ const HomeStackNavigator = () => {
                   ),
                     })}
       >
-          <Stack.Screen name="LocationsScreen" component={LocationsScreen} options={{ headerLeft: () => null }} />
+          <Stack.Screen name="LocationsScreen" component={LocationsScreen} options={{ headerLeft: () => null,
+          title: 'Locations'
+
+           }} />
           <Stack.Screen name="Location" component={Location} />
         </Stack.Navigator>
     )
@@ -159,14 +221,11 @@ const MainNavigation = () => {
     
     //getting the token from the store
     const token = useSelector((state: RootState) => state.member.token);
-    console.log(token, "token in MainNavigation")
     //getting the token status from the store
     const userAuthenticated = useSelector((state: RootState) => state.member.isAuthenticated);
-    console.log(userAuthenticated, "userAuthenticated in MainNavigation")
     useEffect(() => {
       const loadToken = async () => {
         const token = await SecureStore.getItemAsync('token')
-        console.log("stored:", token)
         if (token) {
           dispatch(setToken(token))
           dispatch(checkTokenValidity())
@@ -230,9 +289,24 @@ const MainNavigation = () => {
             ) : (
               <>
                 <Stack.Navigator>
-                    <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-                    <Stack.Screen name="SignupScreen" component={SignupScreen} />
-                    <Stack.Screen name="LoginScreen" component={LoginScreen} />
+                    <Stack.Screen name="WelcomeScreen" component=
+                    {WelcomeScreen}
+                    options={{
+                      headerShown: false,
+                      title: 'Back',
+                    }}
+                     />
+                    <Stack.Screen name="SignupScreen" component={SignupScreen}
+                    options={{
+                      title: 'Create an account',
+                    }}
+                     />
+                    <Stack.Screen name="LoginScreen" component={LoginScreen}
+                    options={{
+                      title: 'Login',
+                    
+                    }}
+                     />
                 </Stack.Navigator>
               </>
             )

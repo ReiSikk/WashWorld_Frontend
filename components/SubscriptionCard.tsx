@@ -15,7 +15,7 @@ interface SubscriptionCardProps {
 function SubscriptionCard({ plan, onPress }: SubscriptionCardProps) {
   return (
     <TouchableOpacity onPress={onPress}>
-    <View>
+    <View shadow={2}>
         <Flex flexDirection="row" bg="grey5" width="100%" p="4">
         <Box>
         <Text fontSize="2xl" color="greenWhite" fontWeight={800}>{plan.name}</Text>

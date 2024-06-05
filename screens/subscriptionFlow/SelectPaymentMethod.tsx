@@ -11,6 +11,12 @@ import { RootStackParamList } from '../MainNavigation'
 
 type Props = NativeStackScreenProps<RootStackParamList, "SelectPaymentMethod">
 
+interface Car {
+  licensePlate: string;
+  country: string;
+  // include other properties as needed
+}
+
 function SelectPaymentMethod({route, navigation}: Props) {
 const dispatch: AppDispatch = useDispatch();
 const memberID = useSelector((state: RootState) => state.member.memberID);
@@ -19,18 +25,16 @@ const subscriptionPlanID = useSelector((state: RootState) => state.subscription.
 
 const paymentMethodID = useSelector((state: RootState) => state.subscription.selectedPaymentMethodID)
 const subscriptionStatus = useSelector((state: RootState) => state.member.subscriptionStatus);
-console.log(subscriptionStatus, "subscriptionStatus in Select Payment Method")
 
 
-const createCarDtos = memberCars.map(car => ({
+const createCarDtos = memberCars.map((car: Car) => ({
   licensePlate: car.licensePlate,
   country: car.country, 
   subscriptionPlanId: subscriptionPlanID,
 }));
-console.log(createCarDtos, "createCarDtos in Select Payment Method")
+
 useEffect(() => {
   if (subscriptionStatus === 'succeeded') {
-    console.log('Subscription confirmed');
     navigation.navigate('PaymentStatus');
   }
 }, [subscriptionStatus]);

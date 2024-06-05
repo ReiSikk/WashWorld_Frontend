@@ -37,10 +37,13 @@ function AccountScreen({ navigation }: Props) {
       <VStack space={4} pb={4}>
       <Text fontSize="lg" fontWeight="bold" mt="4">My cars</Text>
       {memberCars && memberCars.length > 0 ? memberCars.map((car, index) => (
-        <Pressable onPress={() => {
+        <Pressable
+        shadow={4}
+         onPress={() => {
           const newShowDetails = [...showDetails];
           newShowDetails[index] = !newShowDetails[index];
-        setShowDetails(newShowDetails)}
+        setShowDetails(newShowDetails)
+      }
         }
          key={index}>
         <Flex bg={'greenWhite'} p={4} rounded={'sm'}> 

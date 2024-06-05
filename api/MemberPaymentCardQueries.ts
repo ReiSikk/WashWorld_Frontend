@@ -18,12 +18,11 @@ export class MemberPaymentCardQueries extends SuperQueries {
         
         });
         const data = await response.json();
-        //console.log(data, "data in fetchAll MemberPaymentCardQueries")
         return data;
     }
 
    
-static async updateMemberPaymentCard(cardId: number, updatedStatus: boolean) {
+    static async updateMemberPaymentCard(cardId: number, updatedStatus: boolean) {
     const token = await SecureStore.getItemAsync('token');
     const response = await fetch(this.baseUrl+`/${cardId}`, {
         method: 'PATCH',
@@ -31,12 +30,25 @@ static async updateMemberPaymentCard(cardId: number, updatedStatus: boolean) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({isDefaultMethod: updatedStatus}),
+        body: JSON.stringify({ isDefaultMethod: updatedStatus }),
     });
     const data = await response.json();
-    console.log(data, "data in updateMemberPaymentCard in MemberPaymentCardQueries")
     return data;
-}
+    }
+
+
+    static async deleteMemberPaymentCard(cardId: number) {
+    const token = await SecureStore.getItemAsync('token')
+    const response = await fetch(this.baseUrl+`/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+    const data = await response.json();
+    return data;
+    }
     
 
 } 

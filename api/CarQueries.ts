@@ -1,7 +1,5 @@
 import { SuperQueries } from "./SuperQueries";
 import * as SecureStore from 'expo-secure-store';
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
 
 
 export class CarQueries extends SuperQueries {
@@ -17,7 +15,6 @@ static async fetchAll() {
                 },
             });
             const data = await response.json();
-            //console.log(data, "data from fetchAll carQueries response");
             return data;
     }
 

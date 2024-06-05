@@ -27,9 +27,6 @@ const EnterLicensePlate = ({route, navigation}: Props) => {
   const { subscriptionPlanID } = route.params;
   const dispatch: AppDispatch = useDispatch();
   const stateCars = useSelector((state: RootState) => state.subscription.cars);
-  console.log(stateCars, "stateCars in enterPlate state");
- 
-  
 
   const [cars, setCars] = useState<Car[]>([
     {

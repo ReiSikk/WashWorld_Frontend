@@ -9,7 +9,6 @@ import { getMemberDetails, getProfile } from '../store/MemberSlice';
 const MembershipCard = () => {
   const dispatch: AppDispatch = useDispatch();
   const member = useSelector((state: RootState) => state.member.member);
-  console.log(member, "member in MembershipCard")
  useEffect(() => {
   dispatch(getProfile());
  },[member])

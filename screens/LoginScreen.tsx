@@ -61,7 +61,6 @@ const handlePasswordChange = (value: string) => {
 
       const response = await dispatch(login({email, password}))
       if (response && response.payload.access_token) {
-        console.log(response.payload.access_token, "response in login screen")
         dispatch(setToken(response.payload.access_token))
         dispatch(checkTokenValidity())
       } else {

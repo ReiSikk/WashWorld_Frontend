@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { Text, VStack, Button, Icon, Pressable, HStack, FormControl, Input, ScrollView, Badge } from 'native-base';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, VStack, Button, Icon, Pressable, HStack, FormControl, Input, ScrollView, Badge, Flex } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { CreateCardDTO } from '../entities/CreateCardDTO';
-import { createCard, fetchCards } from '../store/CardSlice';
+import { createCard, fetchCards, deleteMemberPaymentCard } from '../store/CardSlice';
 import { parse, isValid, endOfMonth, set } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { setSelectedPaymentMethodID } from '../store/SubscriptionSlice';
 import { MemberPaymentCardQueries } from '../api/MemberPaymentCardQueries';
+import { updateMemberPaymentCard } from '../store/MemberSlice';
+import { FontAwesome } from '@expo/vector-icons';
 
-const PaymentMethodSelector: React.FC = () => {
+const PaymentMethodSelector = () => {
   //redux
   const dispatch: AppDispatch = useDispatch();
   const cardsFromStore = useSelector((state: RootState) => state.cards);
   const cardsToDisplay = cardsFromStore.cards;
+
   const selectedPaymentMethodID = useSelector((state: RootState) => state.subscription.selectedPaymentMethodID);
-  
+  //look through cardsToDisplay and find the default card
+  const defaultCard = useSelector((state: RootState) => state.member.memberDefaultCard);
+  const [cardDeleted, setCardDeleted] = useState(false);
+
   const [showForm, setShowForm] = useState(false);
-  const [cardAdded, setCardAdded] = useState(false);
+
   const [selectedMethod, setSelectedMethod] = useState('');
 
-  //console.log(selectedMethod, "selectedMethod in PaymentMethodSelector")
+  const [showCardDetails, setShowCardDetails] = useState(new Array(cardsToDisplay.length).fill(false));
 
 
   const [formData, setFormData] = useState({
@@ -39,8 +45,11 @@ useEffect(() => {
   dispatch(fetchCards());
 }, [dispatch]);
 
+useEffect(() => {
+  dispatch(fetchCards());
+}
+, [defaultCard]);
 
-//useffect to setpaymentmethods
 
 
   const handleSubmit = () => {
@@ -81,12 +90,6 @@ useEffect(() => {
     };
 
     dispatch(createCard(newCard))
-      .then(() => {
-        setCardAdded(true);
-      })
-      .catch(error => {
-        console.error('Error adding card:', error);
-      });
   };
 
   const handleValidation = () => {
@@ -138,20 +141,41 @@ useEffect(() => {
     }
   };
 
-  const changeCardDefaultState = async (cardId: number) => {
-    console.log(cardId, "cardId in changeCardDefaultState")
+
+  const changeCardDefaultState = async (cardId :number) => {
     const cardToUpdate = cardsToDisplay.find(card => card.id === cardId);
-    const currentStatus = cardToUpdate?.isDefaultMethod;
+    if (!cardToUpdate) {
+        console.error('Card not found');
+        return;
+    }
+    const currentStatus = Boolean(cardToUpdate.isDefaultMethod);
     const updatedStatus = !currentStatus;
 
-    const updatedCard = await MemberPaymentCardQueries.updateMemberPaymentCard(cardId, updatedStatus);
-
+    dispatch(updateMemberPaymentCard({cardId, updatedStatus}))
     dispatch(fetchCards());
-  } 
 
+
+  /* useEffect(() => {
+      if (cardDeleted) {
+        dispatch(fetchCards());
+        setCardDeleted(false); // reset the state after fetching
+      }
+    }, [cardDeleted, dispatch]); */
+}
+
+
+const handleDeleteCard = async (cardId :number) => {
+  const cardToDelete = cardsToDisplay.find(card => card.id === cardId);
+  if (!cardToDelete) {
+      console.error('Card not found');
+      return;
+  }
+  dispatch(deleteMemberPaymentCard(cardId)).then(() => dispatch(fetchCards()));
+}
 
   return (
-    <ScrollView mb={20}>
+    <>
+    <ScrollView mb={20} showsVerticalScrollIndicator={false}>
       <VStack space={4}>
         <Text size={'xl'} fontWeight={'extrabold'}>
           Wallet
@@ -172,33 +196,68 @@ useEffect(() => {
               key={index}
               color={'black'}
               padding={4}
-              bg={selectedMethod === method.cardNumber ? 'greenWhite' : 'grey10'}
+              bg={'white'}
+              borderColor={selectedMethod === method.cardNumber ? 'greenWhite' : 'grey10'}
+              borderWidth={2}
               borderRadius={4}
-              onPress={() => dispatch(
+              onPress={() => {
+                dispatch(
                 setSelectedPaymentMethodID(method.id),
-                setSelectedMethod(method.cardNumber)
-              )}
+                setSelectedMethod(method.cardNumber),
+              )
+              const newShowCardDetails = [...showCardDetails]
+              newShowCardDetails[index] = !newShowCardDetails[index]
+              setShowCardDetails(newShowCardDetails)
+
+            }
+          }
             > 
-              <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
-                <VStack space={0}>
-              <HStack space={2} justifyContent={'flex-start'} alignItems={'center'}>
-                <Text>{method.nameOnCard}</Text>
-                <Text>{method.cardNumber}</Text>
+              <HStack space={2} justifyContent={'space-between'} alignItems={'center'}>
+                <VStack space={2} alignItems={'center'} maxWidth={'100%'}>
+              <HStack space={6} alignItems="center" justifyContent={'space-between'} width={'100%'}>
+                <HStack alignItems={'center'} space={2}>
+                  <AntDesign name="creditcard" size={24} color="black" />
+                <Text ml={2} fontWeight={'medium'}>
+                {"**** **** **** " + method.cardNumber.slice(-4)}
+                </Text>
+                { method.isDefaultMethod && (
+                    <Badge variant={'subtle'}>Default</Badge>
+                )
+                }
+                </HStack>
+                <AntDesign name={showCardDetails[index] ? 'down' : 'right'} size={24} marginLeft={'auto'} />
               </HStack>
               <Text fontSize="sm" color={method.isActive ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'}>
                 {method.isActive ? 'Active' : ''}
               </Text>
-              <Button fontSize="sm" color={method.isDefaultMethod ? "greenWhite" : 'grey60'} width={'fit-content'}  marginRight={'auto'} 
-              onPress={() => {
-                if (parseInt(selectedPaymentMethodID) === method.id) {
-                  changeCardDefaultState(method.id);
-                }
-              }}
-              >
-                {method.isDefaultMethod ? 'Default' : 'Set as default method'}
-              </Button>
+              { showCardDetails[index] && (
+               <HStack width={'100%'} space={4}>
+               <Flex flex={1}>
+                 <Button fontSize="sm" bgColor={'error.400'} width={'100%'} 
+                   onPress={() => {
+                     if (parseInt(selectedPaymentMethodID) === method.id) {
+                      handleDeleteCard(method.id)
+                     }
+                   }}
+                 >
+                   Delete
+                 </Button>
+               </Flex>
+               <Flex flex={1}>
+                 <Button fontSize="sm" bgColor={'greenWhite'} width={'100%'} 
+                   onPress={() => {
+                     if (parseInt(selectedPaymentMethodID) === method.id) {
+                       changeCardDefaultState(method.id)
+                     }
+                   }}
+                 >
+                   {method.isDefaultMethod ? 'Remove as default' : 'Set as default'}
+                 </Button>
+               </Flex>
+             </HStack>
+              )}
+
               </VStack>
-                <AntDesign name="right" size={14} marginLeft={'auto'} />
               </HStack>
             </Pressable>
           ))) : 
@@ -287,6 +346,7 @@ useEffect(() => {
         </VStack>
       </VStack>
     </ScrollView>
+      </>
   );
 };
 

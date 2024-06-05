@@ -56,6 +56,9 @@ export const cardSlice = createSlice({
        addEntry: (state, action: PayloadAction<Card>) => {
         state.cards.push(action.payload)
         },
+        resetCards: (state) => {
+          state.cards = [];
+        },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -83,6 +86,6 @@ export const cardSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 // ACTIONS
-export const {  } = cardSlice.actions
+export const {  resetCards } = cardSlice.actions
 
 export default cardSlice.reducer

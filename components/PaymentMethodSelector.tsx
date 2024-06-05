@@ -155,12 +155,12 @@ useEffect(() => {
     dispatch(fetchCards());
 
 
-  useEffect(() => {
+  /* useEffect(() => {
       if (cardDeleted) {
         dispatch(fetchCards());
         setCardDeleted(false); // reset the state after fetching
       }
-    }, [cardDeleted, dispatch]);
+    }, [cardDeleted, dispatch]); */
 }
 
 
@@ -170,13 +170,8 @@ const handleDeleteCard = async (cardId :number) => {
       console.error('Card not found');
       return;
   }
-  dispatch(deleteMemberPaymentCard(cardId))
-  .then(() => dispatch(fetchCards()));
+  dispatch(deleteMemberPaymentCard(cardId)).then(() => dispatch(fetchCards()));
 }
-
-
-
-
 
   return (
     <>

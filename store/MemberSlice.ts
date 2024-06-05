@@ -7,6 +7,7 @@ import { CarQueries } from '../api/CarQueries';
 import { Car } from '../entities/car';
 import { MemberPaymentCard } from '../entities/memberPaymentCard';
 import { MemberPaymentCardQueries } from '../api/MemberPaymentCardQueries';
+import { cardSlice } from './CardSlice';
 
 
 
@@ -143,6 +144,8 @@ export const MemberSlice = createSlice({
             SecureStore.deleteItemAsync('token')
             state.isAuthenticated = false;
             state.subscriptionStatus = 'none';
+            state.memberID = null;
+            state.member = null;
         }, 
         setMemberID: (state, action: PayloadAction<string>) => {
             state.memberID = action.payload;

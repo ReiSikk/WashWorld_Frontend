@@ -140,8 +140,6 @@ export default function App() {
     <NativeBaseProvider theme={customTheme}>
       <MainNavigation>
       </MainNavigation> 
-      {/* <ProductCardDark />
-      <WelcomeScreen /> */}
     </NativeBaseProvider>
     </Provider>
     </QueryClientProvider>

@@ -14,7 +14,6 @@ type Props = NativeStackScreenProps<RootStackParamList, "SelectPaymentMethod">
 interface Car {
   licensePlate: string;
   country: string;
-  // include other properties as needed
 }
 
 function SelectPaymentMethod({route, navigation}: Props) {

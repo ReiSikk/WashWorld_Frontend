@@ -116,8 +116,7 @@ const validateForm = () => {
   setCars(newCars);
 
   if (isFormValid) {
-    const trimmedCarsPayload = newCars.filter((_, i) => i === 0 || (i === 1 && addSecondPlate))
-                                      .map(({ country, licensePlate }) => ({ country, licensePlate }));
+    const trimmedCarsPayload = newCars.filter((_, i) => i === 0 || (i === 1 && addSecondPlate)).map(({ country, licensePlate }) => ({ country, licensePlate }));
     dispatch(setCarsState(trimmedCarsPayload));
     navigation.navigate('OrderSummary', { subscriptionPlanID: subscriptionPlanID});
   } else {

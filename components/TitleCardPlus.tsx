@@ -6,7 +6,7 @@ interface TitleCardPlusProps {
   title: string;
 }
 
-const TitleCardPlus: React.FC<TitleCardPlusProps> = ({ title }) => {
+const TitleCardPlus = ({ title }: TitleCardPlusProps) => {
   return (
     <View>
       <Flex flexDirection="row" bg="grey5" py="8" px="4" w="100%" alignItems="center">

@@ -11,8 +11,7 @@ type ProductCardDarkProps = {
 };
 const SubscriptionCard = (props: ProductCardDarkProps) => {
     const theme: ICustomTheme = useTheme();
-
-
+    
     const styles = StyleSheet.create({
         container: {
           padding:20,

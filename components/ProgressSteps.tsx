@@ -7,8 +7,6 @@ type ProgressStepsProps = {
     totalSteps: number;
     };
   
-
-    
     const ProgressSteps = ({ currentStep, totalSteps }: ProgressStepsProps) => {
 
         const theme = useTheme();

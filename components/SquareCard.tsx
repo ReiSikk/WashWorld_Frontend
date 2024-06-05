@@ -4,20 +4,14 @@ import { useTheme, ICustomTheme } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import  { StyleSheet, TouchableOpacity } from 'react-native';
 
-
-
 type SquareCardProps = {
   onPress: () => void;
   name: string;
   address: string;
 };
 
-
-
 const SquareCard = (props:SquareCardProps) => {
-
     const theme: ICustomTheme = useTheme();
-    
     const styles = StyleSheet.create({
         container: {
           padding: 10,
@@ -26,7 +20,6 @@ const SquareCard = (props:SquareCardProps) => {
           alignItems: 'flex-start',
         },
       });
-
 
     return(
       <TouchableOpacity onPress={props.onPress}>

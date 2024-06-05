@@ -203,9 +203,7 @@ export const MemberSlice = createSlice({
                 state.subscriptionStatus = 'failed';
               })
             .addCase(confirmSubscription.fulfilled, (state, action) => {
-                console.log(action.payload, "action.payload");
                 if(action.payload.success) {
-                    console.log("subscription succes and cars are these:", state.cars)
                     state.subscriptionStatus = 'succeeded';
                 } else {
                     alert(`${action.payload.message}, please try again.`);

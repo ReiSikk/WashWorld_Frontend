@@ -31,8 +31,6 @@ export const fetchCards = createAsyncThunk(
 );
 
 
-
-
   export const createCard = createAsyncThunk(
     'createCard',
     async (card: CreateCardDTO, thunkAPI) => {
@@ -84,8 +82,6 @@ export const cardSlice = createSlice({
 }
 })
 
-// Action creators are generated for each case reducer function
-// ACTIONS
 export const {  resetCards } = cardSlice.actions
 
 export default cardSlice.reducer

@@ -1,4 +1,3 @@
-import { CreateCardDTO } from '../entities/CreateCardDTO';
 import { SuperQueries } from './SuperQueries';
 
 

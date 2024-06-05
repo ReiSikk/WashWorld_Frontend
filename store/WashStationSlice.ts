@@ -33,7 +33,6 @@ export const washStationSlice = createSlice({
         }
   },
   extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
     builder
     .addCase(fetchWashStations.fulfilled, (state, action) => {
       // Add user to the state array
@@ -44,8 +43,6 @@ export const washStationSlice = createSlice({
 }
 })
 
-// Action creators are generated for each case reducer function
-// ACTIONS
 export const {  } = washStationSlice.actions
 
 export default washStationSlice.reducer

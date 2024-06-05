@@ -7,7 +7,7 @@ interface WashHistoryCardProps {
   washType: string;
 }
 
-const WashHistoryCard: React.FC<WashHistoryCardProps> = ({ washStation, washType }) => {
+const WashHistoryCard  = ({ washStation, washType } : WashHistoryCardProps) => {
   return (
     <View>
         <Flex>

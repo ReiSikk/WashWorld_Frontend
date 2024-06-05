@@ -40,7 +40,6 @@ export const supportTicketSlice = createSlice({
         }
   },
   extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchSupportTickets.fulfilled, (state, action) => {
       // Add ticket to the state array
       
@@ -56,8 +55,7 @@ export const supportTicketSlice = createSlice({
 }
 })
 
-// Action creators are generated for each case reducer function
-// ACTIONS
+
 export const {  } = supportTicketSlice.actions
 
 export default supportTicketSlice.reducer

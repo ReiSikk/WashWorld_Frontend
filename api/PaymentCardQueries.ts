@@ -8,12 +8,10 @@ export class PaymentCardQueries extends SuperQueries {
 
     
     static async fetchAll() {
-        //const token = await SecureStore.getItemAsync('token')
         const response = await fetch(this.baseUrl, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                /* 'Authorization': `Bearer ${token}` */
             }
         
         });
@@ -26,7 +24,6 @@ export class PaymentCardQueries extends SuperQueries {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-               /*  'Authorization': `Bearer ${token}` */
 
 
             },

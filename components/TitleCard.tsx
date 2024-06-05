@@ -8,7 +8,7 @@ interface TitleCardProps {
   onPress?: () => void;
 }
 
-const TitleCard: React.FC<TitleCardProps> = ({ title, onPress }) => {
+const TitleCard = ({ title, onPress }: TitleCardProps) => {
   return (
     <TouchableOpacity onPress={onPress}>
     <View shadow={1}>

@@ -14,7 +14,6 @@ export const stepSlice = createSlice({
   reducers: {
     setCurrentStep: (state, action: PayloadAction<number>) => {
       state.currentStep = action.payload;
-      console.log(state.currentStep, "current step in redux state");
     },
   },
 });

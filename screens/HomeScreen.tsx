@@ -14,13 +14,10 @@ import { AntDesign } from "@expo/vector-icons";
 import Picture from '../components/Picture';
 
 
-
-
 type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 
 
-
- function HomeScreen({ navigation }: Props) {
+function HomeScreen({ navigation }: Props) {
 const dispatch: AppDispatch = useDispatch();
 const washStations = useSelector((state: RootState) => state.washStations.washStations);
 const userAuthenticated = useSelector((state: RootState) => state.member.isAuthenticated);

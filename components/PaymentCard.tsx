@@ -6,7 +6,7 @@ interface PaymentCardProps {
   cardNumber: string;
 }
 
-const PaymentCard: React.FC<PaymentCardProps> = ({ cardNumber }) => {
+const PaymentCard  = ({ cardNumber }: PaymentCardProps) => {
   return (
     <View>
       <HStack bg="grey5" p="4" w="100%" alignItems="center">

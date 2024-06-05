@@ -13,7 +13,6 @@ import { updateMemberPaymentCard } from '../store/MemberSlice';
 import { FontAwesome } from '@expo/vector-icons';
 
 const PaymentMethodSelector = () => {
-  //redux
   const dispatch: AppDispatch = useDispatch();
   const cardsFromStore = useSelector((state: RootState) => state.cards);
   const cardsToDisplay = cardsFromStore.cards;
@@ -153,14 +152,6 @@ useEffect(() => {
 
     dispatch(updateMemberPaymentCard({cardId, updatedStatus}))
     dispatch(fetchCards());
-
-
-  /* useEffect(() => {
-      if (cardDeleted) {
-        dispatch(fetchCards());
-        setCardDeleted(false); // reset the state after fetching
-      }
-    }, [cardDeleted, dispatch]); */
 }
 
 
@@ -319,7 +310,7 @@ const handleDeleteCard = async (cardId :number) => {
                     <Input
                       type="text"
                       placeholder="MM/YY"
-                      value={expirationDateStr} // Ensure this is a string
+                      value={expirationDateStr}
                       onChangeText={handleExpirationDateChange}
                       onBlur={() => handleValidation()}
                     />

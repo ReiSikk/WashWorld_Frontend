@@ -5,8 +5,6 @@ import { TouchableOpacity } from 'react-native';
 import  { StyleSheet} from 'react-native';
 import { Subscription } from '../entities/subscription';
 
-
-
 interface SubscriptionCardProps {
   plan: Subscription;
   onPress: () => void;

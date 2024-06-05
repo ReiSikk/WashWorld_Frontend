@@ -31,11 +31,9 @@ photo: ""
 const newSupportTicket = new CreateSupportTicket(supportTicketForm.description, supportTicketForm.photo);
 
 const handleSubmit = () => {
-  console.log(newSupportTicket)
    dispatch(createTicket(newSupportTicket))
   .then(() => {
     // Entry added successfully
-  console.log("Ticket dispatched");
   setTicketSubmitted(true);
 
   })

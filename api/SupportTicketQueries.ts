@@ -11,7 +11,6 @@ export class SupportTicketQueries extends SuperQueries {
     }
 
     static async createSupportTicket(supportTicket: CreateSupportTicket) {
-        console.log('called support ticket queries')
         const response = await fetch(this.baseUrl, {
             method: 'POST',
             headers: {
@@ -20,7 +19,6 @@ export class SupportTicketQueries extends SuperQueries {
             body: JSON.stringify(supportTicket)
         });
         const data = await response.json();
-        console.log('console before data,', data)
         return data;
     }
 }

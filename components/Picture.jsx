@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, Button, Image } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 
@@ -8,6 +8,7 @@ export default function Picture(props) {
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
+
 
   useEffect(() => {
     (async () => {
@@ -54,7 +55,7 @@ export default function Picture(props) {
   }
 
   return (
-    <Camera ref={cameraRef} style={{ width: 400, height: 400 }}>
+     <Camera ref={cameraRef} style={{ width: 400, height: 400 }}>
       <View style={styles.buttonContainer}>
         <Button title="Take Pic" onPress={takePic} />
       </View>

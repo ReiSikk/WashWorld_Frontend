@@ -22,12 +22,10 @@ export class MemberQueries extends SuperQueries {
         const data = await response.json();
         //store token in secure store
         SecureStore.setItemAsync('token', data.token);
-       console.log(data, "data from login response");
         
         return data;
     } 
  static async signup(member: createMemberDTO) {
-    console.log('calling signup)')
          const response = await fetch(this.baseUrl + "signup", { 
             method: 'POST',
             headers: {
@@ -49,7 +47,6 @@ export class MemberQueries extends SuperQueries {
                 },
             });
             const data = await response.json();
-            console.log(data, "data from getMember response");
             return data;
     }
    static async getTokenValidity() {
@@ -62,10 +59,8 @@ export class MemberQueries extends SuperQueries {
                 },
             });
             const data = await response.json();
-            console.log(data, "data from getTokenValidity response");
             return data;
         } catch (error) {
-            console.log(error, "error in getTokenValidity")
         }
     }
 
@@ -82,7 +77,6 @@ export class MemberQueries extends SuperQueries {
     }
  
     static async confirmSubscription(formData: {memberID: string, createCarDtos: CreateCarDto[], paymentMethodID: string}) {
-        console.log('data passed to confirmSubscription in memberQueries', formData)
 
         try {
             const response = await fetch(this.memberUrl+`${formData.memberID}/add-car`, {
@@ -97,13 +91,9 @@ export class MemberQueries extends SuperQueries {
               throw new Error('Failed to add cars to subscription, please try again');
             }
             const data = await response.json();
-            console.log(data, "data in confirmSubscription");
+            return data
           } catch (error) {
             console.log(error);
           }
     }
-
-    static async logout() {
-        console.log("Not implemented yet");
-    } 
 }

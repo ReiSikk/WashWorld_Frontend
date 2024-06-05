@@ -5,6 +5,9 @@ import { MemberQueries } from '../api/MemberQueries';
 import { CreateCarDto } from '../entities/CreateCarDTO';
 import { CarQueries } from '../api/CarQueries';
 import { Car } from '../entities/car';
+import { MemberPaymentCard } from '../entities/memberPaymentCard';
+import { MemberPaymentCardQueries } from '../api/MemberPaymentCardQueries';
+import { cardSlice } from './CardSlice';
 
 
 
@@ -19,6 +22,7 @@ interface MemberState {
     role: Role | null;
     subscriptionStatus: string | null;
     isAuthenticated: boolean | null
+    memberDefaultCard: MemberPaymentCard | null;
 
 }
 
@@ -57,6 +61,7 @@ const initialState: MemberState = {
     role: null,
     subscriptionStatus: 'none',
     isAuthenticated: null,
+    memberDefaultCard: null,
 };
 
  export const login = createAsyncThunk(
@@ -109,6 +114,15 @@ export const getMemberCars = createAsyncThunk(
     },
 );
 
+export const updateMemberPaymentCard = createAsyncThunk(
+    'updateCards',
+    async (payload: {cardId: number, updatedStatus: boolean}, thunkAPI) => {
+      // Call your API here
+      const response =  await MemberPaymentCardQueries.updateMemberPaymentCard(payload.cardId, payload.updatedStatus);
+      return response;
+    });
+
+
 export const confirmSubscription = createAsyncThunk(
     'member/createSubscription',
     async (payload: ConfirmSubscriptionPayload, thunkAPI) => {
@@ -126,11 +140,12 @@ export const MemberSlice = createSlice({
             state.token = action.payload;
         }, 
          logout: (state) => {
-            console.log("logout called")
             state.token = '';
             SecureStore.deleteItemAsync('token')
             state.isAuthenticated = false;
             state.subscriptionStatus = 'none';
+            state.memberID = null;
+            state.member = null;
         }, 
         setMemberID: (state, action: PayloadAction<string>) => {
             state.memberID = action.payload;
@@ -141,7 +156,6 @@ export const MemberSlice = createSlice({
 
         createSubscription: (state, action: PayloadAction<ConfirmSubscriptionPayload>) => {
             state.memberID = action.payload.memberID;
-            console.log(action.payload, "action.payload in createSubscription")
             MemberQueries.confirmSubscription(action.payload);
           }
     },
@@ -185,14 +199,22 @@ export const MemberSlice = createSlice({
             .addCase(getMemberCars.fulfilled, (state, action) => {
                 state.cars = action.payload;
             })
-            .addCase(confirmSubscription.fulfilled, (state, action) => {
-                console.log(action.payload, "action.payload in confirmSubscription fulfilled")
-                state.subscriptionStatus = 'succeeded';
-
-              })
             .addCase(confirmSubscription.rejected, (state, action) => {
                 state.subscriptionStatus = 'failed';
               })
+            .addCase(confirmSubscription.fulfilled, (state, action) => {
+                console.log(action.payload, "action.payload");
+                if(action.payload.success) {
+                    state.subscriptionStatus = 'succeeded';
+                } else {
+                    alert(`${action.payload.message}, please try again.`);
+                }
+
+              })
+            .addCase(updateMemberPaymentCard.fulfilled, (state, action) => {
+                state.memberDefaultCard = action.payload;
+              }
+            )
     },
 });
 

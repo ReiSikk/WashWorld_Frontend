@@ -11,7 +11,6 @@ function Settings() {
 <TitleCardPlus title="Preferences" />
 <TitleCardPlus title="Language" />
 <TitleCardPlus title="Legal" />
-<TitleCardPlus title="Sign out" />
 </VStack>
     </View>
   )

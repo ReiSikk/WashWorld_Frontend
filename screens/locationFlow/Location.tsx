@@ -108,7 +108,7 @@ function Location({ route, navigation}: Props) {
       <VStack space={4} mb="8">
         {washBays.map((bay, index) => (
           bay.bayType === "Automatic" &&
-          <VStack key={index} space={2} bg={'white'} py={4} px={6} justifyContent={'space-between'} borderRadius="sm">
+          <VStack key={index} space={2} bg={'white'} py={4} px={6} shadow={1} justifyContent={'space-between'} borderRadius="sm">
           <HStack space={4} justifyContent={'space-between'}>
           <Text fontFamily={'extrabold'} fontSize={'lg'}>Automatic wash bay {bay.bayNr}</Text>
           <Badge variant="solid" borderRadius="sm" alignSelf="flex-start" px="4" bg={bay.available ? "greenWhite" : "orange"}>{bay.available ? "Available" : "Not available"}</Badge>

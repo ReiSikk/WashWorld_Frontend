@@ -11,7 +11,7 @@ interface TitleCardProps {
 const TitleCard: React.FC<TitleCardProps> = ({ title, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
-    <View>
+    <View shadow={1}>
       <Flex flexDirection="row" bg="grey5" py="8" px="4" w="100%" alignItems="center">
           <Text>{title}</Text>
         <Spacer />

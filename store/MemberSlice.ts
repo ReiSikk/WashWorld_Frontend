@@ -200,7 +200,12 @@ export const MemberSlice = createSlice({
                 state.subscriptionStatus = 'failed';
               })
             .addCase(confirmSubscription.fulfilled, (state, action) => {
-                state.subscriptionStatus = 'succeeded';
+                console.log(action.payload, "action.payload");
+                if(action.payload.success) {
+                    state.subscriptionStatus = 'succeeded';
+                } else {
+                    alert(`${action.payload.message}, please try again.`);
+                }
 
               })
             .addCase(updateMemberPaymentCard.fulfilled, (state, action) => {

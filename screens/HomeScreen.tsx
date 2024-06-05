@@ -32,7 +32,8 @@ useEffect(() => {
 
   return (
      <ScrollView m={6}>
-     <Flex flexDirection='column' alignItems='center' justifyContent='center' w="100%" h="fit-content" py="6">
+     <Text fontSize={'2xl'} fontWeight={'extrabold'} ml={2}>WashWorlds near you</Text>
+     <Flex flexDirection='column' alignItems='center' justifyContent='center' w="100%" h="fit-content" pb="6">
      <ScrollView horizontal={true} paddingRight={5} borderRadius={10}>
      <HStack space={2}>
       {washStations && washStations.map((station,index) => (
@@ -46,6 +47,7 @@ useEffect(() => {
     </HStack>
     </ScrollView>
     </Flex>
+    <Text fontSize={'2xl'} fontWeight={'extrabold'} ml={2}>Explore our membership plans</Text>
       <ProductCardDark 
       onPress={() => navigation.navigate('HomeSubscriptionsScreen')}
       title='Subscriptions'

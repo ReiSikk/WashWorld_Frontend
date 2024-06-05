@@ -170,8 +170,8 @@ const handleDeleteCard = async (cardId :number) => {
       console.error('Card not found');
       return;
   }
-  dispatch(deleteMemberPaymentCard(cardId));
-  setCardDeleted(true);
+  dispatch(deleteMemberPaymentCard(cardId))
+  .then(() => dispatch(fetchCards()));
 }
 
 

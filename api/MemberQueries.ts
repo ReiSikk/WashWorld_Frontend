@@ -91,7 +91,7 @@ export class MemberQueries extends SuperQueries {
               throw new Error('Failed to add cars to subscription, please try again');
             }
             const data = await response.json();
-            console.log(data, 'data in MemberQueries confirmSubscription')
+            return data
           } catch (error) {
             console.log(error);
           }

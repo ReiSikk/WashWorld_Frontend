@@ -15,21 +15,6 @@ function PaymentMethods() {
     <Text mb="2" color="greenWhite" fontWeight="extrabold">01/05/2024</Text>
     </Flex>
     <PaymentMethodSelector />
-{/*     <VStack space={4}>
-    <Text size="lg" fontWeight="extrabold">My payment methods</Text>
-    <PaymentCard cardNumber="1234 1234 1234 1234"/>
-    <Flex flexDirection="row" bg="grey5" py="4" px="4" w="100%" alignItems="center">
-        <Box>
-          <Text>Apple Pay</Text>
-        </Box>
-      </Flex>
-      <Flex flexDirection="row" bg="grey5" py="4" px="4" w="100%" alignItems="center">
-        <Box>
-          <Text>MobilePay</Text>
-        </Box>
-      </Flex>
-      <TitleCardPlus title="Add a card"></TitleCardPlus>
-    </VStack> */}
      </View>
   )
 }

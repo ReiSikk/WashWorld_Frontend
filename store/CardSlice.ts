@@ -34,21 +34,16 @@ export const fetchCards = createAsyncThunk(
   export const createCard = createAsyncThunk(
     'createCard',
     async (card: CreateCardDTO, thunkAPI) => {
-      console.log("createCard in CardSlice called with:", card);
       return await PaymentCardQueries.createCard(card)
     },
   )
 
-
-
-
-/*   export const deleteCard = createAsyncThunk(
-    'deleteCard',
+  export const deleteMemberPaymentCard = createAsyncThunk(
+    'deleteMemberPaymentCard',
     async (id: number, thunkAPI) => {
-      return await PaymentCardQueries.deleteCard(id)
+      return await MemberPaymentCardQueries.deleteMemberPaymentCard(id)
     },
-  ) */
-
+  )
 
 
 export const cardSlice = createSlice({
@@ -65,8 +60,7 @@ export const cardSlice = createSlice({
     builder
     .addCase(fetchCards.fulfilled, (state, action) => {
       state.cards = Array.isArray(action.payload) ? action.payload : [];
-    }),
-    builder
+    })
     .addCase(createCard.fulfilled, (state, action) => {
         // Add user to the state array
         if(action.payload.cardNumber) {
@@ -75,6 +69,12 @@ export const cardSlice = createSlice({
           alert("Card already added to account")
         }
       })
+      .addCase(deleteMemberPaymentCard.fulfilled, (state, action) => {
+        // Remove the card from the state array
+          state.cards = state.cards.filter(card => card.id !== action.payload.cardId);
+        
+      })
+
     
 }
 })

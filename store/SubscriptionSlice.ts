@@ -26,8 +26,7 @@ const initialState: SubscriptionState = {
   selectedPaymentMethodID: '',
 }
 
-
-// First, create the thunk
+//create thunk
 export const fetchSubscriptions = createAsyncThunk(
     'fetchSubscriptions',
     async (thunkAPI) => {
@@ -42,31 +41,24 @@ export const subscriptionSlice = createSlice({
   reducers: {
     selectSubscription: (state, action) => {
       state.selectedSubscription = action.payload;
-      console.log(state.selectedSubscription, "selected subscription in redux state");
     },
     setCarsState: (state, action) => {
       state.cars = action.payload;
-      console.log(state.cars, "cars in redux state");
     },
     setSelectedPaymentMethodID: (state, action) => {
       state.selectedPaymentMethodID = action.payload;
-      console.log(state.selectedPaymentMethodID, "selectedPaymentMethodID in redux state");
     },
     resetCarsState: (state) => {
       state.cars = [];
     }
   },
   extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchSubscriptions.fulfilled, (state, action) => {
-      // Add user to the state array
       state.subscriptions = action.payload;
     });
 }
 })
 
-// Action creators are generated for each case reducer function
-// ACTIONS
 export const { selectSubscription, setCarsState, setSelectedPaymentMethodID, resetCarsState  } = subscriptionSlice.actions
 
 export default subscriptionSlice.reducer

@@ -118,9 +118,9 @@ export const updateMemberPaymentCard = createAsyncThunk(
     async (payload: {cardId: number, updatedStatus: boolean}, thunkAPI) => {
       // Call your API here
       const response =  await MemberPaymentCardQueries.updateMemberPaymentCard(payload.cardId, payload.updatedStatus);
-      console.log(response, "response in updateMemberPaymentCard in memberSlice")
       return response;
     });
+
 
 export const confirmSubscription = createAsyncThunk(
     'member/createSubscription',
@@ -139,7 +139,6 @@ export const MemberSlice = createSlice({
             state.token = action.payload;
         }, 
          logout: (state) => {
-            console.log("logout called")
             state.token = '';
             SecureStore.deleteItemAsync('token')
             state.isAuthenticated = false;
@@ -154,7 +153,6 @@ export const MemberSlice = createSlice({
 
         createSubscription: (state, action: PayloadAction<ConfirmSubscriptionPayload>) => {
             state.memberID = action.payload.memberID;
-            console.log(action.payload, "action.payload in createSubscription")
             MemberQueries.confirmSubscription(action.payload);
           }
     },
@@ -198,13 +196,12 @@ export const MemberSlice = createSlice({
             .addCase(getMemberCars.fulfilled, (state, action) => {
                 state.cars = action.payload;
             })
-            .addCase(confirmSubscription.fulfilled, (state, action) => {
-                console.log(action.payload, "action.payload in confirmSubscription fulfilled")
-                state.subscriptionStatus = 'succeeded';
-
-              })
             .addCase(confirmSubscription.rejected, (state, action) => {
                 state.subscriptionStatus = 'failed';
+              })
+            .addCase(confirmSubscription.fulfilled, (state, action) => {
+                state.subscriptionStatus = 'succeeded';
+
               })
             .addCase(updateMemberPaymentCard.fulfilled, (state, action) => {
                 state.memberDefaultCard = action.payload;

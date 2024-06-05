@@ -159,14 +159,11 @@ const MainNavigation = () => {
     
     //getting the token from the store
     const token = useSelector((state: RootState) => state.member.token);
-    console.log(token, "token in MainNavigation")
     //getting the token status from the store
     const userAuthenticated = useSelector((state: RootState) => state.member.isAuthenticated);
-    console.log(userAuthenticated, "userAuthenticated in MainNavigation")
     useEffect(() => {
       const loadToken = async () => {
         const token = await SecureStore.getItemAsync('token')
-        console.log("stored:", token)
         if (token) {
           dispatch(setToken(token))
           dispatch(checkTokenValidity())

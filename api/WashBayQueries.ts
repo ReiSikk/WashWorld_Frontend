@@ -15,7 +15,6 @@ static async updateWashBay(bayId: number, updatedAvailability: boolean) {
         body: JSON.stringify({available: updatedAvailability}),
     });
     const data = await response.json();
-    console.log(data, "data in updateWashBay in WashBayQueries")
     return data;
 }
 }

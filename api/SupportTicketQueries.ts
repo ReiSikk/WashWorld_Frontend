@@ -2,7 +2,7 @@ import { CreateSupportTicket } from '../entities/CreateSupportTicket';
 import { SuperQueries } from './SuperQueries';
 
 export class SupportTicketQueries extends SuperQueries {
-    static baseUrl = SuperQueries.baseUrl + 'supportticket'
+    static baseUrl = SuperQueries.baseUrl + 'support-ticket'
 
     static async fetchAll() {
         const response = await fetch(this.baseUrl);
@@ -11,6 +11,7 @@ export class SupportTicketQueries extends SuperQueries {
     }
 
     static async createSupportTicket(supportTicket: CreateSupportTicket) {
+        console.log('called support ticket queries')
         const response = await fetch(this.baseUrl, {
             method: 'POST',
             headers: {
@@ -19,6 +20,7 @@ export class SupportTicketQueries extends SuperQueries {
             body: JSON.stringify(supportTicket)
         });
         const data = await response.json();
+        console.log('console before data,', data)
         return data;
     }
 }

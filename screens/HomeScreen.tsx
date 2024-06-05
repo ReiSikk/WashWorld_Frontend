@@ -24,13 +24,6 @@ type Props = NativeStackScreenProps<RootStackParamList, "HomeScreen">
 const dispatch: AppDispatch = useDispatch();
 const washStations = useSelector((state: RootState) => state.washStations.washStations);
 const userAuthenticated = useSelector((state: RootState) => state.member.isAuthenticated);
-const [camera, setCamera] = useState(false);
-const [photoToDisplay, setPhotoToDisplay] = useState('')
-
-const [savedPhoto, setSavedPhoto] = useState({
-photo: ""
-});
-
 
 
 useEffect(() => {

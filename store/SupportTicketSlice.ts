@@ -22,8 +22,8 @@ export const fetchSupportTickets = createAsyncThunk(
   )
 
 
-  export const createSupportTicket = createAsyncThunk(
-    'createSupportTicket',
+  export const createTicket = createAsyncThunk(
+    'createTicket',
     async (supportTicket: CreateSupportTicket, thunkAPI) => {
       return await SupportTicketQueries.createSupportTicket(supportTicket)
     },
@@ -35,7 +35,6 @@ export const supportTicketSlice = createSlice({
   name: 'supportTicket',
   initialState,
   reducers: {
-  // i need to push the new category to the state
        addSupportTicket: (state, action: PayloadAction<SupportTicket>) => {
         state.supportTickets.push(action.payload)
         }
@@ -48,8 +47,8 @@ export const supportTicketSlice = createSlice({
       state.supportTickets = action.payload;
     //   state.entities.push(action.payload)
     }),
-    builder.addCase(createSupportTicket.fulfilled, (state, action) => {
-        // Add user to the state array
+    builder.addCase(createTicket.fulfilled, (state, action) => {
+        // Add picture to the state array
         
         state.supportTickets.push(action.payload)
       //   state.entities.push(action.payload)

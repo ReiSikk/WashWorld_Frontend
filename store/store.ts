@@ -4,6 +4,7 @@ import { stepSlice } from './StepSlice'
 import { MemberSlice } from './MemberSlice'
 import { cardSlice } from './CardSlice'
 import { washStationSlice } from './WashStationSlice'
+import { supportTicketSlice } from './SupportTicketSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     member: MemberSlice.reducer,
     cards: cardSlice.reducer,
     washStations: washStationSlice.reducer,
+    supportTickets: supportTicketSlice.reducer,
   },
 })
 

@@ -26,14 +26,14 @@ const newSupportTicket = new CreateSupportTicket(supportTicketForm.description, 
 
 const handleSubmit = () => {
   console.log(supportTicketForm)
-  /* dispatch(createEntry(newSupportTicket))
+  /* dispatch(createTicket(newSupportTicket))
   .then(() => {
     // Entry added successfully
-    setEntryAdded(true);
+  console.log("Ticket dispatched")
   })
   .catch(error => {
     // Handle error if entry addition fails
-    console.error('Error adding expense:', error);
+    console.error('Error adding ticket:', error);
   }); */
   }
 

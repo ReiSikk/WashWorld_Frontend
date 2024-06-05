@@ -26,10 +26,9 @@ function AccountScreen({ navigation }: Props) {
     if(memberID && memberID !== null) {
       const memberIDNumber = parseInt(memberID);
       dispatch(getMemberDetails(memberIDNumber))
+      dispatch(getMemberCars())
     } 
-    dispatch(getMemberCars())
-    dispatch(resetCarsState());
-  }, [dispatch]);
+  }, [dispatch, memberCars]);
 
   return (
     <ScrollView m="6">

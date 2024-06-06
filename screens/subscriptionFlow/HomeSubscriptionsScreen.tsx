@@ -69,7 +69,7 @@ function HomeSubscriptionsScreen({ navigation }: Props) {
           plan={plan}
           onPress={() => handleItemPress(plan)}/>
       )}
-      contentContainerStyle={{ margin: 12}}
+      contentContainerStyle={{ margin: 12, paddingBottom: 35}}
       ItemSeparatorComponent={() => <View style={{ height: 12 }} />} 
     />
     </>

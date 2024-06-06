@@ -8,7 +8,7 @@ interface TitleCardPlusProps {
 
 const TitleCardPlus = ({ title }: TitleCardPlusProps) => {
   return (
-    <View>
+    <View shadow={2}>
       <Flex flexDirection="row" bg="grey5" py="8" px="4" w="100%" alignItems="center">
         <Flex flexDirection="row">
           <AntDesign name="plus" size={24} color="black" />

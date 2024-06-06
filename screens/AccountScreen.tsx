@@ -31,7 +31,7 @@ function AccountScreen({ navigation }: Props) {
   }, [dispatch, memberCars]);
 
   return (
-    <ScrollView m="6">
+    <ScrollView m="6" showsVerticalScrollIndicator={false}>
       <MembershipCard />
       <VStack space={4} pb={4}>
       <Text fontSize="lg" fontWeight="bold" mt="4">My cars</Text>

@@ -30,7 +30,8 @@ useEffect(() => {
 
 
   return (
-     <ScrollView m={6}>
+    <>
+     <ScrollView m={6} showsVerticalScrollIndicator={false}>
      <Text fontSize={'2xl'} fontWeight={'extrabold'} ml={2}>WashWorlds near you</Text>
      <Flex flexDirection='column' alignItems='center' justifyContent='center' w="100%" h="fit-content" pb="6">
      <ScrollView horizontal={true} paddingRight={5} borderRadius={10}>
@@ -57,8 +58,9 @@ useEffect(() => {
        />
 
 
- <Fab renderInPortal={false} shadow={2} placement="top-right" size="sm" icon={<Icon color="white" as={AntDesign} name="plus" size="4" />} label="Report a problem" onPress={() => navigation.navigate('SupportTicketScreen')} />
     </ScrollView>
+ <Fab renderInPortal={false} shadow={8} placement="bottom-right" size="sm" icon={<Icon color="white" as={AntDesign} name="plus" size="4" />} label="Report a problem" aria-label='Report a problem' onPress={() => navigation.navigate('SupportTicketScreen')} />
+ </>
   )
 }
 
